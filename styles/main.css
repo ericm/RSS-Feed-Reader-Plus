@@ -1,0 +1,94 @@
+* {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+body {
+    height: inherit;
+    background-image: url(../img/gradient.png);
+    background-size: auto 600%;
+    background-attachment: fixed;
+    background-position: 50%;
+    background-color: rgba(255, 255, 255, .96);
+}
+#container {
+    padding-top: 30px;
+    padding-left: 190px;
+}
+#containerOb {
+    padding-top: 30px;
+}
+h1, span, p, i {
+    font-family: 'Abel-Regular', sans-serif;
+}
+#menuC {
+    position: fixed;
+    width: 100%;
+    background-color: rgb(49, 49, 49);
+}
+#menuC h1 {
+    position: fixed;
+    top: 0;
+    left: 3px;
+    font-size: .9em;
+    color: rgb(235, 235, 235);
+}
+#menu {
+    background-color: rgb(49, 49, 49);
+    width: 90%;
+    height: 20px;
+    -webkit-app-region: drag;
+}
+.menuOpt {
+    width: 20px;
+    height: 20px;
+    float: right;
+    color: #fff;
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.menuOpt:hover {
+    background-color: rgb(26, 26, 26);
+}
+.break {
+    height: 50px;
+}
+#minimize {
+    right: 40px;
+}
+#maximize {
+    right:20px;
+}
+#ex {
+    right: 0;
+    top: -1px !important;   
+    font-family: Calibri;
+}
+#ex:hover {
+    background-color: rgb(230, 25, 66) !important;
+}
+
+.bottom {
+    border-bottom: solid 3px rgb(49, 49, 49);
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgb(49, 49, 49);
+}
+
+::-webkit-scrollbar {
+	width: 5px;
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgba(0, 0, 0, 0.6);
+}

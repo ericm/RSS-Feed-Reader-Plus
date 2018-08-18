@@ -1,0 +1,46 @@
+.input input {
+	font-size: 1.5em;
+	border: solid 3px rgb(49, 49, 49);
+    padding: 3px 10px 3px 10px;
+	display: inline-block;
+    border-radius: 9999em;
+    transition: box-shadow 0.3s;
+    width: 400px;
+}
+
+.input input:focus, button:focus {
+    outline-width: 0;
+    box-shadow: inset 0 0 0 0 #fff,
+			0 0 0 0 #fff,
+			3px -3px 30px #1beabd, 
+			-3px 3px 30px #10abff;
+}
+.input {
+    top: 20px;
+    position: relative;
+    left: 50%;
+    margin-left: -200px;
+}
+button {
+    display: block;
+    outline-width: 0;
+    position: relative;
+    background-color: rgb(49, 49, 49);
+    color: #fff;
+    top: 40px;
+    left: 50%;
+    border: solid 3px rgb(49, 49, 49);
+    border-radius: 9999em;
+    transition: box-shadow 0.3s;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 100px;
+    margin-left: -50px;
+    cursor: pointer;
+}
+
+p {
+    margin-top: 80px;
+    text-align: center;
+    font-size: 1.7em;
+}

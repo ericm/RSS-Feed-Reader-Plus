@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="fonts/fonts.css"/>
+    <link rel="stylesheet" href="styles/main.css"/>
+    <link rel="stylesheet" href="styles/list.css"/>
+  </head>
+  <body>
+    <div id="menuC">
+      <h1></h1>
+      <div id="menu"></div>
+      <div id="ex" class="menuOpt">x</div>
+      <div id="maximize" class="menuOpt">□</div>
+      <div id="minimize" class="menuOpt">-</div>
+    </div>
+    <div id="list">
+      <div class="item">
+        <span>test</span>
+        <i>testing</i>
+      </div>
+      <div class="item">
+          <span>test</span>
+          <i>testing</i>
+      </div>
+      <div class="item">
+          <span>test</span>
+          <i>testing</i>
+      </div>
+      <div class="item">
+          <span>test</span>
+          <i>testing</i>
+      </div>
+      <div class="item">
+          <span>test</span>
+          <i>testing</i>
+      </div>
+      <div class="item">
+          <span>test</span>
+          <i>testing</i>
+      </div>
+      <div class="item">
+          <span>test</span>
+          <i>testing</i>
+      </div>
+      <div class="item">
+          <span>test</span>
+          <i>testing</i>
+      </div>
+      <div class="item">
+          <span>test</span>
+          <i>testing</i>
+      </div>
+      <div class="break"></div>
+    </div>
+    <div id="drawer">
+      <span>ADD FEED</span>
+      <span>SETTINGS</span>
+    </div>
+    <div id="container">
+      
+    </div>
+    <hr class="bottom">
+    <script>
+      // You can also require other files to run in this process
+      var TITLE = 'Latest';
+      require('./renderer.js')
+      require('./js/menu.js')
+      require('./js/list.js')
+    </script>
+  </body>
+</html>

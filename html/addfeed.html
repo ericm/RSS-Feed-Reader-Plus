@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../fonts/fonts.css"/>
+    <link rel="stylesheet" href="../styles/main.css"/>
+    <link rel="stylesheet" href="../styles/addfeed.css"/>
+  </head>
+  <body>
+    <div id="menuC">
+      <h1></h1>
+      <div id="menu"></div>
+      <div id="ex" class="menuOpt">x</div>
+      <div id="maximize" class="menuOpt">□</div>
+      <div id="minimize" class="menuOpt">-</div>
+    </div>
+    <div id="containerOb">
+        <p>Enter a feed's URL:</p>
+	    <span class="input">
+            <input name="link" type="text" placeholder="http://example.com/feed">
+        </span>
+        <button>SUBMIT</button>
+    </div>
+    <hr class="bottom">
+    <script>
+        var TITLE = 'Add New Feed';
+        require('../js/addfeed.js')
+        require('../js/menu.js')
+        require('../renderer.js')
+    </script>
+  </body>
+</html>

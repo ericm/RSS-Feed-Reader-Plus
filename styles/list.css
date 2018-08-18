@@ -1,0 +1,66 @@
+#list {
+    height: auto;
+    position: fixed;
+    background-color:  rgb(49, 49, 49);
+    left: 0;
+    top: 20px;
+    width: 180px;
+    overflow-y: scroll;
+}
+.item {
+    border: solid 3px rgb(34, 34, 34);
+    border-radius: 10px;
+    width: 150px;
+    margin-left: 3px;
+    padding-left: 10px;
+    padding-top: 3px;
+    padding-bottom: 7px; 
+    margin-top: 10px; 
+    cursor: pointer;
+    background-color:  rgb(49, 49, 49);
+    transition: background-color 0.3s;
+}
+.item:hover {
+    background-color:  rgb(34, 34, 34);
+}
+.item span {
+    color: rgb(236, 236, 236);
+    display: block;
+    font-size: 1.3em;
+    text-overflow: ellipsis;
+    overflow: hidden; 
+    height: 1.3em; 
+    white-space: nowrap;
+}
+.item i {
+    color: rgb(202, 202, 202);
+    display: block;
+    font-size: .9em;
+    text-overflow: ellipsis;
+    overflow: hidden; 
+    height: 1.3em; 
+    white-space: nowrap;
+}
+
+#drawer {
+    bottom: 0;
+    left: 0;
+    width: 180px;
+    background-color:  rgb(43, 43, 43);
+    height: 70px;
+    position: fixed;
+}
+#drawer span {
+    color: rgb(43, 43, 43);
+    padding: 3px;
+    position: relative;
+    top: 25px;
+    left: 20px;
+    border-radius: 5px; 
+    background-color: rgb(233, 233, 233);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#drawer span:hover {
+    background-color: rgb(255, 255, 255);
+}
