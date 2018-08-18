@@ -12,7 +12,7 @@ function createWindow () {
 
   mainWindow.setMenu(null);
 
-  mainWindow.loadFile('index.html');
+  mainWindow.loadFile('html/index.html');
 
   mainWindow.webContents.openDevTools();
 
