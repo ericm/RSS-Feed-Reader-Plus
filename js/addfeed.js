@@ -10,12 +10,16 @@ document.getElementsByTagName('button')[0].onclick = () => {
     if (!pattern.test(link)) {
         document.getElementsByTagName('p')[0].innerHTML = "Enter a VALID feed's URL:"
     } else {
-        ipcRenderer.send('add-link', link);
         document.getElementById('containerOb').innerHTML = `<p>Loading</p>`
+        ipcRenderer.send('add-link', link);
     }
     
 }
 
 ipcRenderer.on('link-reply', (event, arg) => {
-    console.log(arg);
+    if (arg) {
+        document.getElementById('containerOb').innerHTML = `<p>Found the Feed!</p>`
+    } else {
+        document.getElementById('containerOb').innerHTML = `<p>Couldn't find feed from this link.</p>`
+    }
 });

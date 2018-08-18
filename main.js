@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, ipcMain, Tray} = require('electron');
+const parser = require('./js/feedparse.js');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -39,8 +40,10 @@ app.on('activate', () => {
 
 var settingsOpen = false;
 let settingsWindow;
+
 ipcMain.on('settings-page', (event, arg) => {
   if (!settingsOpen) {
+
     settingsOpen = true;
     console.log('opened settings'); 
     
@@ -56,6 +59,7 @@ ipcMain.on('settings-page', (event, arg) => {
       settingsWindow = null
       settingsOpen = false;
     });
+
   } else {
     settingsWindow.focus();
   }
@@ -65,6 +69,7 @@ ipcMain.on('settings-page', (event, arg) => {
 
 var addOpen = false;
 let addWindow;
+
 ipcMain.on('add-page', (event, arg) => {
   if (!addOpen) {
     addOpen = true;
@@ -83,12 +88,51 @@ ipcMain.on('add-page', (event, arg) => {
       addOpen = false;
     });
   } else {
+
     addWindow.focus();
+
   }
   
   
 });
+
+var editing;
+
 ipcMain.on('add-link', (event, arg) => {
-  console.log(arg);
-  event.sender.send('link-reply', true)
+
+  var feed = parser.feed(arg);
+  feed.then( (res) => {
+
+    var item;
+
+    while (item = res.read()) {
+
+      console.log(item)
+      event.sender.send('link-reply', true);
+
+      setTimeout(() => addWindow.close(), 1500);
+
+      setTimeout(() => {
+        var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true});
+
+        editWindow.setMenu(null);
+  
+        editWindow.loadFile('html/edit.html');
+  
+        // Open the DevTools.
+        editWindow .webContents.openDevTools();
+        editWindow.on('closed', () => {
+          editWindow  = null
+        });
+      }, 1500);
+      
+    }
+  }).catch( (reason) => {
+    
+    console.log(reason);
+    event.sender.send('link-reply', false);
+    setTimeout(() => addWindow.close(), 3000);
+
+  });
+
 });

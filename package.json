@@ -12,6 +12,8 @@
     "electron": "^2.0.0"
   },
   "dependencies": {
-    "jquery": "^3.3.1"
+    "feedparser": "^2.2.9",
+    "jquery": "^3.3.1",
+    "request": "^2.88.0"
   }
 }
