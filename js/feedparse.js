@@ -4,7 +4,7 @@ const {app} = require('electron');
 const fs = require('fs');
 const utils = require('daveutils');
 
-module.exports= {
+module.exports = {
     feed: (link) => {
         
         return new Promise((resolve, reject) => {
@@ -67,10 +67,19 @@ module.exports= {
             name = name.split('>').join('');
             name = name.split('<').join('');
 
-            var theString = "";
+
+            var theString = '{"items":[';
+
             for (x in data) {
+                
                 theString += utils.jsonStringify(data[x]);
+
+                if (x != data.length - 1) {
+                    theString += ',';
+                }
+
             }
+            theString += ']}';
 
             //if exists
 
@@ -109,23 +118,67 @@ module.exports= {
 
             fs.readFile(file, (err, data) => {
                 if (err) {
-                    reject(err)
+                    reject(err);
                 } else {
                     obj = JSON.parse(data);
                 }
+
                 obj.feeds.push({name: name, link: link, title: meta.title});
                 fs.writeFile(file, utils.jsonStringify(obj), (err) => {
                     if (err) {
-                        reject(err)
+                        reject(err);
                     } else {
-                        resolve(true)
+                        resolve(true);
                     }
                 });
             });
-
-            
             
         });
+
+    },
+
+    readData: (name) => {
+
+        return new Promise((resolve, reject) => {
+
+            var feeds = app.getPath('userData') + "/data.json";
+            var feed = app.getPath('userData') + "/rss-feeds/" + name + ".xml";
+
+            if (!fs.existsSync(feeds)) {
+                reject('restart');
+            }
+            if (!fs.existsSync(feed)) {
+                reject('noExist');
+            }
+
+            fs.readFile(feeds, (err, data) => {
+                if (err) {
+                    reject('restart');
+                } else {
+                    var obj = JSON.parse(data);
+                    var feedHead = obj.feeds.filter( (item) => {
+                        return item.name == name;
+                    });
+                    
+                    fs.readFile(feed, 'utf8', (err, dataFeed) => {
+                        if (err) {
+                            reject('noExist');
+                        } else {
+                            var feedObj = JSON.parse(dataFeed);
+
+                            var theFeed = {
+                                head: feedHead[0],
+                                obj: feedObj
+                            }
+                            resolve(theFeed);
+        
+                        }
+                    });
+                }
+            });
+
+        });
+        
 
     }
 }

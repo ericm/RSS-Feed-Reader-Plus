@@ -134,31 +134,37 @@ ipcMain.on('add-link', (event, arg) => {
       var save = parser.saveData(response, arg, res.head);
 
       save.then( (saveRes) => {
+
         if (saveRes) {
+
           console.log('datafile written');
+          editing = response;
+          setTimeout(() => addWindow.close(), 1500);
+
+          setTimeout(() => {
+            var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true});
+
+            editWindow.setMenu(null);
+  
+            editWindow.loadFile('html/edit.html');
+  
+            // Open the DevTools.
+            editWindow.webContents.openDevTools();
+            editWindow.on('closed', () => {
+              editWindow  = null
+            });
+
+          }, 1500);
+          
         }
-      }).catch( (reasonSave => {
-
-      }));
-
-      setTimeout(() => addWindow.close(), 1500);
-
-      setTimeout(() => {
-        var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true});
-
-        editWindow.setMenu(null);
-  
-        editWindow.loadFile('html/edit.html');
-  
-        // Open the DevTools.
-        editWindow.webContents.openDevTools();
-        editWindow.on('closed', () => {
-          editWindow  = null
+      }).catch( (reasonSave) => {
+        console.log(reasonSave);
       });
 
-    }, 1500);
       console.log("written");
+      
     }).catch( (reason) => {
+
       console.log(reason);
 
       if (reason == 'exists') {
@@ -178,4 +184,27 @@ ipcMain.on('add-link', (event, arg) => {
 
   });
 
+});
+
+ipcMain.on('editing', (event) => {
+
+  console.log('editing ' + editing)
+
+  var getData = parser.readData(editing);
+
+  getData.then( (response) => {
+    
+    var theFeedObj = response;
+    event.sender.send('edit_this', theFeedObj);
+
+  }).catch(  (reason) => {
+    if (reason == 'restart') {
+      console.log(reason);
+    }
+    if (reason == 'noExist') {
+      console.log(reason);
+    }
+  });
+
+  
 });
