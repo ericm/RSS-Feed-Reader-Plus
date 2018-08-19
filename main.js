@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, ipcMain, Tray} = require('electron');
 const parser = require('./js/feedparse.js');
+const fs = require('fs');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -16,6 +17,31 @@ function createWindow () {
   mainWindow.loadFile('html/index.html');
 
   mainWindow.webContents.openDevTools();
+
+  //check / create folders
+  var rssDir = app.getPath('userData') + "/rss-feeds";
+  if (!fs.existsSync(rssDir)) {
+    fs.mkdirSync(rssDir);
+    console.log('added folder')
+  }
+  
+  var ob = {
+    name: "",
+    link: ""
+  }
+  var obj = JSON.stringify({
+    feeds: [ob]
+  });
+  
+  var data = app.getPath('userData') + "/data.json";
+  if (!fs.existsSync(data)) {
+    fs.writeFile(data, obj, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    console.log('added new datafile');
+  }
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -106,30 +132,44 @@ ipcMain.on('add-link', (event, arg) => {
     console.log(res.items.length);
     event.sender.send('link-reply', true);
 
-    //tmp
-    var write = parser.writeData(arg, res.data);
-    write.then( (res) => {
+    var write = parser.writeData(arg, res.items);
+    write.then( (response) => {
+
+      var save = parser.saveData(response, arg, res.head);
+
+      save.then( (saveRes) => {
+
+      }).catch( (reasonSave => {
+
+      }));
+
+      setTimeout(() => addWindow.close(), 1500);
+
+      setTimeout(() => {
+        var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true});
+
+        editWindow.setMenu(null);
+  
+        editWindow.loadFile('html/edit.html');
+  
+        // Open the DevTools.
+        editWindow.webContents.openDevTools();
+        editWindow.on('closed', () => {
+          editWindow  = null
+      });
+
+    }, 1500);
       console.log("written");
     }).catch( (reason) => {
       console.log(reason);
+
+      if (reason == 'exists') {
+        event.sender.send('exist-reply', true);
+      }
+
+      setTimeout(() => addWindow.close(), 3000);
+
     });
-    //tmp
-
-    setTimeout(() => addWindow.close(), 1500);
-
-    setTimeout(() => {
-      var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true});
-
-      editWindow.setMenu(null);
-  
-      editWindow.loadFile('html/edit.html');
-  
-      // Open the DevTools.
-      editWindow.webContents.openDevTools();
-      editWindow.on('closed', () => {
-        editWindow  = null
-      });
-    }, 1500);
       
     
   }).catch( (reason) => {

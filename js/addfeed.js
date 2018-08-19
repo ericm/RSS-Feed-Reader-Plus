@@ -10,7 +10,7 @@ document.getElementsByTagName('button')[0].onclick = () => {
     if (!pattern.test(link)) {
         document.getElementsByTagName('p')[0].innerHTML = "Enter a VALID feed's URL:"
     } else {
-        document.getElementById('containerOb').innerHTML = `<p>Loading</p>`
+        document.getElementById('containerOb').innerHTML = `<img class='load' src='../img/load1.gif'><p>Loading</p>`
         ipcRenderer.send('add-link', link);
     }
     
@@ -21,5 +21,11 @@ ipcRenderer.on('link-reply', (event, arg) => {
         document.getElementById('containerOb').innerHTML = `<p>Found the Feed!</p>`
     } else {
         document.getElementById('containerOb').innerHTML = `<p>Couldn't find feed from this link.</p>`
+    }
+});
+
+ipcRenderer.on('exist-reply', (event, arg) => {
+    if (arg) {
+        document.getElementById('containerOb').innerHTML = `<p>You already added this feed.</p>`
     }
 });

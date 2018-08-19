@@ -44,3 +44,12 @@ p {
     text-align: center;
     font-size: 1.7em;
 }
+
+.load {
+    display: block;
+    width: 40px;
+    position: relative;
+    left: 50%;
+    margin-left: -20px;
+    top: 40px; 
+}
