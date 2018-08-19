@@ -103,30 +103,35 @@ ipcMain.on('add-link', (event, arg) => {
   var feed = parser.feed(arg);
   feed.then( (res) => {
 
-    var item;
+    console.log(res.items.length);
+    event.sender.send('link-reply', true);
 
-    while (item = res.read()) {
+    //tmp
+    var write = parser.writeData(arg, res.data);
+    write.then( (res) => {
+      console.log("written");
+    }).catch( (reason) => {
+      console.log(reason);
+    });
+    //tmp
 
-      console.log(item)
-      event.sender.send('link-reply', true);
+    setTimeout(() => addWindow.close(), 1500);
 
-      setTimeout(() => addWindow.close(), 1500);
+    setTimeout(() => {
+      var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true});
 
-      setTimeout(() => {
-        var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true});
-
-        editWindow.setMenu(null);
+      editWindow.setMenu(null);
   
-        editWindow.loadFile('html/edit.html');
+      editWindow.loadFile('html/edit.html');
   
-        // Open the DevTools.
-        editWindow .webContents.openDevTools();
-        editWindow.on('closed', () => {
-          editWindow  = null
-        });
-      }, 1500);
+      // Open the DevTools.
+      editWindow.webContents.openDevTools();
+      editWindow.on('closed', () => {
+        editWindow  = null
+      });
+    }, 1500);
       
-    }
+    
   }).catch( (reason) => {
     
     console.log(reason);
