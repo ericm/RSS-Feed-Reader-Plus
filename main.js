@@ -188,13 +188,24 @@ ipcMain.on('add-link', (event, arg) => {
 
 ipcMain.on('editing', (event) => {
 
-  console.log('editing ' + editing)
+  console.log('editing ' + editing);
 
   var getData = parser.readData(editing);
 
   getData.then( (response) => {
     
     var theFeedObj = response;
+
+    var heads = parser.readHeads();
+
+    heads.then( (resp) => {
+      mainWindow.webContents.send('refreshed-new', resp);
+    }).catch( (reason) => {
+      if (reason == 'restart') {
+        console.log(reason);
+      }
+    });
+
     event.sender.send('edit_this', theFeedObj);
 
   }).catch(  (reason) => {
@@ -207,4 +218,19 @@ ipcMain.on('editing', (event) => {
   });
 
   
+
+});
+
+ipcMain.on('refresh', (event) => {
+
+  var heads = parser.readHeads();
+
+  heads.then( (response) => {
+    event.sender.send('refreshed', response);
+  }).catch( (reason) => {
+    if (reason == 'restart') {
+      console.log(reason);
+    }
+  });
+
 });

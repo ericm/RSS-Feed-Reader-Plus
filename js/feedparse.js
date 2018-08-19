@@ -178,7 +178,30 @@ module.exports = {
             });
 
         });
-        
+
+    },
+
+    readHeads: () => {
+
+        return new Promise((resolve, reject) => {
+
+            var feeds = app.getPath('userData') + "/data.json";
+
+            if (!fs.existsSync(feeds)) {
+                reject('restart');
+            }
+
+            fs.readFile(feeds, (err, data) => {
+                if (err) {
+                    reject('restart');
+                } else {
+                    var obj = JSON.parse(data);
+                    resolve(obj.feeds);
+                }
+            });
+
+        });
 
     }
+
 }

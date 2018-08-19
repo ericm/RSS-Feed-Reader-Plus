@@ -7,6 +7,10 @@
     width: 180px;
     overflow-y: scroll;
 }
+.nothing {
+    font-size: 1.5em;
+    padding-left: 15px;
+}
 .item {
     border: solid 3px rgb(34, 34, 34);
     border-radius: 10px;

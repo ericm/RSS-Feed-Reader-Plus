@@ -16,43 +16,7 @@
       <div id="minimize" class="menuOpt">-</div>
     </div>
     <div id="list">
-      <div class="item">
-        <span>test</span>
-        <i>testing</i>
-      </div>
-      <div class="item">
-          <span>test</span>
-          <i>testing</i>
-      </div>
-      <div class="item">
-          <span>test</span>
-          <i>testing</i>
-      </div>
-      <div class="item">
-          <span>test</span>
-          <i>testing</i>
-      </div>
-      <div class="item">
-          <span>test</span>
-          <i>testing</i>
-      </div>
-      <div class="item">
-          <span>test</span>
-          <i>testing</i>
-      </div>
-      <div class="item">
-          <span>test</span>
-          <i>testing</i>
-      </div>
-      <div class="item">
-          <span>test</span>
-          <i>testing</i>
-      </div>
-      <div class="item">
-          <span>test</span>
-          <i>testing</i>
-      </div>
-      <div class="break"></div>
+
     </div>
     <div id="drawer">
       <span>ADD FEED</span>
@@ -61,13 +25,39 @@
     <div id="container">
       
     </div>
+    <div>
+        <div id="drop">
+            <span>MENU</span>
+        </div>
+        <div id="drop-menu">
+          <div id="drop-back">
+              <span>View latest</span><hr>
+              <span>Refresh</span>
+              <span>Cloud Sync</span><hr>
+              <span>Report a bug</span>
+              <span>Tutorial</span>
+              <span>About</span>
+          </div>
+          
+        </div>
+    </div>
+
+    <div id="rcl">
+
+    </div>
+    <div id="rcl-back"></div>
+    
     <hr class="bottom">
     <script>
       // You can also require other files to run in this process
       var TITLE = 'Latest';
+      function rcl(index, event) {
+        require('../js/renderer.js').rclick(index, event);
+      };
       require('../js/renderer.js')
       require('../js/menu.js')
       require('../js/list.js')
+      require('../js/dropdown.js')
     </script>
   </body>
 </html>

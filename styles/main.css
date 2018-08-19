@@ -73,11 +73,87 @@ h1, span, p, i {
     background-color: rgb(230, 25, 66) !important;
 }
 
+#rcl {
+    width: 100px;
+    height: 200px;
+    position: fixed;
+    display: none;
+    border: 3px solid rgba(230, 25, 66, 0);
+    border-radius: 1em;
+    z-index: 1000;
+}
+#rcl-back {
+    width: 1000em;
+    height: 1000em;
+    position: fixed;
+    z-index: 500;
+    top: 0;
+    left: 0;
+    display: none;
+    background-color: rgba(34, 34, 34, 0);
+}
+
 .bottom {
     border-bottom: solid 3px rgb(49, 49, 49);
     width: 100%;
     position: fixed;
     bottom: 0;
+}
+
+#drop {
+    position: fixed;
+    background-color: rgb(34, 34, 34);
+    width: 100px;
+    height: 20px;
+    border-bottom-left-radius: 2em;
+    border-bottom-right-radius: 2em;
+    right: 0;
+    top: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 100;
+}
+#drop span {
+    text-align: center;
+    color: #fff;
+
+}
+#drop:hover {
+    background-color: rgb(20, 20, 20);
+}
+#drop-menu {
+    height: 0;
+    position: fixed;
+    width: 100px;
+    top: 20px;
+    z-index: 50;
+    right: 0;
+    transition: all 0.3s;
+    overflow: hidden;
+}
+#drop-back {
+    height: 180px;
+    width: 100px;
+    background-color: rgb(49, 49, 49);
+    font-size: 1em;
+    text-align: center;
+    padding-top: 10px;
+}
+#drop-back span {
+    cursor: pointer;
+    width: inherit;
+    color: #fff;
+    transition: all 0.3s;
+    display: block;
+}
+#drop-back span:hover {
+    color: rgb(230, 25, 66);
+}
+#drop-back hr {
+    border-bottom: rgba(255, 255, 255, 0.479) 1px solid;
+    margin-top: 8px;
+    margin-bottom: 8px; 
 }
 
 ::-webkit-scrollbar-track {
