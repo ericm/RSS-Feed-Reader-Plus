@@ -100,6 +100,30 @@ module.exports= {
     saveData: (name, link, meta) => {
 
         return new Promise((resolve, reject) => {
+
+            var obj = {
+                feeds:[]
+            }
+
+            var file = app.getPath('userData') + "/data.json";
+
+            fs.readFile(file, (err, data) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    obj = JSON.parse(data);
+                }
+                obj.feeds.push({name: name, link: link, title: meta.title});
+                fs.writeFile(file, utils.jsonStringify(obj), (err) => {
+                    if (err) {
+                        reject(err)
+                    } else {
+                        resolve(true)
+                    }
+                });
+            });
+
+            
             
         });
 

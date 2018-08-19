@@ -25,12 +25,8 @@ function createWindow () {
     console.log('added folder')
   }
   
-  var ob = {
-    name: "",
-    link: ""
-  }
   var obj = JSON.stringify({
-    feeds: [ob]
+    feeds: []
   });
   
   var data = app.getPath('userData') + "/data.json";
@@ -138,7 +134,9 @@ ipcMain.on('add-link', (event, arg) => {
       var save = parser.saveData(response, arg, res.head);
 
       save.then( (saveRes) => {
-
+        if (saveRes) {
+          console.log('datafile written');
+        }
       }).catch( (reasonSave => {
 
       }));
