@@ -83,7 +83,7 @@ module.exports = {
 
             //if exists
 
-            var loc = app.getPath('userData') + "/rss-feeds/" + name + ".xml";
+            var loc = app.getPath('userData') + "/rss-feeds/" + name + ".json";
 
             if (!fs.existsSync(loc)) {
 
@@ -142,7 +142,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
 
             var feeds = app.getPath('userData') + "/data.json";
-            var feed = app.getPath('userData') + "/rss-feeds/" + name + ".xml";
+            var feed = app.getPath('userData') + "/rss-feeds/" + name + ".json";
 
             if (!fs.existsSync(feeds)) {
                 reject('restart');

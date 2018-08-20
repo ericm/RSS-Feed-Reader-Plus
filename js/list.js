@@ -36,11 +36,13 @@ var refresh = (response) => {
 
         for (x in response) {
 
+            var img  = extractHostname(response[x].link);
+
             enter.innerHTML += `
     
 <div class="item" oncontextmenu="rcl(` + x + `, event)">
     <span>` + response[x].title + `</span>
-    <i>` + response[x].link + `</i>
+    <i><img src="https://www.google.com/s2/favicons?domain=` + img + `">` + response[x].link + `</i>
 </div>
     
             `;
@@ -54,24 +56,68 @@ var refresh = (response) => {
 
 };
 
-var rcl = document.getElementById('rcl');
-var rclb = document.getElementById('rcl-back');
 
-rclb.onclick = () => {
+document.getElementById('rcl-back').onclick = () => {
 
-    
+    var rcl = document.getElementById('rcl');
+    var rclb = document.getElementById('rcl-back');
 
     rcl.style.display = "none";
     rclb.style.display = "none";
 
-    rclb.style.backgroundColor = "rgba(34, 34, 34, 0)"
-    rcl.style.border = "3px solid rgba(230, 25, 66, 0)"
+    rclb.style.backgroundColor = "rgba(34, 34, 34, 0)";
+    rcl.style.border = "3px solid rgba(230, 25, 66, 0)";
+
+    var el = document.getElementById('rcl'),
+        elClone = el.cloneNode(true);
+    el.parentNode.replaceChild(elClone, el);
     
 }
 
-rclb.oncontextmenu = () => {
+document.getElementById('rcl-back').oncontextmenu = () => {
+
+    var rcl = document.getElementById('rcl');
+    var rclb = document.getElementById('rcl-back');
 
     rcl.style.display = "none";
     rclb.style.display = "none";
+
+    rclb.style.backgroundColor = "rgba(34, 34, 34, 0)";
+    rcl.style.border = "3px solid rgba(230, 25, 66, 0)";
+
+    var el = document.getElementById('rcl'),
+        elClone = el.cloneNode(true);
+    el.parentNode.replaceChild(elClone, el);
+
+}
+
+var extractHostname = (url) => {
+    var hostname;
+    //find & remove protocol (http, ftp, etc.) and get hostname
+
+    if (url.indexOf("//") > -1) {
+        hostname = url.split('/')[2];
+    }
+    else {
+        hostname = url.split('/')[0];
+    }
+
+    //find & remove port number
+    hostname = hostname.split(':')[0];
+    //find & remove "?"
+    hostname = hostname.split('?')[0];
+
+    return hostname;
+}
+
+module.exports = {
+
+    quit: () => {
+        ipcRenderer.send('quit', true);
+    },
+
+    link: (snd) => {
+        ipcRenderer.send('link', snd);
+    }
 
 }

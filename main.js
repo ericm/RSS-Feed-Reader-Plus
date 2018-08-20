@@ -1,16 +1,23 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain, Tray} = require('electron');
+const {app, BrowserWindow, ipcMain, Tray, Menu, shell} = require('electron');
 const parser = require('./js/feedparse.js');
 const fs = require('fs');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
+
+
+let mainWindow = null;
+let tray = null;
+var settingsOpen = false;
+let settingsWindow;
+
+
 global.sharedObj = {title: 'RSS FEED READER PLUS'};
 
 function createWindow () {
   
-  mainWindow = new BrowserWindow({width: 1200, height: 600, frame: false, minWidth: 800, minHeight: 400, transparent: true});
+  mainWindow = new BrowserWindow({width: 1200, height: 600, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: './img/64.ico'});
 
   mainWindow.setMenu(null);
 
@@ -44,12 +51,65 @@ function createWindow () {
   });
 }
 
-app.on('ready', createWindow);
+
+app.on('ready', () => {
+  tray = new Tray('./img/64.ico');
+  const contextMenu = Menu.buildFromTemplate([
+    {label: 'Show Latest', click() {
+      if (mainWindow == null) {
+        createWindow();
+      } else {
+        mainWindow.focus();
+      }
+    }},
+    {type: 'separator'},
+    {label: 'Add Feed'},
+    {label: 'Settings', click() {
+      if (!settingsOpen) {
+
+        settingsOpen = true;
+        console.log('opened settings'); 
+        
+        settingsWindow = new BrowserWindow({width: 800, height: 400, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: './img/64.ico'});
+    
+        settingsWindow.setMenu(null);
+    
+        settingsWindow.loadFile('html/settings.html');
+    
+        // Open the DevTools.
+        //settingsWindow.webContents.openDevTools();
+        settingsWindow.on('closed', () => {
+          settingsWindow = null
+          settingsOpen = false;
+        });
+    
+      } else {
+        settingsWindow.focus();
+      }
+    }},
+    {type: 'separator'},
+    {label: 'Quit', click() {
+      if (process.platform !== 'darwin') {
+        app.quit();
+      }
+    }}
+  ]);
+  tray.setToolTip(global.sharedObj.title);
+  tray.setContextMenu(contextMenu);
+  tray.on('click', () => {
+    if (mainWindow == null) {
+      createWindow();
+    } else {
+      mainWindow.focus();
+    }
+  });
+});
+
 
 app.on('window-all-closed', () => {
 
   if (process.platform !== 'darwin') {
-    app.quit()
+    //app.quit()
   }
 });
 
@@ -60,8 +120,7 @@ app.on('activate', () => {
   }
 });
 
-var settingsOpen = false;
-let settingsWindow;
+
 
 ipcMain.on('settings-page', (event, arg) => {
   if (!settingsOpen) {
@@ -69,7 +128,7 @@ ipcMain.on('settings-page', (event, arg) => {
     settingsOpen = true;
     console.log('opened settings'); 
     
-    settingsWindow = new BrowserWindow({width: 800, height: 400, frame: false, minWidth: 800, minHeight: 400, transparent: true});
+    settingsWindow = new BrowserWindow({width: 800, height: 400, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: './img/64.ico'});
 
     settingsWindow.setMenu(null);
 
@@ -86,7 +145,6 @@ ipcMain.on('settings-page', (event, arg) => {
     settingsWindow.focus();
   }
   
-  
 });
 
 var addOpen = false;
@@ -97,7 +155,7 @@ ipcMain.on('add-page', (event, arg) => {
     addOpen = true;
     console.log('opened add'); 
     
-    addWindow = new BrowserWindow({width: 500, height: 400, frame: false, minWidth: 500, minHeight: 400, transparent: true});
+    addWindow = new BrowserWindow({width: 500, height: 400, frame: false, minWidth: 500, minHeight: 400, transparent: true, icon: './img/64.ico'});
 
     addWindow.setMenu(null);
 
@@ -142,7 +200,7 @@ ipcMain.on('add-link', (event, arg) => {
           setTimeout(() => addWindow.close(), 1500);
 
           setTimeout(() => {
-            var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true});
+            var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: './img/64.ico'});
 
             editWindow.setMenu(null);
   
@@ -192,9 +250,11 @@ ipcMain.on('editing', (event) => {
 
   var getData = parser.readData(editing);
 
+  var theFeedObj;
+
   getData.then( (response) => {
     
-    var theFeedObj = response;
+    theFeedObj = response;
 
     var heads = parser.readHeads();
 
@@ -214,11 +274,35 @@ ipcMain.on('editing', (event) => {
     }
     if (reason == 'noExist') {
       console.log(reason);
+
+
+      var feed = parser.feed(arg);
+      feed.then( (res) => {
+
+        console.log(res.items.length);
+        event.sender.send('link-reply', true);
+
+        var write = parser.writeData(arg, res.items);
+        write.then( (response) => {
+          console.log('fixed ' + response);
+        }).catch( (reasonSave) => {
+          console.log(reasonSave);
+        });
+
+      console.log("re-written");
+      
+      }).catch( (reason) => {
+
+        console.log(reason);
+
+        if (reason == 'exists') {
+          event.sender.send('exist-reply', true);
+        }
+
+      });
     }
   });
-
-  
-
+ 
 });
 
 ipcMain.on('refresh', (event) => {
@@ -232,5 +316,19 @@ ipcMain.on('refresh', (event) => {
       console.log(reason);
     }
   });
+
+});
+
+ipcMain.on('quit', () => {
+
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+
+});
+
+ipcMain.on('link', (event, arg) => {
+
+  shell.openExternal(arg);
 
 });

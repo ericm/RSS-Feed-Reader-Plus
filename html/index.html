@@ -23,7 +23,10 @@
       <span>SETTINGS</span>
     </div>
     <div id="container">
-      
+      <div class="article" onclick="link('http://google.com/')">
+        <span>Title</span>
+        <p></p>
+      </div>
     </div>
     <div>
         <div id="drop">
@@ -32,28 +35,36 @@
         <div id="drop-menu">
           <div id="drop-back">
               <span>View latest</span><hr>
-              <span>Refresh</span>
-              <span>Cloud Sync</span><hr>
+              <span>Refresh</span><hr>
+              <span>Global Rules</span><hr>
               <span>Report a bug</span>
-              <span>Tutorial</span>
-              <span>About</span>
+              <span>About</span><hr>
+              <span onclick="quit()">Quit</span>
           </div>
           
         </div>
     </div>
 
     <div id="rcl">
-
+      <a>Edit</a>
+      <a>Add Global Rules</a>
+      <a>Feed Settings</a>
+      <a>Delete<br><br></a>
     </div>
     <div id="rcl-back"></div>
     
     <hr class="bottom">
     <script>
-      // You can also require other files to run in this process
       var TITLE = 'Latest';
       function rcl(index, event) {
         require('../js/renderer.js').rclick(index, event);
-      };
+      }
+      function quit() {
+        require('../js/list.js').quit();
+      }
+      function link(link) {
+        require('../js/list.js').link(link);
+      }
       require('../js/renderer.js')
       require('../js/menu.js')
       require('../js/list.js')

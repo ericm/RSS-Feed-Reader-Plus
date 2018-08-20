@@ -11,6 +11,4 @@ dropselect.addEventListener('click', () => {
         dropmenu.style.height = "180px";
     }
 
-    
-
 });
