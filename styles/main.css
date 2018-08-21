@@ -191,25 +191,34 @@ h1, span, p, i, a, blockquote {
     border: 3px solid rgba(0, 0, 0, 0.2);
     background-color: rgba(0, 0, 0, 0.1);
 }
-.article span {
+.artitle{
     font-weight: bold;
     cursor: pointer;
     font-size: 2em;
 
 }
-.article i {
+.artfeed {
     cursor: pointer;
     font-size: 1.35em;
-
     display: inline-flex;
 }
-.article i img {
+.artfeed b {
+    cursor: pointer;
+}
+.artfeed img {
     height: 16px;
     width: 16px;
-    position: relative;
-    top: -9px;
+    margin-top: 6px !important;
     margin-left: 7px;
     cursor: pointer;
+}
+.artdate {
+    cursor: pointer;
+    font-size: .9em;
+    display: block;
+    font-weight: bold;
+    margin-top: -8px;
+    padding-bottom: 25px;
 }
 .article blockquote {
     cursor: pointer;

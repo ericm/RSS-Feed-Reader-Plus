@@ -137,7 +137,7 @@ module.exports = {
 
     },
 
-    readData: (name) => {
+    readData: (name, x) => {
 
         return new Promise((resolve, reject) => {
 
@@ -168,7 +168,8 @@ module.exports = {
 
                             var theFeed = {
                                 head: feedHead[0],
-                                obj: feedObj
+                                obj: feedObj,
+                                x: x
                             }
                             resolve(theFeed);
         

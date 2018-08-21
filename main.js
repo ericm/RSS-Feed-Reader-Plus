@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, ipcMain, Tray, Menu, shell} = require('electron');
 const parser = require('./js/feedparse.js');
+const sorting = require('./js/sorting.js');
 const fs = require('fs');
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -273,7 +274,7 @@ ipcMain.on('editing', (event) => {
 
   console.log('editing ' + editing);
 
-  var getData = parser.readData(editing);
+  var getData = parser.readData(editing, 0);
 
   var theFeedObj;
 
@@ -341,6 +342,56 @@ ipcMain.on('refresh', (event) => {
       console.log(reason);
     }
   });
+
+});
+
+ipcMain.on('reload', (event, arg) => {
+
+  if (arg == 'latest') {
+
+    console.log('Getting latest feeds');
+
+    var getHeads = parser.readHeads();
+
+    getHeads.then ( (response) => {
+
+      var feeds = [];
+
+      var sendIt = () => {
+        var articles = sorting.latest(feeds)
+        //event.sender.send('reloaded', feeds);
+      }
+
+      for (var x = 0; x < response.length; x++) {
+
+        var name = response[x].name;
+        var feed;
+        var reader = parser.readData(name, x);
+  
+        reader.then ( (response2) => {
+          feed = response2;
+          resolution();
+        }).catch( (reason2) => {
+          console.log(reason2);
+        });
+
+        var resolution = () => {
+
+          feeds.push(feed);
+          console.log(feed.x);
+          if (feed.x == response.length - 1) {
+            sendIt();
+          }
+          
+        }
+          
+      }
+
+    }).catch( (reason) => {
+      console.log(reason);
+    });
+    
+  }
 
 });
 
