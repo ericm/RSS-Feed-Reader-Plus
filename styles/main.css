@@ -233,6 +233,77 @@ h1, span, p, i, a, blockquote {
 .clickeda, .clickeda * {
     cursor: default !important;
 }
+.clickeda {
+    border: 3px solid rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.artopt {
+    border-radius: 10px;
+    display: block;
+    margin: 50px auto;
+    width: 480px; 
+    padding: 10px;
+    border: 3px solid #000;
+}
+.artopt label {
+    padding: 27px;
+}
+.artopt * {
+    font-family: 'Abel-Regular', sans-serif;
+    font-size: 1em;
+    color: rgba(0, 0, 0, 1);
+    font-weight: bold;
+}
+.artopt button, .artopt select {
+    background-color: transparent;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 10px;
+    cursor: pointer !important;
+    border: 3px solid #000;
+    transition: all 0.3s;
+}
+.artopt button:hover, .artopt select:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.unread:active {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.artup {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+.artup img {
+    width: 30px;
+    height: 30px;
+    cursor: pointer !important;
+    margin: auto;
+}
+
+.linked {
+    padding-left: 10px;
+    color: #bc81e4;
+    border-left: #bc81e4 solid 3px;
+    cursor: pointer !important;
+    transition: all 0.3s;
+    border-radius: 0;
+    padding-right: 8px;
+}
+.linked p {
+    color: #707070;
+    font-size: .5em;
+    display: inline;
+    margin-left: 5px;
+}
+.linked:hover {
+    color: #fff;
+    background-color: #bc81e4;
+    border-radius: 10px;
+}
+.linked:hover p {
+    color: rgb(230, 230, 230);
+}
 
 ::-webkit-scrollbar-track {
     background-color: rgb(49, 49, 49);

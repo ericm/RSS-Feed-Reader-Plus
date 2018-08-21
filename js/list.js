@@ -49,7 +49,7 @@ var refresh = (response) => {
         }
 
     } else {
-        enter.innerHTML += '<i class="nothing">No feeds found</i>'
+        enter.innerHTML += '<i class="nothing">No feeds found</i>';
     }
     
     enter.innerHTML += '<div class="break"></div>';
@@ -113,18 +113,48 @@ var extractHostname = (url) => {
 module.exports = {
 
     quit: () => {
+
         ipcRenderer.send('quit', true);
+
     },
 
     link: (snd) => {
+
         ipcRenderer.send('link', snd);
+
     },
 
     opena: (i) => {
+
         var artcl = document.getElementsByClassName('article')[i];
+        artcl.removeAttribute('onclick');
         artcl.style.height = "auto";
         artcl.style.boxShadow = "inset 0px -130px 200px -100px transparent";
-        artcl.classList += " clickeda";
+        artcl.classList.add("clickeda");
+        var title = artcl.getElementsByTagName('span')[0];
+        title.classList += " linked";
+
+        var text = document.createElement('p');
+        text.textContent = "(Link)";
+        title.appendChild(text);
+
+    },
+
+    closea: (i) => {
+
+        var artcle = document.getElementsByClassName('article')[i];
+        artcle.removeAttribute('style');
+        console.log(artcle.textContent);
+        artcle.classList.remove("clickeda");
+        var title = artcle.getElementsByTagName('span')[0];
+        title.classList.remove("linked");
+
+        var text = title.getElementsByTagName('p')[0];
+        title.removeChild(text);
+        setTimeout(() => {
+            artcle.setAttribute('onclick', "opena(" + i + ")");
+        }, 1000);
+        
     }
 
 }

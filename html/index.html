@@ -25,7 +25,7 @@
     <div id="container">
       <div class="article" onclick="opena(0)">
 
-        <span>My portion sizes are NOT your art project - idubbbz complains</span><br>
+        <span onclick="link('http://www.youtube.com')">My portion sizes are NOT your art project - idubbbz complains</span><br>
         <i>From<img src="https://www.google.com/s2/favicons?domain=www.youtube.com"><b>iDubbbzTv</b></i>
         <blockquote>
           <img src="https://img1.ak.crunchyroll.com/i/spire3-tmb/c02170e0d44ee91bfd3336eb3584a0741531455321_thumb.jpg"><br>Rachel is saved from an attack by Danny, the man calling himself her doctor, when Zack appears. She asks Zack to kill her, and he agrees as the two of them start to search for a way out of the building.<div class="feedflare">
@@ -33,6 +33,21 @@
             </div><img src="http://feeds.feedburner.com/~r/crunchyroll/rss/~4/AOh7Fjgf1bg" alt="" width="1" height="1"><div class="enclosure enclosure-image" data-url="https://img1.ak.crunchyroll.com/i/spire3-tmb/c02170e0d44ee91bfd3336eb3584a0741531455321_thumb.jpg" data-type="image/jpeg"><div class="enclosure-caption"><span class="enclosure-viewlink">View</span> enclosure: <a class="enclosure-link" href="https://img1.ak.crunchyroll.com/i/spire3-tmb/c02170e0d44ee91bfd3336eb3584a0741531455321_thumb.jpg"><span class="enclosure-name">c02170e0d44ee91bfd3336eb3584a0741531455321_thumb.jpg</span></a> <span class="enclosure-type">[image/jpeg]</span></div></div>
         </blockquote>
         
+        <div class="artopt">
+          <label><button class="unread">Keep unread</button></label>
+          <label><button>Hide</button></label>
+          <label>
+            Save to:
+            <select>
+              <option>Starred</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="artup">
+          <img src="../img/arrow1.png" onclick="closea(0)">
+        </div>
+
       </div>
     </div>
     <div>
@@ -74,6 +89,9 @@
       }
       function opena(i) {
         require('../js/list.js').opena(i);
+      }
+      function closea(i) {
+        require('../js/list.js').closea(i);
       }
       require('../js/renderer.js')
       require('../js/menu.js')
