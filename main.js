@@ -10,7 +10,9 @@ const fs = require('fs');
 let mainWindow = null;
 let tray = null;
 var settingsOpen = false;
-let settingsWindow;
+let settingsWindow = null;
+var addOpen = false;
+let addWindow = null;
 
 
 global.sharedObj = {title: 'RSS FEED READER PLUS'};
@@ -63,7 +65,31 @@ app.on('ready', () => {
       }
     }},
     {type: 'separator'},
-    {label: 'Add Feed'},
+    {label: 'Add Feed', click() {
+
+      if (!addOpen) {
+        addOpen = true;
+        console.log('opened add'); 
+        
+        addWindow = new BrowserWindow({width: 500, height: 400, frame: false, minWidth: 500, minHeight: 400, transparent: true, icon: './img/64.ico'});
+    
+        addWindow.setMenu(null);
+    
+        addWindow.loadFile('html/addfeed.html');
+    
+        // Open the DevTools.
+        addWindow.webContents.openDevTools();
+        addWindow.on('closed', () => {
+          addWindow = null
+          addOpen = false;
+        });
+      } else {
+    
+        addWindow.focus();
+    
+      }
+
+    }},
     {label: 'Settings', click() {
       if (!settingsOpen) {
 
@@ -147,10 +173,10 @@ ipcMain.on('settings-page', (event, arg) => {
   
 });
 
-var addOpen = false;
-let addWindow;
+
 
 ipcMain.on('add-page', (event, arg) => {
+
   if (!addOpen) {
     addOpen = true;
     console.log('opened add'); 
@@ -172,7 +198,6 @@ ipcMain.on('add-page', (event, arg) => {
     addWindow.focus();
 
   }
-  
   
 });
 

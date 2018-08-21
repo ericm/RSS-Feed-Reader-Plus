@@ -118,6 +118,13 @@ module.exports = {
 
     link: (snd) => {
         ipcRenderer.send('link', snd);
+    },
+
+    opena: (i) => {
+        var artcl = document.getElementsByClassName('article')[i];
+        artcl.style.height = "auto";
+        artcl.style.boxShadow = "inset 0px -130px 200px -100px transparent";
+        artcl.classList += " clickeda";
     }
 
 }

@@ -14,9 +14,10 @@
 .item {
     border: solid 3px rgb(34, 34, 34);
     border-radius: 10px;
-    width: 190px;
+    width: 180px;
     margin-left: 3px;
     padding-left: 10px;
+    padding-right: 10px;
     padding-top: 3px;
     padding-bottom: 7px; 
     margin-top: 10px; 
