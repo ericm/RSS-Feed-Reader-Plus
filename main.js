@@ -347,7 +347,7 @@ ipcMain.on('refresh', (event) => {
 
 ipcMain.on('reload', (event, arg) => {
 
-  if (arg == 'latest') {
+  if (arg.get == 'latest') {
 
     console.log('Getting latest feeds');
 
@@ -358,7 +358,13 @@ ipcMain.on('reload', (event, arg) => {
       var feeds = [];
 
       var sendIt = () => {
-        var articles = sorting.latest(feeds)
+        var articles = sorting.latest(feeds, arg.num);
+        articles.then ( (arts) => {
+          console.log(arts[0].title);
+        }).catch ( (err) => {
+          console.log(err);
+        });
+        
         //event.sender.send('reloaded', feeds);
       }
 
@@ -366,10 +372,12 @@ ipcMain.on('reload', (event, arg) => {
 
         var name = response[x].name;
         var feed;
+        
         var reader = parser.readData(name, x);
-  
+
         reader.then ( (response2) => {
           feed = response2;
+          feeds.push(feed);
           resolution();
         }).catch( (reason2) => {
           console.log(reason2);
@@ -377,10 +385,20 @@ ipcMain.on('reload', (event, arg) => {
 
         var resolution = () => {
 
-          feeds.push(feed);
-          console.log(feed.x);
-          if (feed.x == response.length - 1) {
-            sendIt();
+          //bubble sort
+          for (var i = 0; i < feeds.length; i++) {
+            for (var j = 0; j < feeds.length - i - 1; j++) {
+              if (feeds[j].x > feeds[j + 1].x) {
+                var tmp = feeds[j]; 
+                feeds[j] = feeds[j + 1];
+                feeds[j + 1] = tmp;
+              }
+            }
+
+            if (feeds[i].x == response.length - 1) {
+              sendIt();
+            }
+
           }
           
         }

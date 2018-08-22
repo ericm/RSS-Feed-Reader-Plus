@@ -7,8 +7,9 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}\\main.js"
+            "name": "Debug sorting",
+            "program": "${workspaceFolder}\\js\\sorting.js",
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
