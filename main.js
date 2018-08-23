@@ -28,6 +28,14 @@ function createWindow () {
 
   mainWindow.webContents.openDevTools();
 
+  mainWindow.on('closed', () => {
+    mainWindow = null
+  });
+}
+
+
+app.on('ready', () => {
+
   //check / create folders
   var rssDir = app.getPath('userData') + "/rss-feeds";
   if (!fs.existsSync(rssDir)) {
@@ -49,13 +57,6 @@ function createWindow () {
     console.log('added new datafile');
   }
 
-  mainWindow.on('closed', () => {
-    mainWindow = null
-  });
-}
-
-
-app.on('ready', () => {
   tray = new Tray('./img/64.ico');
   const contextMenu = Menu.buildFromTemplate([
     {label: 'Show Latest', click() {

@@ -132,12 +132,12 @@ module.exports = {
 
     opena: (i) => {
 
-        var artcl = document.getElementsByClassName('article')[i];
-        artcl.removeAttribute('onclick');
-        artcl.style.height = "auto";
-        artcl.style.boxShadow = "inset 0px -130px 200px -100px transparent";
-        artcl.classList.add("clickeda");
-        var title = artcl.getElementsByTagName('span')[0];
+        var artcle = document.getElementsByClassName('article')[i];
+        artcle.removeAttribute('onclick');
+        artcle.style.height = "auto";
+        artcle.style.boxShadow = "inset 0px -130px 200px -100px transparent";
+        artcle.classList.add("clickeda");
+        var title = artcle.getElementsByTagName('span')[0];
         title.classList += " linked";
 
         var text = document.createElement('p');
@@ -146,6 +146,12 @@ module.exports = {
         
         document.getElementsByClassName('artopt')[i].style.display = "block";
         document.getElementsByClassName('artup')[i].style.display = "block";
+        artcle.getElementsByTagName('iframe')[0].style.cssText = 'position: inherit;';
+
+        var it = artcle.getElementsByTagName('blockquote')[0].getElementsByTagName('i');
+        if (it.length > 0) {
+            it[0].style.cursor = "default";
+        }
 
     },
 
@@ -163,6 +169,12 @@ module.exports = {
         
         document.getElementsByClassName('artopt')[i].style.display = "none";
         document.getElementsByClassName('artup')[i].style.display = "none";
+        artcle.getElementsByTagName('iframe')[0].style.cssText =  'position: relative !important;';
+
+        var it = artcle.getElementsByTagName('blockquote')[0].getElementsByTagName('i');
+        if (it.length > 0) {
+            it[0].style.cursor = "pointer";
+        }
 
         setTimeout(() => {
             artcle.setAttribute('onclick', "opena(" + i + ")");

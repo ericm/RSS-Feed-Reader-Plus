@@ -46,7 +46,14 @@ ipcRenderer.on('reloaded', (event, response) => {
 
             dt1 = new Date(date);
             dt2 = new Date();
-            return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
+            var ago = Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
+            
+            if (ago != 0) {
+                return ago + " days ago";
+            } else {
+                return Math.floor((dt2.getTime() - dt1.getTime()) /(1000 * 60 * 60)) + " hours ago";
+            }
+            
         
         }
 
@@ -82,7 +89,7 @@ ipcRenderer.on('reloaded', (event, response) => {
             if (str != null) {
                 return str.replace(/href="([^"]+)/g, `onclick="link(\'$1\')" class="hrefed"`);
             } else {
-                return "<i>No Description</i>"
+                return '<i style="cursor: pointer !important;">No Description</i>';
             }
         }
 
@@ -94,12 +101,18 @@ ipcRenderer.on('reloaded', (event, response) => {
             }
         }
 
+        //For YouTube feeds
+        var embed_yt = "";
+        if (typeof article['yt:videoid'] !== 'undefined') {
+            embed_yt = `<div class="yt"><iframe style="position: relative !important;" width="480" height="270" src="https://www.youtube.com/embed/` + article['yt:videoid']['#'] + `" frameborder="0" allow="encrypted-media"></iframe></div>`
+        }
+
         enter.innerHTML += `<div class="article" onclick="opena(` + (x) + `)">
 <span class="artitle" onclick="link('` + is_exist(article.link) + `')">` + is_exist(article.title) + `</span><br>
 <i class="artfeed">From<img src="https://www.google.com/s2/favicons?domain=` + extractHostname(article.link) + `"><b>` + article.meta.title +`</b></i>
-<i class="artdate">` + date_format(is_exist(article.pubdate)) + ` (` + date_diff_indays(article.pubdate) + ` days ago)</i>
+<i class="artdate">` + date_format(is_exist(article.pubdate)) + ` (` + date_diff_indays(article.pubdate) + `)</i>
 <blockquote>
-` + replace_href(article.description) + `
+` + replace_href(article.description) + embed_yt + `
 </blockquote>
 <div class="artopt">
 <label><button class="unread">Keep unread</button></label>
