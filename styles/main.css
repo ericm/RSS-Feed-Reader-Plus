@@ -12,22 +12,34 @@ body {
     background-attachment: fixed;
     background-position: 50%;
     background-color: rgba(255, 255, 255, .96);
+    padding-top: 20px;
 }
 #container {
     padding-top: 60px;
-    padding-left: 250px;
+    left: 250px;
+    padding-bottom: 70px;
     padding-right: 20px;
+    position: fixed;
+    overflow-y: scroll;
+}
+#container h2 * {
+    font-size: 2.3em;
+    font-weight: bold;
+}
+#container h2 {
+    padding-bottom: 50px;
 }
 #containerOb {
     padding-top: 30px;
 }
-h1, span, p, i, a, blockquote {
+h1, h2, span, p, i, a, blockquote {
     font-family: 'Abel-Regular', sans-serif;
 }
 #menuC {
     position: fixed;
     width: 100%;
     background-color: rgb(49, 49, 49);
+    margin-top: -20px;
 }
 #menuC h1 {
     position: fixed;
@@ -185,6 +197,7 @@ h1, span, p, i, a, blockquote {
     text-overflow: ellipsis;
     overflow: hidden; 
     box-shadow: inset 0px -130px 200px -100px black;
+    margin-bottom: 40px;
 }
 
 .article:hover {
@@ -195,7 +208,6 @@ h1, span, p, i, a, blockquote {
     font-weight: bold;
     cursor: pointer;
     font-size: 2em;
-
 }
 .artfeed {
     cursor: pointer;
@@ -248,7 +260,7 @@ h1, span, p, i, a, blockquote {
 }
 .artopt {
     border-radius: 10px;
-    display: block;
+    display: none;
     margin: 50px auto;
     width: 480px; 
     padding: 10px;
@@ -282,6 +294,7 @@ h1, span, p, i, a, blockquote {
     width: 100%;
     text-align: center;
     margin-top: 20px;
+    display: none;
 }
 .artup img {
     width: 30px;
@@ -312,6 +325,10 @@ h1, span, p, i, a, blockquote {
 }
 .linked:hover p {
     color: rgb(230, 230, 230);
+}
+
+.hrefed, .hrefed * {
+    cursor: pointer !important;
 }
 
 ::-webkit-scrollbar-track {

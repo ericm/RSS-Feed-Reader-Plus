@@ -349,59 +349,64 @@ ipcMain.on('reload', (event, arg) => {
 
   if (arg.get == 'latest') {
 
-    console.log('Getting latest feeds');
-
     var getHeads = parser.readHeads();
 
     getHeads.then ( (response) => {
 
       var feeds = [];
-
+      var inc = 0;
+      
       var sendIt = () => {
-        var articles = sorting.latest(feeds, arg.num);
+        console.log('Getting latest feeds');
+        var articles = sorting.latest(feeds);
         articles.then ( (arts) => {
           console.log(arts[0].title);
+          event.sender.send('reloaded', {arts: arts, num: arg.num});
         }).catch ( (err) => {
           console.log(err);
         });
         
-        //event.sender.send('reloaded', feeds);
+        
       }
+
+      var resolution = (feed) => {
+        
+        feeds.push(feed);
+
+        //bubble sort
+        for (var i = 0; i < feeds.length; i++) {
+          for (var j = 0; j < feeds.length - i - 1; j++) {
+
+            if (feeds[j].x > feeds[j + 1].x) {
+
+              var tmp = feeds[j]; 
+              feeds[j] = feeds[j + 1];
+              feeds[j + 1] = tmp;
+
+            }
+
+          }
+
+        }
+        console.log(inc);
+        if (inc == response.length - 1) {
+          sendIt();
+        }
+        inc += 1;
+      }
+
 
       for (var x = 0; x < response.length; x++) {
 
         var name = response[x].name;
-        var feed;
-        
+
         var reader = parser.readData(name, x);
 
         reader.then ( (response2) => {
-          feed = response2;
-          feeds.push(feed);
-          resolution();
+          resolution(response2);
         }).catch( (reason2) => {
           console.log(reason2);
         });
-
-        var resolution = () => {
-
-          //bubble sort
-          for (var i = 0; i < feeds.length; i++) {
-            for (var j = 0; j < feeds.length - i - 1; j++) {
-              if (feeds[j].x > feeds[j + 1].x) {
-                var tmp = feeds[j]; 
-                feeds[j] = feeds[j + 1];
-                feeds[j + 1] = tmp;
-              }
-            }
-
-            if (feeds[i].x == response.length - 1) {
-              sendIt();
-            }
-
-          }
-          
-        }
           
       }
 

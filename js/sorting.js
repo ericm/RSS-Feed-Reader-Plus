@@ -1,78 +1,72 @@
-
-var getFeeds = (x, feeds) => {
+var getFeeds = (feeds) => {
 
     return new Promise( (resolve, reject) => {
+
         var round = new Array();
-        for (var i = 0; i < feeds.length; i++) {
-            round.push(feeds[i].obj.items[x]);
-            if (i == feeds.length - 1) {
-                resolve(round);
+
+            for (var i = 0; i < feeds.length; i++) {
+
+                var getLength = getLengths(feeds[i].obj.items);
+                getLength.then( (arg) => {
+
+                    for (var x = 0; x < arg.count; x++) {
+
+                        round.push(arg.feed[x]);
+
+                    }
+    
+                }).catch ( (err) => {
+                    console.log(err);
+                });       
+
             }
-        }
+
+            resolve(round);
+
     });
 
 }
 
-var sortFeeds = (round) => {
+var getLengths = (feed) => {
 
     return new Promise( (resolve, reject) => {
 
-        for (var i = 0; i < round.length; i++) {
-        
-            for (var j = 0; j < round.length - i - 1; j++) {
+        var count = 0;
+        var existing = true;
 
-                var tmp = round[j];
+        while (existing) {
                 
-                var date1 = new Date(round[j].date).getTime();
-                var date2 = new Date(round[j + 1].date).getTime();
-
-                if (isNaN(date1) || isNaN(date2)) {
-                    reject('date na');
-                }
-
-                if (date1 > date2) {
-                    round[j] = round[j + 1];
-                    round[j + 1] = tmp;
-                }
-
-                if (i == round.length - 1) {
-                    resolve(round);
-                }
-
-            }
+            if (typeof feed[count] !== "undefined") {
+                count += 1
+            } else {
+                existing = false;
+            }  
 
         }
+        
+        resolve({count: count, feed: feed});
 
     });
-
 }
 
 module.exports = {
 
-    latest: (feeds, num) => {
+    latest: (feeds) => {
 
         return new Promise( (resolve, reject) => {
-
-            var round = new Array();
-            console.log(feeds[0].obj.items[0].pubdate);
-
-            for (var x = 0; x < num; x++) {
-
-                var getFeedsPromise = getFeeds(x, round, feeds);
-                getFeedsPromise.then ( (arg1) => {
-                    round.concat(arg1);
-                    var sortFeedsPromise = sortFeeds(round);
-                    sortFeedsPromise.then( (arg2) => {
-                        console.log(arg2[0].title);
-                        resolve(arg2);
-                    }).catch( (reason) => {
-                        console.log(reason);
-                    });
-                }).catch( (reason) => {
-                    console.log(reason);
+            
+            var roundFeeds = getFeeds(feeds);
+            roundFeeds.then( (arg1) => {
+                
+                arg1.sort( (a, b) => {
+                    return new Date(b.pubdate).getTime() - new Date(a.pubdate).getTime();
                 });
-    
-            }
+
+                resolve(arg1);
+
+            }).catch( (err) => {
+                console.log(err);
+            });
             
         });
 

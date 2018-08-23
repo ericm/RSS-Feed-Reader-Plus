@@ -1,8 +1,12 @@
 const {ipcRenderer} = require('electron');
 
 document.getElementById('list').style.height = window.innerHeight - 70 + "px";
+document.getElementById('container').style.height = window.innerHeight - 20 + "px";
+document.getElementById('container').style.width = window.innerWidth - 270 + "px";
 window.onresize = () => {
     document.getElementById('list').style.height = window.innerHeight - 70 + "px";
+    document.getElementById('container').style.height = window.innerHeight - 20 + "px";
+    document.getElementById('container').style.width = window.innerWidth - 270 + "px";
 };
 
 document.getElementById('drawer').getElementsByTagName('span')[0].addEventListener('click', () => {
@@ -137,6 +141,9 @@ module.exports = {
         var text = document.createElement('p');
         text.textContent = "(Link)";
         title.appendChild(text);
+        
+        document.getElementsByClassName('artopt')[i].style.display = "block";
+        document.getElementsByClassName('artup')[i].style.display = "block";
 
     },
 
@@ -151,6 +158,10 @@ module.exports = {
 
         var text = title.getElementsByTagName('p')[0];
         title.removeChild(text);
+        
+        document.getElementsByClassName('artopt')[i].style.display = "none";
+        document.getElementsByClassName('artup')[i].style.display = "none";
+
         setTimeout(() => {
             artcle.setAttribute('onclick', "opena(" + i + ")");
         }, 1000);
