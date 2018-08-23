@@ -24,6 +24,7 @@ var enter = document.getElementById('list');
 ipcRenderer.on('refreshed', (event, response) => {
 
     refresh(response);
+    ipcRenderer.send('reload', {get: 'latest', num: 10});
 
 });
 
@@ -31,6 +32,7 @@ ipcRenderer.on('refreshed-new', (event, response) => {
 
     enter.innerHTML = "";
     refresh(response);
+    ipcRenderer.send('reload', {get: 'latest', num: 10});
 
 });
 

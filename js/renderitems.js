@@ -25,7 +25,17 @@ var extractHostname = (url) => {
 
 ipcRenderer.on('reloaded', (event, response) => {
 
-    for (var x = 0; x < response.num; x++) {
+    enter.innerHTML = "<h2><i>Latest</i></h2>";
+
+    var number;
+
+    if (response.arts.length < response.num) {
+        number = response.arts.length;
+    } else {
+        number = response.num;
+    }
+
+    for (var x = 0; x < number; x++) {
 
         var article = response.arts[x];
 
@@ -69,13 +79,25 @@ ipcRenderer.on('reloaded', (event, response) => {
         }
 
         var replace_href = (str) => {
-            return str.replace(/href="([^"]+)/g, `onclick="link(\'$1\')" class="hrefed"`);
+            if (str != null) {
+                return str.replace(/href="([^"]+)/g, `onclick="link(\'$1\')" class="hrefed"`);
+            } else {
+                return "<i>No Description</i>"
+            }
+        }
+
+        var is_exist = (variable) => {
+            if (typeof variable !== 'undefined' || variable != null) {
+                return variable;
+            } else {
+                return "";
+            }
         }
 
         enter.innerHTML += `<div class="article" onclick="opena(` + (x) + `)">
-<span class="artitle" onclick="link('` + article.link + `')">` + article.title + `</span><br>
+<span class="artitle" onclick="link('` + is_exist(article.link) + `')">` + is_exist(article.title) + `</span><br>
 <i class="artfeed">From<img src="https://www.google.com/s2/favicons?domain=` + extractHostname(article.link) + `"><b>` + article.meta.title +`</b></i>
-<i class="artdate">` + date_format(article.pubdate) + ` (` + date_diff_indays(article.pubdate) + ` days ago)</i>
+<i class="artdate">` + date_format(is_exist(article.pubdate)) + ` (` + date_diff_indays(article.pubdate) + ` days ago)</i>
 <blockquote>
 ` + replace_href(article.description) + `
 </blockquote>

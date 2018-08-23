@@ -79,7 +79,7 @@ app.on('ready', () => {
         addWindow.loadFile('html/addfeed.html');
     
         // Open the DevTools.
-        addWindow.webContents.openDevTools();
+        //addWindow.webContents.openDevTools();
         addWindow.on('closed', () => {
           addWindow = null
           addOpen = false;
