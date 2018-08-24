@@ -335,6 +335,11 @@ h1, h2, span, p, i, a, blockquote {
 
 .hrefed, .hrefed * {
     cursor: pointer !important;
+    color: #4088da;
+    transition: all 0.3s;
+}
+.hrefed:hover, .hrefed *:hover {
+    color: #1e4879;
 }
 
 .yt {

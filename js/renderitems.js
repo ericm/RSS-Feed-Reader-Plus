@@ -91,7 +91,9 @@ var reloaded = (arts, number) => {
 
         var replace_href = (str) => {
             if (str != null) {
-                return str.replace(/href="([^"]+)/g, `onclick="link(\'$1\')" class="hrefed"`);
+                str = str.replace(/href="([^"]+)/g, `onclick="link(\'$1\')" class="hrefed"`);
+
+                return str;
             } else {
                 return '';
             }
@@ -140,6 +142,9 @@ Save to:
 
     }
     enter.innerHTML += `<div id="scrollTo"><img src="../img/load1.gif"></div>`;
+
+    $('iframe').remove();
+    $('#container > script').remove();
 
 }
 
