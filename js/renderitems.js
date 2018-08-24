@@ -1,6 +1,5 @@
 const {ipcRenderer} = require('electron');
-
-document.onload = ipcRenderer.send('reload', {get: 'latest', num: 10});
+const $ = require('jquery');
 
 var enter = document.getElementById('container');
 
@@ -23,23 +22,16 @@ var extractHostname = (url) => {
     return hostname;
 }
 
-ipcRenderer.on('reloaded', (event, response) => {
+var artGlob = new Array();
+var xGlob;
 
-    enter.innerHTML = "<h2><i>Latest</i></h2>";
+var reloaded = (arts, number) => {
 
-    var number;
+    for (var x = xGlob; x < number; x++) {
 
-    if (response.arts.length < response.num) {
-        number = response.arts.length;
-    } else {
-        number = response.num;
-    }
+        var article = arts.arts[x];
 
-    for (var x = 0; x < number; x++) {
-
-        var article = response.arts[x];
-
-        var days = ['Sun','Mon','Tues','Wednes','Thurs','Fri','Sat'];
+        var days = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat'];
         var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
         var date_diff_indays = (date) => {
@@ -49,12 +41,24 @@ ipcRenderer.on('reloaded', (event, response) => {
             var ago = Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
             
             if (ago != 0) {
-                return ago + " days ago";
+
+                if (ago == 1) {
+                    return ago + " day ago";
+                } else {
+                    return ago + " days ago";
+                }
+                
             } else {
-                return Math.floor((dt2.getTime() - dt1.getTime()) /(1000 * 60 * 60)) + " hours ago";
+                
+                var hrs = Math.floor((dt2.getTime() - dt1.getTime()) /(1000 * 60 * 60));
+                if (hrs == 1) {
+                    return hrs + " hour ago"
+                } else {
+                    return hrs + " hours ago";
+                }
+                
             }
             
-        
         }
 
         var date_format = (date) => {
@@ -89,7 +93,7 @@ ipcRenderer.on('reloaded', (event, response) => {
             if (str != null) {
                 return str.replace(/href="([^"]+)/g, `onclick="link(\'$1\')" class="hrefed"`);
             } else {
-                return '<i style="cursor: pointer !important;">No Description</i>';
+                return '';
             }
         }
 
@@ -103,8 +107,8 @@ ipcRenderer.on('reloaded', (event, response) => {
 
         //For YouTube feeds
         var embed_yt = "";
-        if (typeof article['yt:videoid'] !== 'undefined') {
-            embed_yt = `<div class="yt"><iframe style="position: relative !important;" width="480" height="270" src="https://www.youtube.com/embed/` + article['yt:videoid']['#'] + `" frameborder="0" allow="encrypted-media"></iframe></div>`
+        if ( extractHostname(article.link) == "www.youtube.com") {
+            embed_yt = `<a class="imgpr"><div><img onclick="link('` + article.link + `')" src="` + article['image']['url'] + `"></div></a>`
         }
 
         enter.innerHTML += `<div class="article" onclick="opena(` + (x) + `)">
@@ -129,7 +133,72 @@ Save to:
 <img src="../img/arrow1.png" onclick="closea(` + x + `)">
 </div>`;
 
+        xGlob = x + 1;
+        if (arts.arts.length < arts.num) {
+            xGlob = -1;
+        }
+
     }
-    enter.innerHTML += `<div style="margin-bottom: 100px;"></div>`;
+    enter.innerHTML += `<div id="scrollTo"><img src="../img/load1.gif"></div>`;
+
+}
+
+ipcRenderer.on('reloaded', (event, response) => {
+
+    enter.innerHTML = "<h2><i>Latest</i></h2>";
+
+    var number;
+
+    if (response.arts.length < response.num) {
+        number = response.arts.length;
+    } else {
+        number = response.num;
+    }
+    xGlob = 0;
+    artGlob = response;
+    reloaded(response, number);
+
+});
+
+// MAD JQUERY SKILZZ
+var loadmore = 10;
+$('#container').scroll(() => {
+
+    if (artGlob.arts.length < artGlob.num) {
+        loadmore = artGlob.arts.length;
+    }
+
+    var y_scroll_pos = 0;
+    if ($('#scrollTo').length) {
+        y_scroll_pos = $('#scrollTo').offset().top;
+    }
+
+    var wHeight = $('#container').innerHeight();
+    var distance = (y_scroll_pos - wHeight + 148);
+              
+    if(distance == 0 && xGlob >= 0) {
+
+        $('#scrollTo').remove();
+        console.log('loaded more ' + loadmore);
+        loadmore += 10;
+
+        if (artGlob.arts.length <= loadmore) {
+            if (loadmore != artGlob.arts.length + 10) {
+                console.log('fin1');
+                loadmore = artGlob.arts.length;
+                reloaded(artGlob, loadmore);
+            } else {
+                console.log('fin');
+            }
+            
+        } else {
+            reloaded(artGlob, loadmore);
+        }
+        
+    }
+
+    if (xGlob < 0) {
+        $('#scrollTo').remove();
+    }
 
 });

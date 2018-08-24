@@ -26,7 +26,7 @@ function createWindow () {
 
   mainWindow.loadFile('html/index.html');
 
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -131,6 +131,9 @@ app.on('ready', () => {
       mainWindow.focus();
     }
   });
+
+  console.log('\033[0;36mThe app is now running.\033[0m');
+
 });
 
 
@@ -389,11 +392,12 @@ ipcMain.on('reload', (event, arg) => {
           }
 
         }
-        console.log(inc);
+
         if (inc == response.length - 1) {
           sendIt();
         }
         inc += 1;
+
       }
 
 

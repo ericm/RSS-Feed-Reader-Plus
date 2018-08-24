@@ -1,12 +1,26 @@
 const {ipcRenderer} = require('electron');
 
 document.getElementById('list').style.height = window.innerHeight - 70 + "px";
-document.getElementById('container').style.height = window.innerHeight - 20 + "px";
+document.getElementById('container').style.height = window.innerHeight - 153 + "px";
 document.getElementById('container').style.width = window.innerWidth - 270 + "px";
+
 window.onresize = () => {
+
     document.getElementById('list').style.height = window.innerHeight - 70 + "px";
-    document.getElementById('container').style.height = window.innerHeight - 20 + "px";
-    document.getElementById('container').style.width = window.innerWidth - 270 + "px";
+    document.getElementById('container').style.height = window.innerHeight - 153 + "px";
+    
+    if (window.innerWidth > 1512) {
+
+        var wWidth = (window.innerWidth - 1260 - 250) /2;
+        var cLeft = 250 + wWidth;
+        document.getElementById('container').style.left = cLeft + "px";
+        document.getElementById('container').style.width = window.innerWidth - cLeft - 20 + "px"
+
+    } else {
+        document.getElementById('container').style.left = "250px";
+        document.getElementById('container').style.width = window.innerWidth - 270 + "px";
+    }
+
 };
 
 document.getElementById('drawer').getElementsByTagName('span')[0].addEventListener('click', () => {
@@ -22,21 +36,21 @@ document.onload = ipcRenderer.send('refresh');
 var enter = document.getElementById('list');
 
 ipcRenderer.on('refreshed', (event, response) => {
-
-    refresh(response);
     ipcRenderer.send('reload', {get: 'latest', num: 10});
-
+    refresh(response);
 });
 
 ipcRenderer.on('refreshed-new', (event, response) => {
-
-    enter.innerHTML = "";
-    refresh(response);
+    enter.innerHTML = ""
     ipcRenderer.send('reload', {get: 'latest', num: 10});
-
+    refresh(response);
 });
 
+var respGlob = new Array();
+
 var refresh = (response) => {
+
+    respGlob = response;
 
     if (response.length != 0) {
 
@@ -46,7 +60,7 @@ var refresh = (response) => {
 
             enter.innerHTML += `
     
-<div class="item" oncontextmenu="rcl(` + x + `, event)">
+<div class="item" onclick="tab(` + x + `)" oncontextmenu="rcl(` + x + `, event)">
     <span>` + response[x].title + `</span>
     <i><img src="https://www.google.com/s2/favicons?domain=` + img + `">` + response[x].link + `</i>
 </div>
@@ -146,7 +160,11 @@ module.exports = {
         
         document.getElementsByClassName('artopt')[i].style.display = "block";
         document.getElementsByClassName('artup')[i].style.display = "block";
-        artcle.getElementsByTagName('iframe')[0].style.cssText = 'position: inherit;';
+        //artcle.getElementsByTagName('iframe')[0].style.cssText = 'position: inherit;';
+
+        if (typeof artcle.getElementsByClassName('imgpr')[0] !== 'undefined') {
+            artcle.getElementsByClassName('imgpr')[0].getElementsByTagName('img')[0].style.zIndex = "0";
+        }
 
         var it = artcle.getElementsByTagName('blockquote')[0].getElementsByTagName('i');
         if (it.length > 0) {
@@ -159,7 +177,7 @@ module.exports = {
 
         var artcle = document.getElementsByClassName('article')[i];
         artcle.removeAttribute('style');
-        console.log(artcle.textContent);
+
         artcle.classList.remove("clickeda");
         var title = artcle.getElementsByTagName('span')[0];
         title.classList.remove("linked");
@@ -169,7 +187,12 @@ module.exports = {
         
         document.getElementsByClassName('artopt')[i].style.display = "none";
         document.getElementsByClassName('artup')[i].style.display = "none";
-        artcle.getElementsByTagName('iframe')[0].style.cssText =  'position: relative !important;';
+        //artcle.getElementsByTagName('iframe')[0].style.cssText =  'position: relative !important;';
+
+        if (typeof artcle.getElementsByClassName('imgpr')[0] !== 'undefined') {
+            artcle.getElementsByClassName('imgpr')[0].getElementsByTagName('img')[0].style.zIndex = "-100";
+        }
+        
 
         var it = artcle.getElementsByTagName('blockquote')[0].getElementsByTagName('i');
         if (it.length > 0) {
@@ -180,6 +203,20 @@ module.exports = {
             artcle.setAttribute('onclick', "opena(" + i + ")");
         }, 1000);
         
+    },
+
+    tab: (i) => {
+
+        if (respGlob.length != 0) {
+
+            console.log(respGlob[i]);
+
+        }
+
+    },
+
+    load: () => {
+        ipcRenderer.send('reload', {get: 'latest', num: 10});
     }
 
 }

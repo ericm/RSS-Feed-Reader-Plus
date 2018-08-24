@@ -198,6 +198,7 @@ h1, h2, span, p, i, a, blockquote {
     overflow: hidden; 
     box-shadow: inset 0px -130px 200px -100px black;
     margin-bottom: 40px;
+    max-width: 1200px;
 }
 
 .article:hover {
@@ -310,8 +311,8 @@ h1, h2, span, p, i, a, blockquote {
 
 .linked {
     padding-left: 10px;
-    color: #bc81e4;
-    border-left: #bc81e4 solid 3px;
+    color: #64a6f1;
+    border-left: #64a6f1 solid 3px;
     cursor: pointer !important;
     transition: all 0.3s;
     border-radius: 0;
@@ -325,7 +326,7 @@ h1, h2, span, p, i, a, blockquote {
 }
 .linked:hover {
     color: #fff;
-    background-color: #bc81e4;
+    background-color: #64a6f1;
     border-radius: 10px;
 }
 .linked:hover p {
@@ -345,6 +346,29 @@ h1, h2, span, p, i, a, blockquote {
     z-index: -100;
 }
 
+.imgpr div {
+    cursor: pointer !important;
+    margin: auto;
+    width: 480px;
+    height: 270px;
+    overflow: hidden;
+    border-radius: 1em;
+    
+}
+.imgpr div img {
+    width: 480px;
+    height: 360px;
+    margin-top: -45px;
+    position: relative !important;
+    z-index: -100;
+    cursor: pointer !important;
+}
+
+#scrollTo {
+    text-align: center;
+    padding-top: 30px;
+}
+
 
 ::-webkit-scrollbar-track {
     background-color: rgb(49, 49, 49);
@@ -356,5 +380,5 @@ h1, h2, span, p, i, a, blockquote {
 }
 
 ::-webkit-scrollbar-thumb {
-	background-color: rgba(0, 0, 0, 0.6);
+	background-color: rgba(0, 0, 0, 1);
 }
