@@ -385,5 +385,5 @@ h1, h2, span, p, i, a, blockquote {
 }
 
 ::-webkit-scrollbar-thumb {
-	background-color: rgba(0, 0, 0, 1);
+	background-color: rgb(78, 78, 78);
 }

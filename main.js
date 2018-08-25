@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain, Tray, Menu, shell} = require('electron');
+const {app, BrowserWindow, ipcMain, Tray, Menu, shell, nativeImage} = require('electron');
 const parser = require('./js/feedparse.js');
 const sorting = require('./js/sorting.js');
 const fs = require('fs');
@@ -20,13 +20,13 @@ global.sharedObj = {title: 'RSS FEED READER PLUS'};
 
 function createWindow () {
   
-  mainWindow = new BrowserWindow({width: 1200, height: 600, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: './img/64.ico'});
+  mainWindow = new BrowserWindow({width: 1200, height: 600, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
 
   mainWindow.setMenu(null);
 
   mainWindow.loadFile('html/index.html');
 
-  //mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -57,7 +57,7 @@ app.on('ready', () => {
     console.log('added new datafile');
   }
 
-  tray = new Tray('./img/64.ico');
+  tray = new Tray(nativeImage.createFromPath('./img/64.ico'));
   const contextMenu = Menu.buildFromTemplate([
     {label: 'Show Latest', click() {
       if (mainWindow == null) {
@@ -73,7 +73,7 @@ app.on('ready', () => {
         addOpen = true;
         console.log('opened add'); 
         
-        addWindow = new BrowserWindow({width: 500, height: 400, frame: false, minWidth: 500, minHeight: 400, transparent: true, icon: './img/64.ico'});
+        addWindow = new BrowserWindow({width: 500, height: 400, frame: false, minWidth: 500, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
     
         addWindow.setMenu(null);
     
@@ -98,7 +98,7 @@ app.on('ready', () => {
         settingsOpen = true;
         console.log('opened settings'); 
         
-        settingsWindow = new BrowserWindow({width: 800, height: 400, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: './img/64.ico'});
+        settingsWindow = new BrowserWindow({width: 800, height: 400, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
     
         settingsWindow.setMenu(null);
     
@@ -159,7 +159,7 @@ ipcMain.on('settings-page', (event, arg) => {
     settingsOpen = true;
     console.log('opened settings'); 
     
-    settingsWindow = new BrowserWindow({width: 800, height: 400, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: './img/64.ico'});
+    settingsWindow = new BrowserWindow({width: 800, height: 400, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
 
     settingsWindow.setMenu(null);
 
@@ -186,7 +186,7 @@ ipcMain.on('add-page', (event, arg) => {
     addOpen = true;
     console.log('opened add'); 
     
-    addWindow = new BrowserWindow({width: 500, height: 400, frame: false, minWidth: 500, minHeight: 400, transparent: true, icon: './img/64.ico'});
+    addWindow = new BrowserWindow({width: 500, height: 400, frame: false, minWidth: 500, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
 
     addWindow.setMenu(null);
 
@@ -230,7 +230,7 @@ ipcMain.on('add-link', (event, arg) => {
           setTimeout(() => addWindow.close(), 1500);
 
           setTimeout(() => {
-            var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: './img/64.ico'});
+            var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
 
             editWindow.setMenu(null);
   
