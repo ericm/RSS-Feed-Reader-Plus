@@ -5,7 +5,7 @@ const fs = require('fs');
 const utils = require('daveutils');
 
 module.exports = {
-    feed: (link) => {
+    feed: (link, x) => {
         
         return new Promise((resolve, reject) => {
 
@@ -46,7 +46,7 @@ module.exports = {
             
             feedparser.on('end', () => {
                 
-                resolve(theFeed);
+                resolve({feed: theFeed, x: x, link});
             });
 
         });
@@ -102,6 +102,53 @@ module.exports = {
 
             }
 
+        });
+
+    },
+
+    rewriteData: (link, data) => {
+
+        return new Promise((resolve, reject) => {
+
+            var name = link;
+
+            name = name.split('/').join('-');
+            name = name.split(':').join('');
+            name = name.split('?').join('');
+            name = name.split('=').join('');
+            name = name.split('*').join('');
+            name = name.split('>').join('');
+            name = name.split('<').join('');
+
+
+            var theString = '{"items":[';
+
+            for (x in data) {
+                
+                theString += utils.jsonStringify(data[x]);
+
+                if (x != data.length - 1) {
+                    theString += ',';
+                }
+
+            }
+            theString += ']}';
+
+            var loc = app.getPath('userData') + "/rss-feeds/" + name + ".json";
+
+            fs.truncate(loc, 0, () => {
+
+                fs.writeFile(loc, theString, (err2) => {
+                    if (err2) {
+                        reject(err2);
+                    } else {
+                        console.log("Saved");
+                        resolve(name);
+                    }
+                });
+
+            })
+            
         });
 
     },

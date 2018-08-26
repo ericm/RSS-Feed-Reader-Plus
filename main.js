@@ -2,6 +2,7 @@
 const {app, BrowserWindow, ipcMain, Tray, Menu, shell, nativeImage} = require('electron');
 const parser = require('./js/feedparse.js');
 const sorting = require('./js/sorting.js');
+const main_cron = require('./js/main_cron.js');
 const fs = require('fs');
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -134,6 +135,11 @@ app.on('ready', () => {
 
   console.log('\033[0;36mThe app is now running.\033[0m');
 
+  var cron = main_cron.start();
+  cron.then( (arg) => {}).catch( (reason) => {
+    console.log(reason);
+  })
+
 });
 
 
@@ -210,16 +216,16 @@ var editing;
 
 ipcMain.on('add-link', (event, arg) => {
 
-  var feed = parser.feed(arg);
+  var feed = parser.feed(arg, 0);
   feed.then( (res) => {
 
-    console.log(res.items.length);
+    console.log(res.feed.items.length);
     event.sender.send('link-reply', true);
 
-    var write = parser.writeData(arg, res.items);
+    var write = parser.writeData(arg, res.feed.items);
     write.then( (response) => {
 
-      var save = parser.saveData(response, arg, res.head);
+      var save = parser.saveData(response, arg, res.feed.head);
 
       save.then( (saveRes) => {
 
@@ -306,13 +312,13 @@ ipcMain.on('editing', (event) => {
       console.log(reason);
 
 
-      var feed = parser.feed(arg);
+      var feed = parser.feed(arg, 0);
       feed.then( (res) => {
 
-        console.log(res.items.length);
+        console.log(res.feed.items.length);
         event.sender.send('link-reply', true);
 
-        var write = parser.writeData(arg, res.items);
+        var write = parser.writeData(arg, res.feed.items);
         write.then( (response) => {
           console.log('fixed ' + response);
         }).catch( (reasonSave) => {

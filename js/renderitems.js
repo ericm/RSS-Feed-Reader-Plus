@@ -1,5 +1,6 @@
 const {ipcRenderer} = require('electron');
 const $ = require('jquery');
+const timer = require('./timer.js');
 
 var enter = document.getElementById('container');
 
@@ -150,7 +151,8 @@ Save to:
 
 ipcRenderer.on('reloaded', (event, response) => {
 
-    enter.innerHTML = "<h2><i>Latest</i></h2>";
+    enter.innerHTML = `<h2><i>Latest</i></h2>
+    <div id="timer"><p><b>Last Refreshed</b>: 0 minutes ago</p></div>`;
 
     var number;
 
@@ -162,7 +164,8 @@ ipcRenderer.on('reloaded', (event, response) => {
     xGlob = 0;
     artGlob = response;
     reloaded(response, number);
-
+    timer.stop();
+    timer.start();
 });
 
 // MAD JQUERY SKILZZ

@@ -374,6 +374,11 @@ h1, h2, span, p, i, a, blockquote {
     padding-top: 30px;
 }
 
+#timer {
+    position: relative;
+    top: -50px;
+}
+
 
 ::-webkit-scrollbar-track {
     background-color: rgb(49, 49, 49);
