@@ -1,5 +1,7 @@
 const cron = require('node-cron');
 const parser = require('../js/feedparse.js');
+const {app} = require('electron');
+const fs = require('fs');
 
 module.exports = {
 
@@ -84,7 +86,19 @@ module.exports = {
                     reject(reason);
                 });
 
-                global.refreshed = {last: new Date()};
+                var loc = app.getPath('userData') + "/last_written.txt";
+                var theString = new Date().toString();
+
+                fs.truncate(loc, 0, () => {
+
+                    fs.writeFile(loc, theString, (err) => {
+                        if (err) {
+                            console.log(err)
+                        }
+                    });
+
+                });
+    
     
             }, false);
     

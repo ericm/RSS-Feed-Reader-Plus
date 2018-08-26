@@ -58,6 +58,17 @@ app.on('ready', () => {
     console.log('added new datafile');
   }
 
+  var lw = app.getPath('userData') + "/last_written.txt";
+  var dl = (new Date()).toString();
+  if (!fs.existsSync(lw)) {
+    fs.writeFile(lw, dl, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    console.log('added new last_written');
+  }
+
   tray = new Tray(nativeImage.createFromPath('./img/64.ico'));
   const contextMenu = Menu.buildFromTemplate([
     {label: 'Show Latest', click() {
@@ -440,5 +451,19 @@ ipcMain.on('quit', () => {
 ipcMain.on('link', (event, arg) => {
 
   shell.openExternal(arg);
+
+});
+
+ipcMain.on('getLatestTime', (event) => {
+
+  var loc = app.getPath('userData') + "/last_written.txt";
+  fs.readFile(loc, 'utf8', (err, data) => {
+    if (err) {
+      console.log('noExist');
+    } else {
+      lastTime = data;
+      event.sender.send('latestTime', lastTime);
+    }
+  });
 
 });

@@ -1,10 +1,17 @@
 var cron = require('node-cron');
-
-var lastTime;
+const {ipcRenderer} = require('electron');
 
 var task = cron.schedule('30 * * * * *', () => {
 
+    ipcRenderer.send('getLatestTime', []);
+
+}, false);
+
+ipcRenderer.on('latestTime', (event, data) => {
+
     var cont = document.getElementById('timer');
+
+    var lastTime = new Date(data);
 
     var currentTime = new Date();
     //in minutes ->
@@ -29,16 +36,13 @@ var task = cron.schedule('30 * * * * *', () => {
         
     }
 
-}, false);
+});
 
 module.exports = {
 
     start: () => {
-
-        var electron = require('electron').remote;
-        lastTime = electron.getGlobal('refreshed').last;
+        ipcRenderer.send('getLatestTime', []);
         task.start();
-
     },
 
     stop: () => {
