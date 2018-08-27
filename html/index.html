@@ -31,8 +31,8 @@
         </div>
         <div id="drop-menu">
           <div id="drop-back">
-              <span>View latest</span><hr>
-              <span>Refresh</span><hr>
+              <span onclick="load()">View latest</span><hr>
+              <span onclick="reload()">Refresh</span><hr>
               <span>Global Rules</span><hr>
               <span>Report a bug</span>
               <span>About</span><hr>
@@ -68,8 +68,14 @@
       function closea(i) {
         require('../js/list.js').closea(i);
       }
-      function tab(name, i) {
-        require('../js/list.js').tab(name, i);
+      function tab(name, i, title) {
+        require('../js/list.js').tab(name, i, title);
+      }
+      function load() {
+        require('../js/list.js').load();
+      }
+      function reload() {
+        require('../js/list.js').reload();
       }
       require('../js/renderer.js');
       require('../js/menu.js');

@@ -55,7 +55,17 @@ var reloaded = (arts, number) => {
                 if (hrs == 1) {
                     return hrs + " hour ago"
                 } else {
-                    return hrs + " hours ago";
+                    if (hrs == 0) {
+                        var mins = Math.floor((dt2.getTime() - dt1.getTime()) /(1000 * 60));
+                        if (mins == 1) {
+                            return mins + " minute ago";
+                        } else {
+                            return mins + " minutes ago"
+                        }
+                    } else {
+                        return hrs + " hours ago";
+                    }
+                    
                 }
                 
             }
@@ -170,6 +180,12 @@ ipcRenderer.on('reloaded', (event, response) => {
         timer.start();
 
     } else {
+
+        if (document.getElementById('item_clicked') !== null) {
+
+            document.getElementById('item_clicked').removeAttribute('id');
+
+        }
 
         enter.innerHTML = `<h2><i>Latest</i></h2>
         <div id="timer"><p><b>Last Refreshed</b>: </p></div>`;

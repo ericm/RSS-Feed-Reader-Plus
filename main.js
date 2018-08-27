@@ -484,6 +484,16 @@ ipcMain.on('getLatestTime', (event) => {
 
 });
 
+ipcMain.on('reGet', (event) => {
+
+  var now = main_cron.now();
+  now.then( () => {
+  }).catch( (error) => {
+    console.log(error);
+  })
+
+});
+
 
 
 global.output = {

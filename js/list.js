@@ -1,4 +1,5 @@
 const {ipcRenderer} = require('electron');
+const renderer = require('./renderer.js');
 
 document.getElementById('list').style.height = window.innerHeight - 70 + "px";
 document.getElementById('container').style.height = window.innerHeight - 153 + "px";
@@ -46,11 +47,31 @@ ipcRenderer.on('refreshed-new', (event, response) => {
     refresh(response);
 });
 
+
+ipcRenderer.on('reGot', (event) => {
+    document.getElementById('topOpt').getElementsByTagName('span')[1].getElementsByTagName('img')[0].style.cursor = "pointer";
+});
+
+
 var respGlob = new Array();
+
+var removeMark = (str) => {
+
+    str = str.split(`'`).join('');
+    str = str.split(`"`).join('');
+    str = str.split("`").join('');
+
+    return str;
+}
 
 var refresh = (response) => {
 
     respGlob = response;
+
+    enter.innerHTML += `<div id="topOpt">
+    <span onclick="load()">View Latest</span>
+    <span onclick="reload()"><img style="width: 22px; height: 22px;" src="../img/reload.svg"/></span>
+    </div>`;
 
     if (response.length != 0) {
 
@@ -60,7 +81,7 @@ var refresh = (response) => {
 
             enter.innerHTML += `
     
-<div class="item" onclick="tab('` + response[x].name + `', ` + x + `)" oncontextmenu="rcl(` + x + `, event)">
+<div class="item" onclick="tab('` + removeMark(response[x].name) + `', ` + x + `, '` + removeMark(response[x].title) + `')" oncontextmenu="rcl(` + x + `, event)">
     <span>` + response[x].title + `</span>
     <i><img src="https://www.google.com/s2/favicons?domain=` + img + `">` + response[x].link + `</i>
 </div>
@@ -205,7 +226,11 @@ module.exports = {
         
     },
 
-    tab: (name, i) => {
+    tab: (name, i, title) => {
+
+        document.getElementById('container').scrollTo(0, 0);
+
+        renderer.rename(title);
 
         if (respGlob.length != 0) {
 
@@ -224,7 +249,17 @@ module.exports = {
     },
 
     load: () => {
+
+        document.getElementById('container').scrollTo(0, 0);
+        renderer.rename('Latest');
         ipcRenderer.send('reload', {get: 'latest', num: 10});
+
+    },
+
+    reload: () => {
+        document.getElementById('container').scrollTo(0, 0);
+        //document.getElementById('topOpt').getElementsByTagName('span')[1].getElementsByTagName('img')[0].style.cursor = "not-allowed";
+        ipcRenderer.send('reGet', []);
     }
 
 }

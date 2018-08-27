@@ -70,7 +70,7 @@ module.exports = {
                                             reject(reason4);
                                         });
 
-                                        global.output.notify(add_items[0].title, "A new entry in " + arg3.feed.head.title + " has just been released.");
+                                        global.output.notify(add_items[0].title, "- " + arg3.feed.head.title);
                                             
                                     }
                                     
@@ -112,7 +112,105 @@ module.exports = {
 
         });
 
-        
+    },
+
+    now: () => {
+
+        return new Promise( (resolve, reject) => {
+
+            console.log("looking for new items");
+
+            var getHeads = parser.readHeads();
+
+            getHeads.then( (arg1) => {
+
+                for (var x = 0; x < arg1.length; x++) {
+
+                    //Compare old and new feeds      
+                    //Get stored feed data ->
+                    var getData = parser.readData(arg1[x].name, x);
+                    getData.then ( (arg2) => {
+
+                        var old_items = arg2.obj.items;
+
+                        var getCurrent = parser.feed(arg1[arg2.x].link, x);
+
+                        getCurrent.then( (arg3) => {
+
+                            var new_items = arg3.feed.items;
+
+                            var i = 0;
+                            var matched = false;
+
+                            while (!matched) {
+
+                                if (i >= new_items.length) {
+                                    break;
+                                }
+
+                                if (typeof old_items[0] === 'undefined') {
+                                    break;
+                                }
+
+                                if (new_items[i].title == old_items[0].title) {
+
+                                    if (i == 0) {
+                                        break;
+                                    }
+                                    
+                                    var insert_index = i;
+
+                                    var add_items = new_items.slice(0, insert_index);
+            
+                                    var insert = add_items.concat(old_items);
+
+                                    var writer = parser.rewriteData(arg3.link, insert);
+                                    writer.then ( (arg4) => {
+
+                                        global.output.latestRefresh();
+                                        console.log('refreshed feed: ' + arg4);
+                                        matched = true;
+
+                                    }).catch( (reason4) => {
+                                        reject(reason4);
+                                    });
+
+                                    global.output.notify(add_items[0].title, "- " + arg3.feed.head.title);
+                                        
+                                }
+                                
+                                i += 1;
+
+                            }
+
+                        }).catch ( (reason3) => {
+                            reject(reason3);
+                        });
+
+                    }).catch( (reason2) => {
+                        reject(reason2);
+                    });
+
+                }
+
+            }).catch( (reason) => {
+                reject(reason);
+            });
+
+            var loc = app.getPath('userData') + "/last_written.txt";
+            var theString = new Date().toString();
+
+            fs.truncate(loc, 0, () => {
+
+                fs.writeFile(loc, theString, (err) => {
+                    if (err) {
+                        console.log(err)
+                    }
+                });
+
+            });
+
+        });
 
     }
 

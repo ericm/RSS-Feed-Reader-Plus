@@ -82,3 +82,26 @@
 #drawer span:hover {
     background-color: rgb(255, 255, 255);
 }
+
+#topOpt {
+    padding: 20px;
+}
+#topOpt span {
+    color: rgb(233, 233, 233);
+    margin-left: 15px;
+    padding: 5px;
+    border-radius: 10px;
+    border: solid 3px rgb(34, 34, 34);
+    background-color:  rgb(49, 49, 49);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+#topOpt span:hover {
+    background-color: rgb(34, 34, 34);
+}
+
+#topOpt span img {
+    position: relative;
+    top: 5px;
+    cursor: pointer;
+}
