@@ -16,6 +16,7 @@
     "feedparser": "^2.2.9",
     "jquery": "^3.3.1",
     "node-cron": "^1.2.1",
+    "node-notifier": "^5.2.1",
     "request": "^2.88.0"
   }
 }

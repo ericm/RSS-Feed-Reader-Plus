@@ -60,7 +60,7 @@ var refresh = (response) => {
 
             enter.innerHTML += `
     
-<div class="item" onclick="tab(` + x + `)" oncontextmenu="rcl(` + x + `, event)">
+<div class="item" onclick="tab('` + response[x].name + `', ` + x + `)" oncontextmenu="rcl(` + x + `, event)">
     <span>` + response[x].title + `</span>
     <i><img src="https://www.google.com/s2/favicons?domain=` + img + `">` + response[x].link + `</i>
 </div>
@@ -205,11 +205,19 @@ module.exports = {
         
     },
 
-    tab: (i) => {
+    tab: (name, i) => {
 
         if (respGlob.length != 0) {
 
-            console.log(respGlob[i]);
+            if (document.getElementById('item_clicked') !== null) {
+
+                document.getElementById('item_clicked').removeAttribute('id');
+
+            }
+
+            document.getElementsByClassName('item')[i].setAttribute('id', 'item_clicked');
+
+            ipcRenderer.send('reload', {get: 'feed', name: name, num: 10});
 
         }
 

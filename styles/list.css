@@ -23,7 +23,7 @@
     margin-top: 10px; 
     cursor: pointer;
     background-color:  rgb(49, 49, 49);
-    transition: background-color 0.3s;
+    transition: all 0.3s;
 }
 .item:hover {
     background-color:  rgb(34, 34, 34);
@@ -54,6 +54,10 @@
     top: 2px;
     margin-right: 3px;
     cursor: pointer;
+}
+
+#item_clicked {
+    background-color:  rgb(34, 34, 34);
 }
 
 #drawer {

@@ -7,6 +7,8 @@ module.exports = {
 
     start: () => {
 
+        //global.output.notify('test', "test");
+
         return new Promise( (resolve, reject) => {
 
             var task = cron.schedule( '*/3 * * * *', () => {
@@ -59,12 +61,16 @@ module.exports = {
 
                                         var writer = parser.rewriteData(arg3.link, insert);
                                         writer.then ( (arg4) => {
-                                            //notify
+
+                                            global.output.latestRefresh();
                                             console.log('refreshed feed: ' + arg4);
                                             matched = true;
+
                                         }).catch( (reason4) => {
                                             reject(reason4);
                                         });
+
+                                        global.output.notify(add_items[0].title, "A new entry in " + arg3.feed.head.title + " has just been released.");
                                             
                                     }
                                     

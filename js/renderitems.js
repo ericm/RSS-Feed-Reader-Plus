@@ -151,22 +151,52 @@ Save to:
 
 ipcRenderer.on('reloaded', (event, response) => {
 
-    enter.innerHTML = `<h2><i>Latest</i></h2>
-    <div id="timer"><p><b>Last Refreshed</b>: 0 minutes ago</p></div>`;
+    if (typeof response.title !== 'undefined') {
 
-    var number;
+        enter.innerHTML = `<h2><i>` + response.title + `</i></h2>
+        <div id="timer"><p><b>Last Refreshed</b>: </p></div>`;
+    
+        var number;
+    
+        if (response.arts.length < response.num) {
+            number = response.arts.length;
+        } else {
+            number = response.num;
+        }
+        xGlob = 0;
+        artGlob = response;
+        reloaded(response, number);
+        timer.stop();
+        timer.start();
 
-    if (response.arts.length < response.num) {
-        number = response.arts.length;
     } else {
-        number = response.num;
+
+        enter.innerHTML = `<h2><i>Latest</i></h2>
+        <div id="timer"><p><b>Last Refreshed</b>: </p></div>`;
+    
+        var number;
+    
+        if (response.arts.length < response.num) {
+            number = response.arts.length;
+        } else {
+            number = response.num;
+        }
+        xGlob = 0;
+        artGlob = response;
+        reloaded(response, number);
+        timer.stop();
+        timer.start();
+
     }
-    xGlob = 0;
-    artGlob = response;
-    reloaded(response, number);
-    timer.stop();
-    timer.start();
+
+    
 });
+
+ipcRenderer.on('newArticles', () => {
+
+    ipcRenderer.send('reload', {get: 'latest', num: 10});
+
+})
 
 // MAD JQUERY SKILZZ
 var loadmore = 10;

@@ -47,6 +47,7 @@ module.exports = {
             feedparser.on('end', () => {
                 
                 resolve({feed: theFeed, x: x, link});
+                
             });
 
         });

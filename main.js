@@ -1,9 +1,10 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain, Tray, Menu, shell, nativeImage} = require('electron');
+const {app, BrowserWindow, ipcMain, Tray, Menu, shell, nativeImage, Notification} = require('electron');
 const parser = require('./js/feedparse.js');
 const sorting = require('./js/sorting.js');
 const main_cron = require('./js/main_cron.js');
 const fs = require('fs');
+const notifier = require('node-notifier');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -36,6 +37,8 @@ function createWindow () {
 
 
 app.on('ready', () => {
+
+  app.setAppUserModelId("RSS FEED READER PLUS");
 
   //check / create folders
   var rssDir = app.getPath('userData') + "/rss-feeds";
@@ -438,6 +441,19 @@ ipcMain.on('reload', (event, arg) => {
     
   }
 
+  if (arg.get == 'feed') {
+
+    var getFeed = parser.readData(arg.name, arg.num);
+    getFeed.then( (response) => {
+
+      event.sender.send('reloaded', {arts: response.obj.items, num: 10, title: response.head.title});
+
+    }).catch ( (err) => {
+      console.log(err);
+    })
+
+  }
+
 });
 
 ipcMain.on('quit', () => {
@@ -467,3 +483,31 @@ ipcMain.on('getLatestTime', (event) => {
   });
 
 });
+
+
+
+global.output = {
+
+  latestRefresh: () => {
+
+    if (mainWindow != null) {
+
+      mainWindow.webContents.send('newArticles', "");
+
+    }
+
+  },
+
+  notify: (title, body) => {
+
+    notifier.notify({  
+      title: title,
+      message: body,
+      icon: './img/64.png',
+      sound: true,
+      wait: true
+    });
+
+  }
+
+}
