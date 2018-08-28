@@ -2,16 +2,24 @@ const cron = require('node-cron');
 const parser = require('../js/feedparse.js');
 const {app} = require('electron');
 const fs = require('fs');
+const settings = require('electron-settings');
 
 module.exports = {
 
     start: () => {
 
-        //global.output.notify('test', "test");
+        var val = settings.get('main.refresh');
+
+        var str;
+        if (val >= 60) {
+            str = '* */' + val /60 + ' * * *';
+        } else {
+            str = '*/' + val + ' * * * *';
+        }
 
         return new Promise( (resolve, reject) => {
 
-            var task = cron.schedule( '*/3 * * * *', () => {
+            var task = cron.schedule( str, () => {
 
                 console.log("looking for new items");
 

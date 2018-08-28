@@ -5,6 +5,7 @@ const sorting = require('./js/sorting.js');
 const main_cron = require('./js/main_cron.js');
 const fs = require('fs');
 const notifier = require('node-notifier');
+const settings = require('electron-settings');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -16,6 +17,7 @@ var settingsOpen = false;
 let settingsWindow = null;
 var addOpen = false;
 let addWindow = null;
+var unseen;
 
 
 global.sharedObj = {title: 'RSS FEED READER PLUS'};
@@ -28,7 +30,7 @@ function createWindow () {
 
   mainWindow.loadFile('html/index.html');
 
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -72,6 +74,36 @@ app.on('ready', () => {
     console.log('added new last_written');
   }
 
+  //default settings
+  if (!settings.has('main')) {
+
+    settings.set('main', {
+
+      refresh: 300,
+      theme: 'default',
+      launch_start: true,
+      start_tray: true,
+      opacity: 96,
+      notifications: true
+
+    });
+
+  }
+
+  if (!settings.has('articles')) {
+
+    settings.set('articles', {
+
+      unseen: 0
+
+    })
+
+  }
+
+  unseen = settings.get('articles.unseen');
+
+  //settings.delete('main');
+
   tray = new Tray(nativeImage.createFromPath('./img/64.ico'));
   const contextMenu = Menu.buildFromTemplate([
     {label: 'Show Latest', click() {
@@ -113,14 +145,14 @@ app.on('ready', () => {
         settingsOpen = true;
         console.log('opened settings'); 
         
-        settingsWindow = new BrowserWindow({width: 800, height: 400, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
+        settingsWindow = new BrowserWindow({width: 800, height: 700, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
     
         settingsWindow.setMenu(null);
     
         settingsWindow.loadFile('html/settings.html');
     
         // Open the DevTools.
-        //settingsWindow.webContents.openDevTools();
+        settingsWindow.webContents.openDevTools();
         settingsWindow.on('closed', () => {
           settingsWindow = null
           settingsOpen = false;
@@ -137,7 +169,7 @@ app.on('ready', () => {
       }
     }}
   ]);
-  tray.setToolTip(global.sharedObj.title);
+  tray.setToolTip('(' + unseen + ') ' + global.sharedObj.title);
   tray.setContextMenu(contextMenu);
   tray.on('click', () => {
     if (mainWindow == null) {
@@ -152,7 +184,11 @@ app.on('ready', () => {
   var cron = main_cron.start();
   cron.then( (arg) => {}).catch( (reason) => {
     console.log(reason);
-  })
+  });
+  var nowCron = main_cron.now();
+  nowCron.then( (arg) => {}).catch( (reason) => {
+    console.log(reason);
+  });
 
 });
 
@@ -179,7 +215,7 @@ ipcMain.on('settings-page', (event, arg) => {
     settingsOpen = true;
     console.log('opened settings'); 
     
-    settingsWindow = new BrowserWindow({width: 800, height: 400, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
+    settingsWindow = new BrowserWindow({width: 800, height: 700, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
 
     settingsWindow.setMenu(null);
 
@@ -494,7 +530,29 @@ ipcMain.on('reGet', (event) => {
 
 });
 
+ipcMain.on('settings', (event) => {
 
+  var mainSet = settings.get('main');
+  event.sender.send('mainSet', mainSet);
+
+});
+
+ipcMain.on('updateSet', (event, arg) => {
+
+  settings.set('main', {
+
+    refresh: arg.refresh,
+    theme: arg.theme,
+    launch_start: arg.launch_start,
+    start_tray: arg.start_tray,
+    opacity: arg.opacity,
+    notifications: arg.notifications
+
+  });
+
+  event.sender.send('mainSet', arg)
+
+});
 
 global.output = {
 
@@ -509,6 +567,10 @@ global.output = {
   },
 
   notify: (title, body) => {
+
+    unseen += 1;
+
+    tray.setToolTip('(' + unseen + ') ' + global.sharedObj.title);
 
     notifier.notify({  
       title: title,

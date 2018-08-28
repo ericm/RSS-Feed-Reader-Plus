@@ -4,6 +4,7 @@
     padding: 0;
     user-select: none;
     cursor: default;
+    outline: none;
 }
 body {
     height: inherit;

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "daveutils": "^0.4.29",
+    "electron-settings": "^3.2.0",
     "feedparser": "^2.2.9",
     "jquery": "^3.3.1",
     "node-cron": "^1.2.1",

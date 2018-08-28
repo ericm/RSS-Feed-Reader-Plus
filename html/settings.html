@@ -4,6 +4,7 @@
     <title></title>
     <link rel="stylesheet" href="../fonts/fonts.css"/>
     <link rel="stylesheet" href="../styles/main.css"/>
+    <link rel="stylesheet" href="../styles/setting.css"/>
   </head>
   <body>
     <div id="menuC">
@@ -19,8 +20,12 @@
     <hr class="bottom">
     <script>
         var TITLE = 'Settings';
+        function update() {
+          require('../js/settings.js').update();
+        }
         require('../js/menu.js')
         require('../js/renderer.js')
+        require('../js/settings.js')
     </script>
   </body>
 </html>
