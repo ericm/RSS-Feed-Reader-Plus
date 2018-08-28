@@ -72,13 +72,18 @@ module.exports = {
 
                                             global.output.latestRefresh();
                                             console.log('refreshed feed: ' + arg4);
+
+                                            for (var k = 0; k < add_items.length; k++) {
+
+                                                global.output.notify(add_items[k].title, "- " + arg3.feed.head.title);
+    
+                                            }
+
                                             matched = true;
 
                                         }).catch( (reason4) => {
                                             reject(reason4);
                                         });
-
-                                        global.output.notify(add_items[0].title, "- " + arg3.feed.head.title);
                                             
                                     }
                                     
@@ -177,13 +182,20 @@ module.exports = {
 
                                         global.output.latestRefresh();
                                         console.log('refreshed feed: ' + arg4);
+
+                                        for (var k = 0; k < add_items.length; k++) {
+
+                                            global.output.notify(add_items[k].title, "- " + arg3.feed.head.title);
+
+                                        }
+                                        
                                         matched = true;
 
                                     }).catch( (reason4) => {
                                         reject(reason4);
                                     });
 
-                                    global.output.notify(add_items[0].title, "- " + arg3.feed.head.title);
+                                    
                                         
                                 }
                                 

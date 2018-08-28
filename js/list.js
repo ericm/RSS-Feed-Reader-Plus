@@ -260,6 +260,12 @@ module.exports = {
         document.getElementById('container').scrollTo(0, 0);
         //document.getElementById('topOpt').getElementsByTagName('span')[1].getElementsByTagName('img')[0].style.cursor = "not-allowed";
         ipcRenderer.send('reGet', []);
+    },
+
+    unread: (title, pubdate, feed) => {
+
+        ipcRenderer.send('unread', {title: title, pubdate: pubdate, feed: feed});
+
     }
 
 }

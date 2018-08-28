@@ -77,6 +77,9 @@
       function reload() {
         require('../js/list.js').reload();
       }
+      function unread(title, pubdate, feed) {
+        require('../js/list.js').unread(title, pubdate, feed);
+      }
       require('../js/renderer.js');
       require('../js/menu.js');
       require('../js/list.js');

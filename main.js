@@ -30,7 +30,7 @@ function createWindow () {
 
   mainWindow.loadFile('html/index.html');
 
-  //mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -96,7 +96,7 @@ app.on('ready', () => {
 
       unseen: 0
 
-    })
+    });
 
   }
 
@@ -178,6 +178,12 @@ app.on('ready', () => {
       mainWindow.focus();
     }
   });
+
+  if (unseen > 0) {
+
+    tray.setImage(nativeImage.createFromPath('./img/64n.ico'));
+
+  }
 
   console.log('\033[0;36mThe app is now running.\033[0m');
 
@@ -417,15 +423,18 @@ ipcMain.on('reload', (event, arg) => {
       var inc = 0;
       
       var sendIt = () => {
+
         console.log('Getting latest feeds');
+
         var articles = sorting.latest(feeds);
         articles.then ( (arts) => {
+          
           console.log(arts[0].title);
           event.sender.send('reloaded', {arts: arts, num: arg.num});
+
         }).catch ( (err) => {
           console.log(err);
         });
-        
         
       }
 
@@ -554,6 +563,22 @@ ipcMain.on('updateSet', (event, arg) => {
 
 });
 
+ipcMain.on('read', (event, arg) => {
+
+  unseen -= 1;
+
+});
+
+ipcMain.on('unread', (event, arg) => {
+
+  unseen += 1;
+
+  var title = arg.title;
+  var pubdate = arg.pubdate;
+  var feed = arg.feed;
+
+});
+
 global.output = {
 
   latestRefresh: () => {
@@ -570,7 +595,14 @@ global.output = {
 
     unseen += 1;
 
+    settings.set('articles', {
+
+      unseen: unseen
+
+    });
+
     tray.setToolTip('(' + unseen + ') ' + global.sharedObj.title);
+    tray.setImage(nativeImage.createFromPath('./img/64n.ico'));
 
     notifier.notify({  
       title: title,
