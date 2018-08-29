@@ -585,7 +585,7 @@ ipcMain.on('read', (event, arg) => {
 
   var title = arg.titleArt.replace(/U0027/g, "'").replace(/U0022/g, '"').replace(/U0060/g, '"');
   var pubdate = arg.pubdate;
-  var feed = arg.feed;
+  var feed = arg.feed.replace(/U0027/g, "'").replace(/U0022/g, '"').replace(/U0060/g, '"');
   var newArt = arg.newArt
 
   var makeRead = parser.makeRead(title, pubdate, feed, newArt);

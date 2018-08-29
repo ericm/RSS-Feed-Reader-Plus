@@ -1,7 +1,7 @@
 var cron = require('node-cron');
 const {ipcRenderer} = require('electron');
 
-var task = cron.schedule('30 * * * * *', () => {
+var task = cron.schedule('10 * * * * *', () => {
 
     ipcRenderer.send('getLatestTime', []);
 

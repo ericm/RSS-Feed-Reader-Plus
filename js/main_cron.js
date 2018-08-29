@@ -58,7 +58,7 @@ module.exports = {
                                     new_items[i].new = true;
                                     new_items[i].read = false;
 
-                                    if (new_items[i].title == old_items[0].title || i == new_items.length - 1) {
+                                    if (new_items[i].title == old_items[0].title) {
 
                                         matched = true;
 
@@ -88,6 +88,40 @@ module.exports = {
                                             reject(reason4);
                                         });
                                             
+                                    } else {
+
+                                        if (i == new_items.length - 1 && !matched) {
+
+                                            matched = true;
+
+                                            if (i == 0) {
+                                                break;
+                                            }
+                                            
+                                            var insert_index = i;
+    
+                                            var add_items = new_items;
+                    
+                                            var insert = add_items.concat(old_items);
+    
+                                            var writer = parser.rewriteData(arg3.link, insert);
+                                            writer.then ( (arg4) => {
+    
+                                                global.output.latestRefresh();
+                                                console.log('refreshed feed: ' + arg4);
+    
+                                                for (var k = 0; k < add_items.length; k++) {
+    
+                                                    global.output.notify(add_items[k].title, "- " + arg3.feed.head.title);
+        
+                                                }
+    
+                                            }).catch( (reason4) => {
+                                                reject(reason4);
+                                            });
+
+                                        }
+
                                     }
                                     
                                     i += 1;
@@ -171,7 +205,7 @@ module.exports = {
                                 new_items[i].new = true;
                                 new_items[i].read = false;
 
-                                if (new_items[i].title == old_items[0].title || i == new_items.length - 1) {
+                                if (new_items[i].title == old_items[0].title && !matched) {
 
                                     matched = true;
 
@@ -201,6 +235,40 @@ module.exports = {
                                         reject(reason4);
                                     });
                                         
+                                } else {
+
+                                    if (i == new_items.length - 1 && !matched) {
+
+                                        matched = true;
+
+                                        if (i == 0) {
+                                            break;
+                                        }
+                                        
+                                        var insert_index = i;
+
+                                        var add_items = new_items;
+                
+                                        var insert = add_items.concat(old_items);
+
+                                        var writer = parser.rewriteData(arg3.link, insert);
+                                        writer.then ( (arg4) => {
+
+                                            global.output.latestRefresh();
+                                            console.log('refreshed feed: ' + arg4);
+
+                                            for (var k = 0; k < add_items.length; k++) {
+
+                                                global.output.notify(add_items[k].title, "- " + arg3.feed.head.title);
+    
+                                            }
+
+                                        }).catch( (reason4) => {
+                                            reject(reason4);
+                                        });
+
+                                    }
+
                                 }
                                 
                                 i += 1;
