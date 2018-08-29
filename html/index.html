@@ -62,8 +62,8 @@
       function link(link) {
         require('../js/list.js').link(link);
       }
-      function opena(i) {
-        require('../js/list.js').opena(i);
+      function opena(i, titleArt, pubdate, feed, newArt, read) {
+        require('../js/list.js').opena(i, titleArt, pubdate, feed, newArt, read);
       }
       function closea(i) {
         require('../js/list.js').closea(i);
@@ -77,8 +77,8 @@
       function reload() {
         require('../js/list.js').reload();
       }
-      function unread(title, pubdate, feed) {
-        require('../js/list.js').unread(title, pubdate, feed);
+      function unread(title, pubdate, feed, newArt) {
+        require('../js/list.js').unread(title, pubdate, feed, newArt);
       }
       require('../js/renderer.js');
       require('../js/menu.js');

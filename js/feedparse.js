@@ -251,6 +251,90 @@ module.exports = {
 
         });
 
+    },
+
+    makeRead: (title, pubdate, feed, newArt) => {
+
+        return new Promise((resolve, reject) => {
+
+            var link;
+
+            var feeds = app.getPath('userData') + "/data.json";
+
+            if (!fs.existsSync(feeds)) {
+                reject('restart');
+            }
+
+            fs.readFile(feeds, (err, data) => {
+                if (err) {
+                    reject('restart');
+                } else {
+
+                    var obj = JSON.parse(data);
+                    for (var i = 0; i < obj.feeds.length; i++) {
+
+                        if (obj.feeds[i].title == feed) {
+
+                            link = obj.feeds[i].link;
+
+                        }
+
+                    }
+
+                    var name = link;
+
+                    name = name.split('/').join('-');
+                    name = name.split(':').join('');
+                    name = name.split('?').join('');
+                    name = name.split('=').join('');
+                    name = name.split('*').join('');
+                    name = name.split('>').join('');
+                    name = name.split('<').join('');
+        
+                    var loc = app.getPath('userData') + "/rss-feeds/" + name + ".json";
+        
+                    if (!fs.existsSync(loc)) {
+                        reject('restart');
+                    }
+        
+                    fs.readFile(loc, 'utf8', (err, dataFeed) => {
+                        if (err) {
+                            reject('noExist');
+                        } else {
+                            var feedObj = JSON.parse(dataFeed);
+        
+                            //Array of Objects
+                            var items = feedObj.items;
+        
+                            for (var i = 0; i < items.length; i++) {
+        
+                                if (items[i].title == title && items[i].pubdate == pubdate) {
+        
+                                    items[i].read = true;
+        
+                                }
+        
+                            }
+        
+                            feedObj.items = items;
+        
+                            fs.writeFile(loc, utils.jsonStringify(feedObj), (err) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    resolve(newArt);
+                                }
+                            });
+        
+                        }
+                    });        
+
+                }
+            });
+
+            
+        });
+
     }
 
 }

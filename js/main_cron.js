@@ -55,7 +55,12 @@ module.exports = {
                                         break;
                                     }
 
-                                    if (new_items[i].title == old_items[0].title) {
+                                    new_items[i].new = true;
+                                    new_items[i].read = false;
+
+                                    if (new_items[i].title == old_items[0].title || i == new_items.length - 1) {
+
+                                        matched = true;
 
                                         if (i == 0) {
                                             break;
@@ -78,8 +83,6 @@ module.exports = {
                                                 global.output.notify(add_items[k].title, "- " + arg3.feed.head.title);
     
                                             }
-
-                                            matched = true;
 
                                         }).catch( (reason4) => {
                                             reject(reason4);
@@ -165,7 +168,12 @@ module.exports = {
                                     break;
                                 }
 
-                                if (new_items[i].title == old_items[0].title) {
+                                new_items[i].new = true;
+                                new_items[i].read = false;
+
+                                if (new_items[i].title == old_items[0].title || i == new_items.length - 1) {
+
+                                    matched = true;
 
                                     if (i == 0) {
                                         break;
@@ -188,14 +196,10 @@ module.exports = {
                                             global.output.notify(add_items[k].title, "- " + arg3.feed.head.title);
 
                                         }
-                                        
-                                        matched = true;
 
                                     }).catch( (reason4) => {
                                         reject(reason4);
                                     });
-
-                                    
                                         
                                 }
                                 

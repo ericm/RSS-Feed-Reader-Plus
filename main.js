@@ -563,9 +563,50 @@ ipcMain.on('updateSet', (event, arg) => {
 
 });
 
+var trayUpdate = () => {
+
+  settings.set('articles', {
+
+    unseen: unseen
+
+  });
+
+  tray.setToolTip('(' + unseen + ') ' + global.sharedObj.title);
+
+  if (unseen == 0) {
+    tray.setImage(nativeImage.createFromPath('./img/64.ico'));
+  } else {
+    tray.setImage(nativeImage.createFromPath('./img/64n.ico'));
+  }
+
+}
+
 ipcMain.on('read', (event, arg) => {
 
-  unseen -= 1;
+  var title = arg.titleArt.replace(/U0027/g, "'").replace(/U0022/g, '"').replace(/U0060/g, '"');
+  var pubdate = arg.pubdate;
+  var feed = arg.feed;
+  var newArt = arg.newArt
+
+  var makeRead = parser.makeRead(title, pubdate, feed, newArt);
+  makeRead.then ( (response) => {
+
+    if (response) {
+
+      unseen -= 1;
+
+      trayUpdate();
+
+    }
+
+  }).catch( (err) => {
+
+    console.log(err);
+
+  });
+
+
+  
 
 });
 
@@ -573,7 +614,7 @@ ipcMain.on('unread', (event, arg) => {
 
   unseen += 1;
 
-  var title = arg.title;
+  var title = arg.titleArt;
   var pubdate = arg.pubdate;
   var feed = arg.feed;
 
@@ -601,8 +642,7 @@ global.output = {
 
     });
 
-    tray.setToolTip('(' + unseen + ') ' + global.sharedObj.title);
-    tray.setImage(nativeImage.createFromPath('./img/64n.ico'));
+    trayUpdate();
 
     notifier.notify({  
       title: title,

@@ -165,10 +165,10 @@ module.exports = {
 
     },
 
-    opena: (i) => {
+    opena: (i, titleArt, pubdate, feed, newArt, read) => {
 
         var artcle = document.getElementsByClassName('article')[i];
-        artcle.removeAttribute('onclick');
+        //
         artcle.style.height = "auto";
         artcle.style.boxShadow = "inset 0px -130px 200px -100px transparent";
         artcle.classList.add("clickeda");
@@ -190,6 +190,35 @@ module.exports = {
         var it = artcle.getElementsByTagName('blockquote')[0].getElementsByTagName('i');
         if (it.length > 0) {
             it[0].style.cursor = "default";
+        }
+
+        //Set article as read
+
+        if (!read) {
+
+            ipcRenderer.send('read', {titleArt: titleArt, pubdate: pubdate, feed: feed, newArt: newArt});
+
+            var stats = document.getElementsByClassName('status')[i];
+            stats.classList = "status statusREAD";
+            stats.innerHTML = "READ";
+
+            var oncl = artcle.getAttribute('onclick').split(',');
+            oncl[5] = 'true)';
+
+            var oncl = oncl.join();
+
+            artcle.setAttribute('onclicked', oncl);
+
+            artcle.removeAttribute('onclick');
+
+        } else {
+
+            var oncl = artcle.getAttribute('onclick');
+
+            artcle.setAttribute('onclicked', oncl);
+
+            artcle.removeAttribute('onclick');
+
         }
 
     },
@@ -221,7 +250,9 @@ module.exports = {
         }
 
         setTimeout(() => {
-            artcle.setAttribute('onclick', "opena(" + i + ")");
+            var oncl = artcle.getAttribute('onclicked');
+            artcle.setAttribute('onclick', oncl);
+            artcle.removeAttribute('onclicked');
         }, 1000);
         
     },
@@ -262,9 +293,9 @@ module.exports = {
         ipcRenderer.send('reGet', []);
     },
 
-    unread: (title, pubdate, feed) => {
+    unread: (title, pubdate, feed, newArt) => {
 
-        ipcRenderer.send('unread', {title: title, pubdate: pubdate, feed: feed});
+        ipcRenderer.send('unread', {title: title, pubdate: pubdate, feed: feed, new: newArt});
 
     }
 

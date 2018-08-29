@@ -118,13 +118,70 @@ var reloaded = (arts, number) => {
             }
         }
 
+        var removeMark = (str) => {
+
+            str = str.split(`'`).join('U0027');
+            str = str.split(`"`).join('U0022');
+            str = str.split("`").join('U0060');
+        
+            return str;
+        }
+
+        var read;
+
+        if (typeof article.read === 'undefined') {
+
+            read = false;
+
+        } else {
+
+            if (article.read == true) {
+                read = true;
+            } else {
+                read = false;
+            }
+
+        }
+
+        var newArt;
+
+        if (typeof article.new === 'undefined') {
+
+            newArt = false;
+
+        } else {
+
+            if (article.new == true) {
+                newArt = true;
+            } else {
+                newArt = false;
+            }
+
+        }
+
+        var status;
+
+        if (read) {
+
+            status = "READ";
+
+        } else {
+
+            if (newArt) {
+                status = "NEW";
+            } else {
+                status = "UNREAD";
+            }
+
+        }
+
         //For YouTube feeds
         var embed_yt = "";
         if ( extractHostname(article.link) == "www.youtube.com") {
             embed_yt = `<a class="imgpr"><div><img onclick="link('` + article.link + `')" src="` + article['image']['url'] + `"></div></a>`
         }
 
-        enter.innerHTML += `<div class="article" onclick="opena(` + (x) + `)">
+        enter.innerHTML += `<span class="status status` + status + `">` + status + `</span><div class="article ` + status + `" onclick='opena(` + (x) + `, "` + is_exist(removeMark(article.title)) + `", "` + is_exist(removeMark(article.pubdate)) + `", "` + is_exist(removeMark(article.meta.title)) + `", ` + newArt + `, ` + read +`)'>
 <span class="artitle" onclick="link('` + is_exist(article.link) + `')">` + is_exist(article.title) + `</span><br>
 <i class="artfeed">From<img src="https://www.google.com/s2/favicons?domain=` + extractHostname(article.link) + `"><b>` + article.meta.title +`</b></i>
 <i class="artdate">` + date_format(is_exist(article.pubdate)) + ` (` + date_diff_indays(article.pubdate) + `)</i>
@@ -132,7 +189,7 @@ var reloaded = (arts, number) => {
 ` + replace_href(article.description) + embed_yt + `
 </blockquote>
 <div class="artopt">
-<label><button onclick='unread("` + is_exist(article.title) + `", "` + is_exist(article.pubdate) + `", "` + is_exist(article.meta.title) + `")' class="unread">Keep unread</button></label>
+<label><button onclick='unread("` + is_exist(article.title) + `", "` + is_exist(article.pubdate) + `", "` + is_exist(article.meta.title) + `, ` + newArt + `")' class="unread">Keep unread</button></label>
 <label><button>Hide</button></label>
 <label>
 Save to:

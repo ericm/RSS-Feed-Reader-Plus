@@ -380,6 +380,27 @@ h1, h2, span, p, i, a, blockquote {
     top: -50px;
 }
 
+.status {
+    position: relative;
+    top: 5px;
+    font-size: 1.3em;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 2em;
+    color: #fff;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.statusNEW {
+    background-color: rgb(162, 0, 255);
+}
+.statusUNREAD {
+    background-color: rgb(250, 21, 212);
+}
+.statusREAD {
+    background-color: rgb(126, 126, 126);
+}
+
 
 ::-webkit-scrollbar-track {
     background-color: rgb(49, 49, 49);
