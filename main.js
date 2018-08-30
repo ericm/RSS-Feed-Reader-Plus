@@ -595,7 +595,36 @@ ipcMain.on('read', (event, arg) => {
 
       unseen -= 1;
 
+      if (unseen < 0) {
+        unseen = 0;
+      }
+
       trayUpdate();
+
+      var addToFeed = parser.addUnseenData(feed, -1);
+      addToFeed.then( (arg) => {
+
+        if (mainWindow != null) {
+
+          var heads = parser.readHeads();
+    
+          heads.then( (resp) => {
+            mainWindow.webContents.send('newList', resp);
+          }).catch( (reason) => {
+            if (reason == 'restart') {
+              console.log(reason);
+            }
+          });
+    
+        }
+
+      }).catch( (reason) => {
+
+        console.log(reason);
+
+      });
+
+      
 
     }
 
@@ -636,6 +665,29 @@ global.output = {
 
     unseen += 1;
 
+    var addToFeed = parser.addUnseenData(body, 1);
+    addToFeed.then( (arg) => {
+
+      if (mainWindow != null) {
+
+        var heads = parser.readHeads();
+  
+        heads.then( (resp) => {
+          mainWindow.webContents.send('newList', resp);
+        }).catch( (reason) => {
+          if (reason == 'restart') {
+            console.log(reason);
+          }
+        });
+  
+      }
+
+    }).catch( (reason) => {
+
+      console.log(reason);
+
+    });
+
     settings.set('articles', {
 
       unseen: unseen
@@ -646,7 +698,7 @@ global.output = {
 
     notifier.notify({  
       title: title,
-      message: body,
+      message: "- " + body,
       icon: './img/64.png',
       sound: true,
       wait: true

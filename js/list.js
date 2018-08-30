@@ -1,5 +1,6 @@
 const {ipcRenderer} = require('electron');
 const renderer = require('./renderer.js');
+const settings = require('electron-settings');
 
 document.getElementById('list').style.height = window.innerHeight - 70 + "px";
 document.getElementById('container').style.height = window.innerHeight - 153 + "px";
@@ -37,14 +38,42 @@ document.onload = ipcRenderer.send('refresh');
 var enter = document.getElementById('list');
 
 ipcRenderer.on('refreshed', (event, response) => {
+
+    var unseen = settings.get('articles.unseen');
+    if (unseen != 0) {
+        enter.innerHTML = `<span id="amount">` + unseen + `</span>`;
+    } else {
+        enter.innerHTML = "";
+    }
+    
     ipcRenderer.send('reload', {get: 'latest', num: 10});
     refresh(response);
 });
 
 ipcRenderer.on('refreshed-new', (event, response) => {
-    enter.innerHTML = ""
+
+    var unseen = settings.get('articles.unseen');
+    if (unseen != 0) {
+        enter.innerHTML = `<span id="amount">` + unseen + `</span>`;
+    } else {
+        enter.innerHTML = "";
+    }
+
     ipcRenderer.send('reload', {get: 'latest', num: 10});
     refresh(response);
+});
+
+ipcRenderer.on('newList', (event, response) => {
+
+    var unseen = settings.get('articles.unseen');
+    if (unseen != 0) {
+        enter.innerHTML = `<span id="amount">` + unseen + `</span>`;
+    } else {
+        enter.innerHTML = "";
+    }
+
+    refresh(response);
+
 });
 
 
@@ -79,8 +108,20 @@ var refresh = (response) => {
 
             var img  = extractHostname(response[x].link);
 
+            var amStr = "";
+            if (settings.has('list.' + x)) {
+
+                if (settings.get('list.' + x) != 0) {
+
+                    amStr = `<div style="margin-top:-15px;"></div>
+                    <span class="amountList">` + settings.get('list.' + x) + `</span>`;
+
+                }
+
+            }
+
             enter.innerHTML += `
-    
+` + amStr + `
 <div class="item" onclick="tab('` + removeMark(response[x].name) + `', ` + x + `, '` + removeMark(response[x].title) + `')" oncontextmenu="rcl(` + x + `, event)">
     <span>` + response[x].title + `</span>
     <i><img src="https://www.google.com/s2/favicons?domain=` + img + `">` + response[x].link + `</i>

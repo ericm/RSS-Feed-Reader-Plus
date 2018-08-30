@@ -3,6 +3,7 @@ const request = require('request');
 const {app} = require('electron');
 const fs = require('fs');
 const utils = require('daveutils');
+const settings = require('electron-settings');
 
 module.exports = {
     feed: (link, x) => {
@@ -332,6 +333,57 @@ module.exports = {
                 }
             });
 
+            
+        });
+
+    },
+
+    addUnseenData: (title, amount) => {
+
+        return new Promise((resolve, reject) => {
+
+            var obj = {
+                feeds:[]
+            }
+
+            var file = app.getPath('userData') + "/data.json";
+
+            fs.readFile(file, (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    obj = JSON.parse(data);
+                }
+
+                for (var i = 0; i < obj.feeds.length; i++) {
+
+                    if (obj.feeds[i].title == title) {
+
+                        if (settings.has('list.' + i) ) {
+
+                            settings.set('list.' + i , settings.get('list.' + i) + amount);
+
+                            if (settings.get('list.' + i) < 0 && amount == -1) {
+
+                                settings.set('list.' + i , 0);
+
+                            }
+
+                            resolve(true);
+
+                        } else {
+
+                            settings.set('list.' + i, amount);
+
+                            resolve(true);
+
+                        }
+
+                    }
+
+                }
+                
+            });
             
         });
 

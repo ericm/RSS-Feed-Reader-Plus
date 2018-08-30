@@ -86,7 +86,7 @@ module.exports = {
     
                                                 for (var k = 0; k < add_items.length; k++) {
     
-                                                    global.output.notify(add_items[k].title, "- " + arg3.feed.head.title);
+                                                    global.output.notify(add_items[k].title, arg3.feed.head.title);
         
                                                 }
     
@@ -118,7 +118,7 @@ module.exports = {
         
                                                     for (var k = 0; k < add_items.length; k++) {
         
-                                                        global.output.notify(add_items[k].title, "- " + arg3.feed.head.title);
+                                                        global.output.notify(add_items[k].title, arg3.feed.head.title);
             
                                                     }
         
@@ -242,7 +242,7 @@ module.exports = {
 
                                             for (var k = 0; k < add_items.length; k++) {
 
-                                                global.output.notify(add_items[k].title, "- " + arg3.feed.head.title);
+                                                global.output.notify(add_items[k].title, arg3.feed.head.title);
     
                                             }
 
@@ -274,7 +274,7 @@ module.exports = {
     
                                                 for (var k = 0; k < add_items.length; k++) {
     
-                                                    global.output.notify(add_items[k].title, "- " + arg3.feed.head.title);
+                                                    global.output.notify(add_items[k].title, arg3.feed.head.title);
         
                                                 }
     

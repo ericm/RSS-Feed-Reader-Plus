@@ -83,6 +83,27 @@
     background-color: rgb(255, 255, 255);
 }
 
+#amount {
+    position: relative;
+    top: 30px;
+    left: 105px;
+    background-color: rgb(162, 0, 255);
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: .5em;
+    color: #fff;
+}
+.amountList {
+    position: relative;
+    top: 20px;
+    left: 190px;
+    background-color: rgb(162, 0, 255);
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: .5em;
+    color: #fff;
+}
+
 #topOpt {
     padding: 20px;
 }
