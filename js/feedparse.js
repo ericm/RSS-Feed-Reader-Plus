@@ -172,7 +172,9 @@ module.exports = {
                     obj = JSON.parse(data);
                 }
 
-                obj.feeds.push({name: name, link: link, title: meta.title});
+                var length = obj.feeds.length;
+
+                obj.feeds.push({name: name, link: link, title: meta.title, id: length});
                 fs.writeFile(file, utils.jsonStringify(obj), (err) => {
                     if (err) {
                         reject(err);
@@ -213,7 +215,12 @@ module.exports = {
                         if (err) {
                             reject('noExist');
                         } else {
-                            var feedObj = JSON.parse(dataFeed);
+                            var feedObj;
+                            try {
+                                feedObj = JSON.parse(dataFeed);
+                            } catch(e) {
+                                reject(e);
+                            }
 
                             var theFeed = {
                                 head: feedHead[0],
@@ -378,6 +385,84 @@ module.exports = {
                             resolve(true);
 
                         }
+
+                    }
+
+                }
+                
+            });
+            
+        });
+
+    },
+
+    makeFeedRead: (name) => {
+
+        return new Promise((resolve, reject) => {
+
+            var loc = app.getPath('userData') + "/rss-feeds/" + name + ".json";
+
+            fs.readFile(loc, 'utf8', (err, data) => {
+
+                if (err) {
+                    reject(err);
+                } else {
+
+                    var jData = JSON.parse(data);
+                    var take = 0;
+
+                    for (x in jData.items) {
+
+                        if (typeof jData.items[x].read !== 'undefined' && typeof jData.items[x].new !== 'undefined') {
+                            if (jData.items[x].read == false && jData.items[x].new == true) {
+                                take += 1;
+                            }
+                        }
+
+                        jData.items[x].read = true;
+
+                    }
+                }
+
+                fs.writeFile(loc, utils.jsonStringify(jData), (err2) => {
+                    if (err2) {
+                        reject(err2);
+                    } else {
+                        resolve({name: name, take: take});
+                    }
+                });
+
+                
+
+            });
+
+        });
+
+    },
+
+    addUnseenDataAll: (name) => {
+
+        return new Promise((resolve, reject) => {
+
+            var obj = {
+                feeds:[]
+            }
+
+            var file = app.getPath('userData') + "/data.json";
+
+            fs.readFile(file, (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    obj = JSON.parse(data);
+                }
+
+                for (var i = 0; i < obj.feeds.length; i++) {
+
+                    if (obj.feeds[i].name == name) {
+
+                        settings.set('list.' + i , 0);
+                        resolve(name);
 
                     }
 

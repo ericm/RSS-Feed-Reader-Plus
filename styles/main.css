@@ -401,6 +401,24 @@ h1, h2, span, p, i, a, blockquote {
     background-color: rgb(126, 126, 126);
 }
 
+#allRead {
+    display: block;
+    padding: 10px;
+    color: rgba(237, 20, 61, .6);
+    background-color: transparent;
+    border: 1px solid rgba(237, 20, 61, .6);
+    border-radius: .7em;
+    position: relative;
+    top: -38px;
+    margin-bottom: 20px;
+    transition: all .3s;
+    cursor: pointer;
+}
+#allRead:hover {
+    border: 1px solid rgba(237, 20, 61, .9);
+    background-color: rgba(237, 20, 61, .9);
+    color: #fff;
+}
 
 ::-webkit-scrollbar-track {
     background-color: rgb(49, 49, 49);

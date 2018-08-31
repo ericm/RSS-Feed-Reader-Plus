@@ -32,6 +32,10 @@ module.exports = {
                     var getHeads = parser.readHeads();
         
                     getHeads.then( (arg1) => {
+
+                        if (arg1.length == 0) {
+                            global.running = false;
+                        }
         
                         for (var x = 0; x < arg1.length; x++) {
         
@@ -42,7 +46,7 @@ module.exports = {
     
                                 var old_items = arg2.obj.items;
         
-                                var getCurrent = parser.feed(arg1[arg2.x].link, x);
+                                var getCurrent = parser.feed(arg1[arg2.x].link, arg2.x);
         
                                 getCurrent.then( (arg3) => {
         
@@ -63,8 +67,11 @@ module.exports = {
     
                                         new_items[i].new = true;
                                         new_items[i].read = false;
+                                        
+                                        var newD = new Date(new_items[i].pubdate).getTime();
+                                        var oldD = new Date(old_items[0].pubdate).getTime();
     
-                                        if (new_items[i].title == old_items[0].title) {
+                                        if (new_items[i].title == old_items[0].title && newD == oldD) {
     
                                             matched = true;
     
@@ -133,6 +140,10 @@ module.exports = {
                                         i += 1;
     
                                     }
+
+                                    if (arg3.x == arg1.length - 1) {
+                                        global.running = false;
+                                    }
         
                                 }).catch ( (reason3) => {
                                     reject(reason3);
@@ -141,10 +152,6 @@ module.exports = {
                             }).catch( (reason2) => {
                                 reject(reason2);
                             });
-
-                            if (x == arg1.length - 1) {
-                                global.running = false;
-                            }
         
                         }
       
@@ -165,6 +172,8 @@ module.exports = {
     
                     });
     
+                } else {
+                    console.log('running already');
                 }
 
             }, false);
@@ -188,6 +197,10 @@ module.exports = {
                 var getHeads = parser.readHeads();
     
                 getHeads.then( (arg1) => {
+
+                    if (arg1.length == 0) {
+                        global.running = false;
+                    }
     
                     for (var x = 0; x < arg1.length; x++) {
     
@@ -198,8 +211,8 @@ module.exports = {
 
                             var old_items = arg2.obj.items;
     
-                            var getCurrent = parser.feed(arg1[arg2.x].link, x);
-    
+                            var getCurrent = parser.feed(arg1[arg2.x].link, arg2.x);
+
                             getCurrent.then( (arg3) => {
     
                                 var new_items = arg3.feed.items;
@@ -220,7 +233,10 @@ module.exports = {
                                     new_items[i].new = true;
                                     new_items[i].read = false;
 
-                                    if (new_items[i].title == old_items[0].title) {
+                                    var newD = new Date(new_items[i].pubdate).getTime();
+                                    var oldD = new Date(old_items[0].pubdate).getTime();
+
+                                    if (new_items[i].title == old_items[0].title && newD == oldD) {
 
                                         matched = true;
 
@@ -291,6 +307,10 @@ module.exports = {
                                     i += 1;
 
                                 }
+
+                                if (arg3.x == arg1.length - 1) {
+                                    global.running = false;
+                                }
     
                             }).catch ( (reason3) => {
                                 reject(reason3);
@@ -299,10 +319,6 @@ module.exports = {
                         }).catch( (reason2) => {
                             reject(reason2);
                         });
-
-                        if (x == arg1.length - 1) {
-                            global.running = false;
-                        }
     
                     }
   
@@ -325,6 +341,8 @@ module.exports = {
 
                 //global.running = false;
 
+            } else {
+                console.log('running already');
             }
 
         });

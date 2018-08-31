@@ -79,7 +79,7 @@ app.on('ready', () => {
 
     settings.set('main', {
 
-      refresh: 300,
+      refresh: 30,
       theme: 'default',
       launch_start: true,
       start_tray: true,
@@ -100,6 +100,12 @@ app.on('ready', () => {
 
   }
 
+  if (!settings.has('silent')) {
+
+    settings.set('silent', false);
+
+  }
+
   unseen = settings.get('articles.unseen');
 
   //settings.delete('main');
@@ -112,6 +118,16 @@ app.on('ready', () => {
       } else {
         mainWindow.focus();
       }
+    }},
+    {type: 'separator'},
+    {label: 'Silent Mode', type:'checkbox', checked: settings.get('silent'), click() {
+
+      if (settings.get('silent')) {
+        settings.set('silent', false);
+      } else {
+        settings.set('silent', true);
+      }
+
     }},
     {type: 'separator'},
     {label: 'Add Feed', click() {
@@ -535,7 +551,7 @@ ipcMain.on('reGet', (event) => {
   now.then( () => {
   }).catch( (error) => {
     console.log(error);
-  })
+  });
 
 });
 
@@ -634,9 +650,6 @@ ipcMain.on('read', (event, arg) => {
 
   });
 
-
-  
-
 });
 
 ipcMain.on('unread', (event, arg) => {
@@ -646,6 +659,97 @@ ipcMain.on('unread', (event, arg) => {
   var title = arg.titleArt;
   var pubdate = arg.pubdate;
   var feed = arg.feed;
+
+});
+
+ipcMain.on('allRead', (event, arg) => {
+
+  if (arg == 'latest') {
+
+    var getHeads = parser.readHeads();
+    getHeads.then( (heads) => {
+
+      var final = heads.length;
+      var counting = 0;
+
+      for (x in heads) {
+
+        var makeRead = parser.makeFeedRead(heads[x].name);
+        makeRead.then( (response) => {
+
+          var addToFeed = parser.addUnseenDataAll(response.name);
+          addToFeed.then( (resonse2) => {
+
+            counting += 1;
+            if (counting == final) {
+
+              unseen = 0;
+
+              if (unseen < 0) {
+                unseen = 0;
+              }
+        
+              trayUpdate();
+  
+              mainWindow.webContents.send('readLatest', heads);
+
+            }
+
+          }).catch((err3) => {
+            console.log(err3)
+          });
+
+        }).catch((err2) => {
+          console.log(err2);
+        });
+
+      } 
+
+    });
+
+  } else {
+
+    var getHeads = parser.readHeads();
+    getHeads.then( (heads) => {
+
+      for (x in heads) {
+
+        if (arg == heads[x].title) {
+
+          var makeRead = parser.makeFeedRead(heads[x].name);
+          makeRead.then( (response) => {
+
+            var addToFeed = parser.addUnseenDataAll(response.name);
+            addToFeed.then( (resonse2) => {
+
+              unseen -= response.take;
+
+              if (unseen < 0) {
+                unseen = 0;
+              }
+        
+              trayUpdate();
+
+              mainWindow.webContents.send('readFeed', {feeds: heads, name: response.name});
+
+            }).catch((err3) => {
+              console.log(err3)
+            });
+
+          }).catch((err2) => {
+            console.log(err2);
+          });
+        }
+
+      }
+
+    }).catch( (err) => {
+
+      console.log(err);
+
+    });
+
+  }
 
 });
 
@@ -696,14 +800,16 @@ global.output = {
 
     trayUpdate();
 
-    notifier.notify({  
-      title: title,
-      message: "- " + body,
-      icon: './img/64.png',
-      sound: true,
-      wait: true
-    });
-
+    if (!settings.get('silent')) {
+      notifier.notify({  
+        title: title,
+        message: "- " + body,
+        icon: './img/64.png',
+        sound: true,
+        wait: true
+      });
+    }
+    
   }
 
 }

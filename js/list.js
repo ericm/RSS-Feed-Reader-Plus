@@ -76,6 +76,34 @@ ipcRenderer.on('newList', (event, response) => {
 
 });
 
+ipcRenderer.on('readFeed', (event, response) => {
+
+    var unseen = settings.get('articles.unseen');
+    if (unseen != 0) {
+        enter.innerHTML = `<span id="amount">` + unseen + `</span>`;
+    } else {
+        enter.innerHTML = "";
+    }
+
+    ipcRenderer.send('reload', {get: 'feed', name: response.name, num: 10});
+    refresh(response.feeds);
+
+});
+
+ipcRenderer.on('readLatest', (event, response) => {
+
+    var unseen = settings.get('articles.unseen');
+    if (unseen != 0) {
+        enter.innerHTML = `<span id="amount">` + unseen + `</span>`;
+    } else {
+        enter.innerHTML = "";
+    }
+
+    ipcRenderer.send('reload', {get: 'latest', num: 10});
+    refresh(response);
+
+});
+
 
 ipcRenderer.on('reGot', (event) => {
     document.getElementById('topOpt').getElementsByTagName('span')[1].getElementsByTagName('img')[0].style.cursor = "pointer";
@@ -122,7 +150,7 @@ var refresh = (response) => {
 
             enter.innerHTML += `
 ` + amStr + `
-<div class="item" onclick="tab('` + removeMark(response[x].name) + `', ` + x + `, '` + removeMark(response[x].title) + `')" oncontextmenu="rcl(` + x + `, event)">
+<div class="item" draggable="true" onclick="tab('` + removeMark(response[x].name) + `', ` + x + `, '` + removeMark(response[x].title) + `')" oncontextmenu="rcl(` + x + `, event)">
     <span>` + response[x].title + `</span>
     <i><img src="https://www.google.com/s2/favicons?domain=` + img + `">` + response[x].link + `</i>
 </div>
@@ -337,6 +365,14 @@ module.exports = {
     unread: (title, pubdate, feed, newArt) => {
 
         ipcRenderer.send('unread', {title: title, pubdate: pubdate, feed: feed, new: newArt});
+
+    },
+
+    allRead: (feed) => {
+
+        var title = feed.replace(/U0027/g, "'").replace(/U0022/g, '"').replace(/U0060/g, '"').replace(/U0061/g, ',');
+
+        ipcRenderer.send('allRead', title);
 
     }
 

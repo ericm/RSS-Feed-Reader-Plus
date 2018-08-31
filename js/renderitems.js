@@ -26,6 +26,16 @@ var extractHostname = (url) => {
 var artGlob = new Array();
 var xGlob;
 
+var removeMark = (str) => {
+
+    str = str.split(`'`).join('U0027');
+    str = str.split(`"`).join('U0022');
+    str = str.split("`").join('U0060');
+    str = str.split(",").join('U0061');
+
+    return str;
+}
+
 var reloaded = (arts, number) => {
 
     for (var x = xGlob; x < number; x++) {
@@ -116,16 +126,6 @@ var reloaded = (arts, number) => {
             } else {
                 return "";
             }
-        }
-
-        var removeMark = (str) => {
-
-            str = str.split(`'`).join('U0027');
-            str = str.split(`"`).join('U0022');
-            str = str.split("`").join('U0060');
-            str = str.split(",").join('U0061');
-        
-            return str;
         }
 
         var read;
@@ -222,7 +222,8 @@ ipcRenderer.on('reloaded', (event, response) => {
     if (typeof response.title !== 'undefined') {
 
         enter.innerHTML = `<h2><i>` + response.title + `</i></h2>
-        <div id="timer"><p><b>Last Refreshed</b>: </p></div>`;
+        <div id="timer"><p><b>Last Refreshed</b>: </p></div>
+        <button id="allRead" onclick="allRead('` + removeMark(response.title )+ `')">Mark all as read</button>`;
     
         var number;
     
@@ -246,7 +247,8 @@ ipcRenderer.on('reloaded', (event, response) => {
         }
 
         enter.innerHTML = `<h2><i>Latest</i></h2>
-        <div id="timer"><p><b>Last Refreshed</b>: </p></div>`;
+        <div id="timer"><p><b>Last Refreshed</b>: </p></div>
+        <button id="allRead" onclick="allRead('latest')">Mark all as read</button>`;
     
         var number;
     

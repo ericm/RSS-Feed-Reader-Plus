@@ -80,11 +80,16 @@
       function unread(title, pubdate, feed, newArt) {
         require('../js/list.js').unread(title, pubdate, feed, newArt);
       }
+      function allRead(feed) {
+        require('../js/list.js').allRead(feed);
+      }
       require('../js/renderer.js');
       require('../js/menu.js');
       require('../js/list.js');
       require('../js/renderitems.js');
       require('../js/dropdown.js');
+      require('../js/drag_list.js');
+
     </script>
   </body>
 </html>

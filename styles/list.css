@@ -6,6 +6,7 @@
     top: 20px;
     width: 220px;
     overflow-y: scroll;
+    list-style-type: none;
 }
 .nothing {
     font-size: 1.5em;
@@ -125,4 +126,13 @@
     position: relative;
     top: 5px;
     cursor: pointer;
+}
+
+[draggable] {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -khtml-user-drag: element;
+    -webkit-user-drag: element;
 }
