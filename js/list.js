@@ -166,7 +166,7 @@ var refresh = (response) => {
 
 };
 
-
+//dragstart="handleDragStart(this)" dragenter="handleDragEnter(this)" dragover="handleDragOver(this)" dragleave="handleDragLeave(this)" drop="handleDrop(this)" dragend="handleDragEnd(this)"
 document.getElementById('rcl-back').onclick = () => {
 
     var rcl = document.getElementById('rcl');

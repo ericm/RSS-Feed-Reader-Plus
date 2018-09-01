@@ -68,8 +68,8 @@ module.exports = {
                                         new_items[i].new = true;
                                         new_items[i].read = false;
                                         
-                                        var newD = new Date(new_items[i].pubdate).getTime();
-                                        var oldD = new Date(old_items[0].pubdate).getTime();
+                                        var newD = new Date(new_items[i].pubdate).getDate();
+                                        var oldD = new Date(old_items[0].pubdate).getDate();
     
                                         if (new_items[i].title == old_items[0].title && newD == oldD) {
     
@@ -233,8 +233,8 @@ module.exports = {
                                     new_items[i].new = true;
                                     new_items[i].read = false;
 
-                                    var newD = new Date(new_items[i].pubdate).getTime();
-                                    var oldD = new Date(old_items[0].pubdate).getTime();
+                                    var newD = new Date(new_items[i].pubdate).getDate();
+                                    var oldD = new Date(old_items[0].pubdate).getDate();
 
                                     if (new_items[i].title == old_items[0].title && newD == oldD) {
 
