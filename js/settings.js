@@ -55,7 +55,26 @@ ipcRenderer.on('mainSet', (event, settings) => {
 
     //themes
 
-    var themes = `<label><p>Theme:</p><select onchange="update()"><option>Default</option></label>`;
+    var themeSelect = ['Default', 'Dark'];
+    var themes = `<label><p>Theme:</p><select onchange="update()">`;
+
+    for (x in themeSelect) {
+
+        if (settings.theme == themeSelect[x]) {
+
+            themes += `<option selected>` + themeSelect[x] + `</option>`;
+
+        } else {
+
+            themes += `<option>` + themeSelect[x] + `</option>`
+
+        }
+
+    }
+
+    themes += `</label>`
+
+    
     
     container.innerHTML += themes;
 

@@ -1,0 +1,18 @@
+body {
+    background-color: rgba(41, 41, 41, 0.96);
+}
+
+h1, h2, span, p, i, a, blockquote {
+
+    color: rgb(240, 240, 240);
+
+}
+
+.artopt, .artopt button, .artopt select {
+    border: 3px solid rgba(240, 240, 240, 1);
+    color: rgb(240, 240, 240);
+}
+
+.artopt label {
+    color: rgb(240, 240, 240);
+}
