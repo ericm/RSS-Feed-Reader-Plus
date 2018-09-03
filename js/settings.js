@@ -104,7 +104,7 @@ ipcRenderer.on('mainSet', (event, settings) => {
 
     //opacity
 
-    var opacity = `<br><label><p>Background Opacity:</p><input onchange="update()" type="range" min="1" max="100" value="` + settings.opacity + `" class="slider">
+    var opacity = `<br><label><p>Background Opacity:</p><input onchange="update()" type="range" min="0" max="100" value="` + settings.opacity + `" class="slider">
     <p><i>` + settings.opacity + `%</i></p></label>`;
 
     container.innerHTML += opacity;
