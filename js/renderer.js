@@ -1,9 +1,9 @@
 var electron = require('electron').remote;
+var {ipcRenderer} = require('electron');
 var title = electron.getGlobal('sharedObj').title;
 
 document.getElementsByTagName('title')[0].innerHTML = window.TITLE + ' - ' + title;
 document.getElementsByTagName('h1')[0].innerHTML = window.TITLE + ' - ' + title;
-
 
 module.exports = {
 
@@ -35,7 +35,19 @@ module.exports = {
         rcl.style.border = "3px solid rgba(230, 25, 66, 1)";
 
         rcl.getElementsByTagName('a')[0].addEventListener("click", () => {
-            console.log(index + ' clicked');
+
+            ipcRenderer.send('edit', index);
+
+            rcl.style.display = "none";
+            rclb.style.display = "none";
+
+            rclb.style.backgroundColor = "rgba(34, 34, 34, 0)";
+            rcl.style.border = "3px solid rgba(230, 25, 66, 0)";
+
+            var el = document.getElementById('rcl'),
+                elClone = el.cloneNode(true);
+            el.parentNode.replaceChild(elClone, el);
+
         });
 
     }

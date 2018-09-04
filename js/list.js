@@ -141,8 +141,21 @@ var refresh = (response) => {
 
                 if (settings.get('list.' + x) != 0) {
 
-                    amStr = `<div style="margin-top:-15px;"></div>
-                    <span class="amountList">` + settings.get('list.' + x) + `</span>`;
+                    var amn = settings.get('list.' + x);
+
+                    if (amn.toString().length > 1) {
+
+                        amStr = `<div style="margin-top:-15px;"></div>
+                        <span style="left: 185px;" class="amountList">` + settings.get('list.' + x) + `</span>`;
+
+                    } else {
+
+                        amStr = `<div style="margin-top:-15px;"></div>
+                        <span class="amountList">` + settings.get('list.' + x) + `</span>`;
+
+                    }
+
+                    
 
                 }
 
@@ -162,11 +175,11 @@ var refresh = (response) => {
         enter.innerHTML += '<i class="nothing">No feeds found</i>';
     }
     
-    enter.innerHTML += '<div class="break"></div>';
+    enter.innerHTML += '</div><div class="break"></div>';
 
 };
 
-//dragstart="handleDragStart(this)" dragenter="handleDragEnter(this)" dragover="handleDragOver(this)" dragleave="handleDragLeave(this)" drop="handleDrop(this)" dragend="handleDragEnd(this)"
+
 document.getElementById('rcl-back').onclick = () => {
 
     var rcl = document.getElementById('rcl');

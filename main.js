@@ -201,6 +201,12 @@ app.on('ready', () => {
 
   }
 
+  if(!settings.get('main.start_tray')) {
+
+    createWindow();
+
+  }
+
   console.log('\033[0;36mThe app is now running.\033[0m');
 
   var cron = main_cron.start();
@@ -349,6 +355,34 @@ ipcMain.on('add-link', (event, arg) => {
     setTimeout(() => addWindow.close(), 3000);
 
   });
+
+});
+
+ipcMain.on('edit', (event, arg) => {
+
+  var readHead = parser.readHeads();
+  readHead.then( (res) => {
+
+    editing = res[arg].name;
+
+    var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
+
+    editWindow.setMenu(null);
+  
+    editWindow.loadFile('html/edit.html');
+  
+    // Open the DevTools.
+    editWindow.webContents.openDevTools();
+    editWindow.on('closed', () => {
+      editWindow  = null
+    });
+
+  }).catch( (reas) => {
+
+    console.log(reas);
+
+  });
+  
 
 });
 
