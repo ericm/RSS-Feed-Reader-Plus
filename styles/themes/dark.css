@@ -12,3 +12,13 @@ h1, h2, span, p, i, a, blockquote {
 .artopt label {
     color: rgb(240, 240, 240);
 }
+
+input[type="text"] {
+    border-bottom: 3px rgb(240, 240, 240) solid;
+    color: rgb(240, 240, 240);
+}
+
+button {
+    background-color: rgb(240, 240, 240);
+    color: #000;
+}

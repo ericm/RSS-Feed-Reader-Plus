@@ -114,6 +114,8 @@ var reloaded = (arts, number) => {
             if (str != null) {
                 str = str.replace(/href="([^"]+)/g, `onclick="link(\'$1\')" class="hrefed"`);
 
+                str = str.replace(/script>/g, "");
+
                 return str;
             } else {
                 return '';

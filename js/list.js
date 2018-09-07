@@ -136,7 +136,7 @@ var refresh = (response) => {
 
             var img  = extractHostname(response[x].link);
 
-            var amStr = "";
+            var amStr = `<div class="itemSort">`;
             if (settings.has('list.' + x)) {
 
                 if (settings.get('list.' + x) != 0) {
@@ -145,12 +145,12 @@ var refresh = (response) => {
 
                     if (amn.toString().length > 1) {
 
-                        amStr = `<div style="margin-top:-15px;"></div>
+                        amStr += `<div style="margin-top:-15px;"></div>
                         <span style="left: 185px;" class="amountList">` + settings.get('list.' + x) + `</span>`;
 
                     } else {
 
-                        amStr = `<div style="margin-top:-15px;"></div>
+                        amStr += `<div style="margin-top:-15px;"></div>
                         <span class="amountList">` + settings.get('list.' + x) + `</span>`;
 
                     }
@@ -166,7 +166,7 @@ var refresh = (response) => {
 <div class="item" draggable="true" onclick="tab('` + removeMark(response[x].name) + `', ` + x + `, '` + removeMark(response[x].title) + `')" oncontextmenu="rcl(` + x + `, event)">
     <span>` + response[x].title + `</span>
     <i><img src="https://www.google.com/s2/favicons?domain=` + img + `">` + response[x].link + `</i>
-</div>
+</div></div>
     
             `;
         }
