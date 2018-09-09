@@ -2,6 +2,8 @@ const {ipcRenderer} = require('electron');
 const renderer = require('./renderer.js');
 const settings = require('electron-settings');
 
+var drag = require('./drag_list.js');
+
 document.getElementById('list').style.height = window.innerHeight - 70 + "px";
 document.getElementById('container').style.height = window.innerHeight - 153 + "px";
 document.getElementById('container').style.width = window.innerWidth - 270 + "px";
@@ -36,14 +38,17 @@ document.getElementById('drawer').getElementsByTagName('span')[1].addEventListen
 document.onload = ipcRenderer.send('refresh');
 
 var enter = document.getElementById('list');
+var html;
 
 ipcRenderer.on('refreshed', (event, response) => {
 
     var unseen = settings.get('articles.unseen');
     if (unseen != 0) {
         enter.innerHTML = `<span id="amount">` + unseen + `</span>`;
+        html = "";
     } else {
         enter.innerHTML = "";
+        html = "";
     }
     
     ipcRenderer.send('reload', {get: 'latest', num: 10});
@@ -55,8 +60,10 @@ ipcRenderer.on('refreshed-new', (event, response) => {
     var unseen = settings.get('articles.unseen');
     if (unseen != 0) {
         enter.innerHTML = `<span id="amount">` + unseen + `</span>`;
+        html = "";
     } else {
         enter.innerHTML = "";
+        html = "";
     }
 
     ipcRenderer.send('reload', {get: 'latest', num: 10});
@@ -68,8 +75,10 @@ ipcRenderer.on('newList', (event, response) => {
     var unseen = settings.get('articles.unseen');
     if (unseen != 0) {
         enter.innerHTML = `<span id="amount">` + unseen + `</span>`;
+        html = "";
     } else {
         enter.innerHTML = "";
+        html = "";
     }
 
     refresh(response);
@@ -81,8 +90,10 @@ ipcRenderer.on('readFeed', (event, response) => {
     var unseen = settings.get('articles.unseen');
     if (unseen != 0) {
         enter.innerHTML = `<span id="amount">` + unseen + `</span>`;
+        html = "";
     } else {
         enter.innerHTML = "";
+        html = "";
     }
 
     ipcRenderer.send('reload', {get: 'feed', name: response.name, num: 10});
@@ -92,11 +103,15 @@ ipcRenderer.on('readFeed', (event, response) => {
 
 ipcRenderer.on('readLatest', (event, response) => {
 
+    
+
     var unseen = settings.get('articles.unseen');
     if (unseen != 0) {
         enter.innerHTML = `<span id="amount">` + unseen + `</span>`;
+        html = "";
     } else {
         enter.innerHTML = "";
+        html = "";
     }
 
     ipcRenderer.send('reload', {get: 'latest', num: 10});
@@ -125,33 +140,45 @@ var refresh = (response) => {
 
     respGlob = response;
 
-    enter.innerHTML += `<div id="topOpt">
+    html += `<div id="topOpt">
     <span onclick="load()">View Latest</span>
     <span onclick="reload()"><img style="width: 22px; height: 22px;" src="../img/reload.svg"/></span>
     </div>`;
 
     if (response.length != 0) {
 
+        html += `<div id="listSort">`;
+
         for (x in response) {
 
             var img  = extractHostname(response[x].link);
 
-            var amStr = `<div class="itemSort">`;
-            if (settings.has('list.' + x)) {
+            var origin;
 
-                if (settings.get('list.' + x) != 0) {
+            if (typeof response[x].id !== 'undefined') {
 
-                    var amn = settings.get('list.' + x);
+                origin = response[x].id;
+
+            } else {
+                origin = x;
+            }
+
+            var amStr = `<div class="itemSort" origin=` + x + `>`;
+            if (settings.has('list.' + origin)) {
+
+                if (settings.get('list.' + origin) != 0) {
+
+                    var amn = settings.get('list.' + origin);
 
                     if (amn.toString().length > 1) {
 
                         amStr += `<div style="margin-top:-15px;"></div>
-                        <span style="left: 185px;" class="amountList">` + settings.get('list.' + x) + `</span>`;
+                        <span style="left: 185px;" class="amountList">` + settings.get('list.' + origin) + `</span>`;
 
                     } else {
 
                         amStr += `<div style="margin-top:-15px;"></div>
-                        <span class="amountList">` + settings.get('list.' + x) + `</span>`;
+                        <span class="amountList">` + settings.get('list.' + origin) + `</span>`;
 
                     }
 
@@ -161,7 +188,7 @@ var refresh = (response) => {
 
             }
 
-            enter.innerHTML += `
+            html += `
 ` + amStr + `
 <div class="item" draggable="true" onclick="tab('` + removeMark(response[x].name) + `', ` + x + `, '` + removeMark(response[x].title) + `')" oncontextmenu="rcl(` + x + `, event)">
     <span>` + response[x].title + `</span>
@@ -171,11 +198,17 @@ var refresh = (response) => {
             `;
         }
 
+        html += `</div>`
+
     } else {
-        enter.innerHTML += '<i class="nothing">No feeds found</i>';
+        html += '<i class="nothing">No feeds found</i>';
     }
     
-    enter.innerHTML += '</div><div class="break"></div>';
+    html += '</div><div class="break"></div>';
+
+    enter.innerHTML += html;
+
+    drag.sort();
 
 };
 

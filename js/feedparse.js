@@ -4,6 +4,7 @@ const {app} = require('electron');
 const fs = require('fs');
 const utils = require('daveutils');
 const settings = require('electron-settings');
+const arrayMove = require('array-move');
 
 module.exports = {
     feed: (link, x) => {
@@ -184,6 +185,44 @@ module.exports = {
                 });
             });
             
+        });
+
+    },
+
+    changeOrder: (id, position, old) => {
+
+        return new Promise((resolve, reject) => {
+
+            var feeds = app.getPath('userData') + "/data.json";
+
+            if (!fs.existsSync(feeds)) {
+                reject('restart');
+            }
+
+            fs.readFile(feeds, (err, data) => {
+                if (err) {
+                    reject('restart');
+                } else {
+                    
+                    var obj = JSON.parse(data);
+
+                    var objFeeds = obj.feeds;
+
+                    objFeeds = arrayMove(objFeeds, old, position);
+                            
+                    obj.feeds = objFeeds;
+
+                    fs.writeFile(feeds, utils.jsonStringify(obj), (err) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(objFeeds);
+                        }
+                    });
+
+                }
+            });
+
         });
 
     },
@@ -461,7 +500,7 @@ module.exports = {
 
                     if (obj.feeds[i].name == name) {
 
-                        settings.set('list.' + i , 0);
+                        settings.set('list.' + obj.feeds[i].id , 0);
                         resolve(name);
 
                     }

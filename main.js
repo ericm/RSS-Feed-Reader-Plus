@@ -613,6 +613,24 @@ ipcMain.on('updateSet', (event, arg) => {
 
 });
 
+
+ipcMain.on('changeOrder', (event, arg) => {
+
+  var changer = parser.changeOrder(arg.id, arg.position, arg.old);
+
+  changer.then( (heads) => {
+
+    event.sender.send('newList', heads);
+
+  }).catch( (reason) => {
+
+    throw reason;
+
+  })
+
+});
+
+
 var trayUpdate = () => {
 
   settings.set('articles', {
