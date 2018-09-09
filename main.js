@@ -626,7 +626,7 @@ ipcMain.on('changeOrder', (event, arg) => {
 
     throw reason;
 
-  })
+  });
 
 });
 

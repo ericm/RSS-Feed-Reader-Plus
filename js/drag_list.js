@@ -1,12 +1,6 @@
 const Sortable = require('sortablejs');
 const {ipcRenderer} = require('electron');
 
-var sortIt = () => {
-
-  
-
-}
-
 module.exports = {
 
   sort: () => {
