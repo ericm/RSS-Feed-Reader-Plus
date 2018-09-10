@@ -153,15 +153,7 @@ var refresh = (response) => {
 
             var img  = extractHostname(response[x].link);
 
-            var origin;
-
-            if (typeof response[x].id !== 'undefined') {
-
-                origin = response[x].id;
-
-            } else {
-                origin = x;
-            }
+            var origin = response[x].id;
 
             var amStr = `<div class="itemSort" origin=` + x + `>`;
             if (settings.has('list.' + origin)) {

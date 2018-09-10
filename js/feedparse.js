@@ -405,13 +405,13 @@ module.exports = {
 
                     if (obj.feeds[i].title == title) {
 
-                        if (settings.has('list.' + i) ) {
+                        if (settings.has('list.' + obj.feeds[i].id) ) {
 
-                            settings.set('list.' + i , settings.get('list.' + i) + amount);
+                            settings.set('list.' + obj.feeds[i].id , settings.get('list.' + obj.feeds[i].id) + amount);
 
-                            if (settings.get('list.' + i) < 0 && amount == -1) {
+                            if (settings.get('list.' + obj.feeds[i].id) < 0 && amount == -1) {
 
-                                settings.set('list.' + i , 0);
+                                settings.set('list.' + obj.feeds[i].id , 0);
 
                             }
 
@@ -419,7 +419,7 @@ module.exports = {
 
                         } else {
 
-                            settings.set('list.' + i, amount);
+                            settings.set('list.' + obj.feeds[i].id, amount);
 
                             resolve(true);
 
