@@ -13,11 +13,11 @@ const settings = require('electron-settings');
 
 let mainWindow = null;
 let tray = null;
-var settingsOpen = false;
+let settingsOpen = false;
 let settingsWindow = null;
-var addOpen = false;
+let addOpen = false;
 let addWindow = null;
-var unseen;
+let unseen;
 
 
 global.sharedObj = {title: 'RSS FEED READER PLUS'};
@@ -43,17 +43,17 @@ app.on('ready', () => {
   app.setAppUserModelId("RSS FEED READER PLUS");
 
   //check / create folders
-  var rssDir = app.getPath('userData') + "/rss-feeds";
+  let rssDir = app.getPath('userData') + "/rss-feeds";
   if (!fs.existsSync(rssDir)) {
     fs.mkdirSync(rssDir);
     console.log('added folder')
   }
   
-  var obj = JSON.stringify({
+  let obj = JSON.stringify({
     feeds: []
   });
   
-  var data = app.getPath('userData') + "/data.json";
+  let data = app.getPath('userData') + "/data.json";
   if (!fs.existsSync(data)) {
     fs.writeFile(data, obj, (err) => {
       if (err) {
@@ -63,8 +63,8 @@ app.on('ready', () => {
     console.log('added new datafile');
   }
 
-  var lw = app.getPath('userData') + "/last_written.txt";
-  var dl = (new Date()).toString();
+  let lw = app.getPath('userData') + "/last_written.txt";
+  let dl = (new Date()).toString();
   if (!fs.existsSync(lw)) {
     fs.writeFile(lw, dl, (err) => {
       if (err) {
@@ -145,7 +145,7 @@ app.on('ready', () => {
         // Open the DevTools.
         //addWindow.webContents.openDevTools();
         addWindow.on('closed', () => {
-          addWindow = null
+          addWindow = null;
           addOpen = false;
         });
       } else {
@@ -170,7 +170,7 @@ app.on('ready', () => {
         // Open the DevTools.
         settingsWindow.webContents.openDevTools();
         settingsWindow.on('closed', () => {
-          settingsWindow = null
+          settingsWindow = null;
           settingsOpen = false;
         });
     
@@ -209,11 +209,11 @@ app.on('ready', () => {
 
   console.log('\033[0;36mThe app is now running.\033[0m');
 
-  var cron = main_cron.start();
+  let cron = main_cron.start();
   cron.then( (arg) => {}).catch( (reason) => {
     console.log(reason);
   });
-  var nowCron = main_cron.now();
+  let nowCron = main_cron.now();
   nowCron.then( (arg) => {}).catch( (reason) => {
     console.log(reason);
   });
@@ -252,7 +252,7 @@ ipcMain.on('settings-page', (event, arg) => {
     // Open the DevTools.
     //settingsWindow.webContents.openDevTools();
     settingsWindow.on('closed', () => {
-      settingsWindow = null
+      settingsWindow = null;
       settingsOpen = false;
     });
 
@@ -279,7 +279,7 @@ ipcMain.on('add-page', (event, arg) => {
     // Open the DevTools.
     addWindow.webContents.openDevTools();
     addWindow.on('closed', () => {
-      addWindow = null
+      addWindow = null;
       addOpen = false;
     });
   } else {
@@ -290,20 +290,20 @@ ipcMain.on('add-page', (event, arg) => {
   
 });
 
-var editing;
+let editing;
 
 ipcMain.on('add-link', (event, arg) => {
 
-  var feed = parser.feed(arg, 0);
+  let feed = parser.feed(arg, 0);
   feed.then( (res) => {
 
     console.log(res.feed.items.length);
     event.sender.send('link-reply', true);
 
-    var write = parser.writeData(arg, res.feed.items);
+    let write = parser.writeData(arg, res.feed.items);
     write.then( (response) => {
 
-      var save = parser.saveData(response, arg, res.feed.head);
+      let save = parser.saveData(response, arg, res.feed.head);
 
       save.then( (saveRes) => {
 
@@ -314,7 +314,7 @@ ipcMain.on('add-link', (event, arg) => {
           setTimeout(() => addWindow.close(), 1500);
 
           setTimeout(() => {
-            var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
+            let editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
 
             editWindow.setMenu(null);
   
@@ -360,12 +360,12 @@ ipcMain.on('add-link', (event, arg) => {
 
 ipcMain.on('edit', (event, arg) => {
 
-  var readHead = parser.readHeads();
+  let readHead = parser.readHeads();
   readHead.then( (res) => {
 
     editing = res[arg].name;
 
-    var editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
+    let editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
 
     editWindow.setMenu(null);
   
@@ -390,15 +390,15 @@ ipcMain.on('editing', (event) => {
 
   console.log('editing ' + editing);
 
-  var getData = parser.readData(editing, 0);
+  let getData = parser.readData(editing, 0);
 
-  var theFeedObj;
+  let theFeedObj;
 
   getData.then( (response) => {
     
     theFeedObj = response;
 
-    var heads = parser.readHeads();
+    let heads = parser.readHeads();
 
     heads.then( (resp) => {
       mainWindow.webContents.send('refreshed-new', resp);
@@ -418,13 +418,13 @@ ipcMain.on('editing', (event) => {
       console.log(reason);
 
 
-      var feed = parser.feed(arg, 0);
+      let feed = parser.feed(arg, 0);
       feed.then( (res) => {
 
         console.log(res.feed.items.length);
         event.sender.send('link-reply', true);
 
-        var write = parser.writeData(arg, res.feed.items);
+        let write = parser.writeData(arg, res.feed.items);
         write.then( (response) => {
           console.log('fixed ' + response);
         }).catch( (reasonSave) => {
@@ -449,7 +449,7 @@ ipcMain.on('editing', (event) => {
 
 ipcMain.on('refresh', (event) => {
 
-  var heads = parser.readHeads();
+  let heads = parser.readHeads();
 
   heads.then( (response) => {
     event.sender.send('refreshed', response);
@@ -465,18 +465,18 @@ ipcMain.on('reload', (event, arg) => {
 
   if (arg.get == 'latest') {
 
-    var getHeads = parser.readHeads();
+    let getHeads = parser.readHeads();
 
     getHeads.then ( (response) => {
 
-      var feeds = [];
-      var inc = 0;
+      let feeds = [];
+      let inc = 0;
       
-      var sendIt = () => {
+      let sendIt = () => {
 
         console.log('Getting latest feeds');
 
-        var articles = sorting.latest(feeds);
+        let articles = sorting.latest(feeds);
         articles.then ( (arts) => {
           
           console.log(arts[0].title);
@@ -488,17 +488,17 @@ ipcMain.on('reload', (event, arg) => {
         
       }
 
-      var resolution = (feed) => {
+      let resolution = (feed) => {
         
         feeds.push(feed);
 
         //bubble sort
-        for (var i = 0; i < feeds.length; i++) {
-          for (var j = 0; j < feeds.length - i - 1; j++) {
+        for (let i = 0; i < feeds.length; i++) {
+          for (let j = 0; j < feeds.length - i - 1; j++) {
 
             if (feeds[j].x > feeds[j + 1].x) {
 
-              var tmp = feeds[j]; 
+              let tmp = feeds[j]; 
               feeds[j] = feeds[j + 1];
               feeds[j + 1] = tmp;
 
@@ -516,11 +516,11 @@ ipcMain.on('reload', (event, arg) => {
       }
 
 
-      for (var x = 0; x < response.length; x++) {
+      for (let x = 0; x < response.length; x++) {
 
-        var name = response[x].name;
+        let name = response[x].name;
 
-        var reader = parser.readData(name, x);
+        let reader = parser.readData(name, x);
 
         reader.then ( (response2) => {
           resolution(response2);
@@ -538,7 +538,7 @@ ipcMain.on('reload', (event, arg) => {
 
   if (arg.get == 'feed') {
 
-    var getFeed = parser.readData(arg.name, arg.num);
+    let getFeed = parser.readData(arg.name, arg.num);
     getFeed.then( (response) => {
 
       event.sender.send('reloaded', {arts: response.obj.items, num: 10, title: response.head.title});
@@ -567,7 +567,7 @@ ipcMain.on('link', (event, arg) => {
 
 ipcMain.on('getLatestTime', (event) => {
 
-  var loc = app.getPath('userData') + "/last_written.txt";
+  let loc = app.getPath('userData') + "/last_written.txt";
   fs.readFile(loc, 'utf8', (err, data) => {
     if (err) {
       console.log('noExist');
@@ -581,7 +581,7 @@ ipcMain.on('getLatestTime', (event) => {
 
 ipcMain.on('reGet', (event) => {
 
-  var now = main_cron.now();
+  let now = main_cron.now();
   now.then( () => {
   }).catch( (error) => {
     console.log(error);
@@ -591,7 +591,7 @@ ipcMain.on('reGet', (event) => {
 
 ipcMain.on('settings', (event) => {
 
-  var mainSet = settings.get('main');
+  let mainSet = settings.get('main');
   event.sender.send('mainSet', mainSet);
 
 });
@@ -616,7 +616,7 @@ ipcMain.on('updateSet', (event, arg) => {
 
 ipcMain.on('changeOrder', (event, arg) => {
 
-  var changer = parser.changeOrder(arg.id, arg.position, arg.old);
+  let changer = parser.changeOrder(arg.id, arg.position, arg.old);
 
   changer.then( (heads) => {
 
@@ -631,7 +631,7 @@ ipcMain.on('changeOrder', (event, arg) => {
 });
 
 
-var trayUpdate = () => {
+let trayUpdate = () => {
 
   settings.set('articles', {
 
@@ -651,12 +651,12 @@ var trayUpdate = () => {
 
 ipcMain.on('read', (event, arg) => {
 
-  var title = arg.titleArt.replace(/U0027/g, "'").replace(/U0022/g, '"').replace(/U0060/g, '"').replace(/U0061/g, ',');
-  var pubdate = arg.pubdate;
-  var feed = arg.feed.replace(/U0027/g, "'").replace(/U0022/g, '"').replace(/U0060/g, '"').replace(/U0061/g, ',');
-  var newArt = arg.newArt
+  let title = arg.titleArt.replace(/U0027/g, "'").replace(/U0022/g, '"').replace(/U0060/g, '"').replace(/U0061/g, ',');
+  let pubdate = arg.pubdate;
+  let feed = arg.feed.replace(/U0027/g, "'").replace(/U0022/g, '"').replace(/U0060/g, '"').replace(/U0061/g, ',');
+  let newArt = arg.newArt
 
-  var makeRead = parser.makeRead(title, pubdate, feed, newArt);
+  let makeRead = parser.makeRead(title, pubdate, feed, newArt);
   makeRead.then ( (response) => {
 
     if (response) {
@@ -669,12 +669,12 @@ ipcMain.on('read', (event, arg) => {
 
       trayUpdate();
 
-      var addToFeed = parser.addUnseenData(feed, -1);
+      let addToFeed = parser.addUnseenData(feed, -1);
       addToFeed.then( (arg) => {
 
         if (mainWindow != null) {
 
-          var heads = parser.readHeads();
+          let heads = parser.readHeads();
     
           heads.then( (resp) => {
             mainWindow.webContents.send('newList', resp);
@@ -708,9 +708,9 @@ ipcMain.on('unread', (event, arg) => {
 
   unseen += 1;
 
-  var title = arg.titleArt;
-  var pubdate = arg.pubdate;
-  var feed = arg.feed;
+  let title = arg.titleArt;
+  let pubdate = arg.pubdate;
+  let feed = arg.feed;
 
 });
 
@@ -718,18 +718,18 @@ ipcMain.on('allRead', (event, arg) => {
 
   if (arg == 'latest') {
 
-    var getHeads = parser.readHeads();
+    let getHeads = parser.readHeads();
     getHeads.then( (heads) => {
 
-      var final = heads.length;
-      var counting = 0;
+      let final = heads.length;
+      let counting = 0;
 
       for (x in heads) {
 
-        var makeRead = parser.makeFeedRead(heads[x].name);
+        let makeRead = parser.makeFeedRead(heads[x].name);
         makeRead.then( (response) => {
 
-          var addToFeed = parser.addUnseenDataAll(response.name);
+          let addToFeed = parser.addUnseenDataAll(response.name);
           addToFeed.then( (resonse2) => {
 
             counting += 1;
@@ -761,17 +761,17 @@ ipcMain.on('allRead', (event, arg) => {
 
   } else {
 
-    var getHeads = parser.readHeads();
+    let getHeads = parser.readHeads();
     getHeads.then( (heads) => {
 
       for (x in heads) {
 
         if (arg == heads[x].title) {
 
-          var makeRead = parser.makeFeedRead(heads[x].name);
+          let makeRead = parser.makeFeedRead(heads[x].name);
           makeRead.then( (response) => {
 
-            var addToFeed = parser.addUnseenDataAll(response.name);
+            let addToFeed = parser.addUnseenDataAll(response.name);
             addToFeed.then( (resonse2) => {
 
               unseen -= response.take;
@@ -821,12 +821,12 @@ global.output = {
 
     unseen += 1;
 
-    var addToFeed = parser.addUnseenData(body, 1);
+    let addToFeed = parser.addUnseenData(body, 1);
     addToFeed.then( (arg) => {
 
       if (mainWindow != null) {
 
-        var heads = parser.readHeads();
+        let heads = parser.readHeads();
   
         heads.then( (resp) => {
           mainWindow.webContents.send('newList', resp);
