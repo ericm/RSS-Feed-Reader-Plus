@@ -138,7 +138,7 @@ app.on('ready', () => {
 
   //settings.delete('main');
 
-  tray = new Tray(nativeImage.createFromPath('./img/64.ico'));
+  tray = new Tray(desktopImg);
   const contextMenu = Menu.buildFromTemplate([
     {label: 'Show Latest', click() {
       if (mainWindow == null) {
