@@ -4,7 +4,7 @@ h1, h2, span, p, i, a, blockquote {
 
 }
 
-.artopt, .artopt button, .artopt select {
+.artopt, .artopt button, .artopt select, .rule {
     border: 3px solid rgba(240, 240, 240, 1);
     color: rgb(240, 240, 240);
 }
@@ -13,7 +13,7 @@ h1, h2, span, p, i, a, blockquote {
     color: rgb(240, 240, 240);
 }
 
-input[type="text"] {
+input[type="text"], input[type="number"] {
     border-bottom: 3px rgb(240, 240, 240) solid;
     color: rgb(240, 240, 240);
 }

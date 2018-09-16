@@ -22,9 +22,25 @@ let unseen;
 
 global.sharedObj = {title: 'RSS FEED READER PLUS'};
 
+//Check OS Type
+let desktopImg;
+let desktopImgNew;
+
+if (process.platform == 'linux') {
+
+  desktopImg = nativeImage.createFromPath('./img/64.png');
+  desktopImgNew = nativeImage.createFromPath('./img/64n.png');
+
+} else if (process.platform == 'win32') {
+
+  desktopImg = nativeImage.createFromPath('./img/64.ico');
+  desktopImgNew = nativeImage.createFromPath('./img/64n.ico');
+
+}
+
 function createWindow () {
   
-  mainWindow = new BrowserWindow({width: 1200, height: 600, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
+  mainWindow = new BrowserWindow({width: 1200, height: 600, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: desktopImg});
 
   mainWindow.setMenu(null);
 
@@ -46,7 +62,7 @@ app.on('ready', () => {
   let rssDir = app.getPath('userData') + "/rss-feeds";
   if (!fs.existsSync(rssDir)) {
     fs.mkdirSync(rssDir);
-    console.log('added folder')
+    console.log('added folder');
   }
   
   let obj = JSON.stringify({
@@ -72,6 +88,12 @@ app.on('ready', () => {
       }
     });
     console.log('added new last_written');
+  }
+
+  let rulesDir = app.getPath('userData') + "/rules";
+  if (!fs.existsSync(rulesDir)) {
+    fs.mkdirSync(rulesDir);
+    console.log('added rules folder');
   }
 
   //default settings
@@ -106,6 +128,12 @@ app.on('ready', () => {
 
   }
 
+  if (!settings.has('rules')) {
+
+    settings.set('rules', []);
+
+  }
+
   unseen = settings.get('articles.unseen');
 
   //settings.delete('main');
@@ -136,7 +164,7 @@ app.on('ready', () => {
         addOpen = true;
         console.log('opened add'); 
         
-        addWindow = new BrowserWindow({width: 500, height: 400, frame: false, minWidth: 500, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
+        addWindow = new BrowserWindow({width: 500, height: 400, frame: false, minWidth: 500, minHeight: 400, transparent: true, icon: desktopImg});
     
         addWindow.setMenu(null);
     
@@ -161,7 +189,7 @@ app.on('ready', () => {
         settingsOpen = true;
         console.log('opened settings'); 
         
-        settingsWindow = new BrowserWindow({width: 800, height: 700, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
+        settingsWindow = new BrowserWindow({width: 800, height: 700, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: desktopImg});
     
         settingsWindow.setMenu(null);
     
@@ -231,7 +259,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
 
   if (mainWindow === null) {
-    createWindow()
+    createWindow();
   }
 });
 
@@ -243,7 +271,7 @@ ipcMain.on('settings-page', (event, arg) => {
     settingsOpen = true;
     console.log('opened settings'); 
     
-    settingsWindow = new BrowserWindow({width: 800, height: 700, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
+    settingsWindow = new BrowserWindow({width: 800, height: 700, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: desktopImg});
 
     settingsWindow.setMenu(null);
 
@@ -270,7 +298,7 @@ ipcMain.on('add-page', (event, arg) => {
     addOpen = true;
     console.log('opened add'); 
     
-    addWindow = new BrowserWindow({width: 500, height: 400, frame: false, minWidth: 500, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
+    addWindow = new BrowserWindow({width: 500, height: 400, frame: false, minWidth: 500, minHeight: 400, transparent: true, icon: desktopImg});
 
     addWindow.setMenu(null);
 
@@ -314,7 +342,7 @@ ipcMain.on('add-link', (event, arg) => {
           setTimeout(() => addWindow.close(), 1500);
 
           setTimeout(() => {
-            let editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
+            let editWindow = new BrowserWindow({width: 600, height: 600, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: desktopImg});
 
             editWindow.setMenu(null);
   
@@ -365,7 +393,7 @@ ipcMain.on('edit', (event, arg) => {
 
     editing = res[arg].name;
 
-    let editWindow = new BrowserWindow({width: 1000, height: 800, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: nativeImage.createFromPath('./img/64.ico')});
+    let editWindow = new BrowserWindow({width: 600, height: 600, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: desktopImg});
 
     editWindow.setMenu(null);
   
@@ -641,9 +669,9 @@ let trayUpdate = () => {
   tray.setToolTip('(' + unseen + ') ' + global.sharedObj.title);
 
   if (unseen === 0) {
-    tray.setImage(nativeImage.createFromPath('./img/64.ico'));
+    tray.setImage(desktopImg);
   } else {
-    tray.setImage(nativeImage.createFromPath('./img/64n.ico'));
+    tray.setImage(desktopImgNew);
   }
 
 };
@@ -801,6 +829,18 @@ ipcMain.on('allRead', (event, arg) => {
     });
 
   }
+
+});
+
+ipcMain.on('editSend', (event, arg) => {
+
+  console.log("changed");
+
+});
+
+ipcMain.on('editRule', (event, arg) => {
+
+  console.log(arg);
 
 });
 

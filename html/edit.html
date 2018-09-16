@@ -20,6 +20,12 @@
     <hr class="bottom">
     <script>
         var TITLE = 'Editing ';
+        function update() {
+          require('../js/editer.js').update();
+        }
+        function remRule(id, rule) {
+          require('../js/editer.js').remRule(id, rule);
+        }
         require('../js/editer.js');
         require('../js/menu.js');
         require('../js/renderer.js');

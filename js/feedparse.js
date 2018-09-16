@@ -24,7 +24,7 @@ module.exports = {
 
             file.on('response', (res) => {
 
-                if (res.statusCode !== 200) {
+                if (res.statusCode != 200) {
                     reject('bad status code');
                 } else {
                     file.pipe(feedparser);
@@ -130,11 +130,12 @@ module.exports = {
 
                 theString += utils.jsonStringify(data[x]);
 
-                if (x !== data.length - 1) {
+                if (x != data.length - 1) {
                     theString += ',';
                 }
 
             }
+
             theString += ']}';
 
             const loc = app.getPath('userData') + "/rss-feeds/" + name + ".json";
@@ -174,6 +175,16 @@ module.exports = {
                 }
 
                 var length = obj.feeds.length;
+
+
+                //Set default feed specific settings
+                settings.set("feeds." + length, {
+
+                    max: 100,
+                    rules: [],
+                    notifications: 'default'
+
+                });
 
                 obj.feeds.push({name: name, link: link, title: meta.title, id: length});
                 fs.writeFile(file, utils.jsonStringify(obj), (err) => {
@@ -247,7 +258,7 @@ module.exports = {
                 } else {
                     var obj = JSON.parse(data);
                     var feedHead = obj.feeds.filter( (item) => {
-                        return item.name === name;
+                        return item.name == name;
                     });
 
                     fs.readFile(feed, 'utf8', (err, dataFeed) => {
@@ -320,7 +331,7 @@ module.exports = {
                     var obj = JSON.parse(data);
                     for (var i = 0; i < obj.feeds.length; i++) {
 
-                        if (obj.feeds[i].title === feed) {
+                        if (obj.feeds[i].title == feed) {
 
                             link = obj.feeds[i].link;
 
@@ -355,7 +366,7 @@ module.exports = {
 
                             for (var i = 0; i < items.length; i++) {
 
-                                if (items[i].title === title && items[i].pubdate === pubdate) {
+                                if (items[i].title == title && items[i].pubdate == pubdate) {
 
                                     items[i].read = true;
 
@@ -403,13 +414,13 @@ module.exports = {
 
                 for (var i = 0; i < obj.feeds.length; i++) {
 
-                    if (obj.feeds[i].title === title) {
+                    if (obj.feeds[i].title == title) {
 
                         if (settings.has('list.' + obj.feeds[i].id) ) {
 
                             settings.set('list.' + obj.feeds[i].id , settings.get('list.' + obj.feeds[i].id) + amount);
 
-                            if (settings.get('list.' + obj.feeds[i].id) < 0 && amount === -1) {
+                            if (settings.get('list.' + obj.feeds[i].id) < 0 && amount == -1) {
 
                                 settings.set('list.' + obj.feeds[i].id , 0);
 
@@ -452,8 +463,8 @@ module.exports = {
 
                     for (x in jData.items) {
 
-                        if (typeof jData.items[x].read !== 'undefined' && typeof jData.items[x].new !== 'undefined') {
-                            if (jData.items[x].read === false && jData.items[x].new === true) {
+                        if (typeof jData.items[x].read != 'undefined' && typeof jData.items[x].new != 'undefined') {
+                            if (jData.items[x].read == false && jData.items[x].new == true) {
                                 take += 1;
                             }
                         }
@@ -498,7 +509,7 @@ module.exports = {
 
                 for (var i = 0; i < obj.feeds.length; i++) {
 
-                    if (obj.feeds[i].name === name) {
+                    if (obj.feeds[i].name == name) {
 
                         settings.set('list.' + obj.feeds[i].id , 0);
                         resolve(name);
