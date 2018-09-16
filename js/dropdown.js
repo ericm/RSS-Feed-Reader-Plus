@@ -3,7 +3,7 @@ var dropmenu = document.getElementById('drop-menu');
 
 dropselect.addEventListener('click', () => {
 
-    if (dropselect.style.top == "200px") {
+    if (dropselect.style.top === "200px") {
         dropselect.style.top = "20px";
         dropmenu.style.height = "0";
     } else {

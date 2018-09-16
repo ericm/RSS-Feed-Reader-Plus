@@ -1,15 +1,15 @@
-var getFeeds = (feeds) => {
+let getFeeds = (feeds) => {
 
     return new Promise( (resolve, reject) => {
 
-        var round = new Array();
+        let round = [];
 
-            for (var i = 0; i < feeds.length; i++) {
+            for (let i = 0; i < feeds.length; i++) {
 
-                var getLength = getLengths(feeds[i].obj.items);
+                let getLength = getLengths(feeds[i].obj.items);
                 getLength.then( (arg) => {
 
-                    for (var x = 0; x < arg.count; x++) {
+                    for (let x = 0; x < arg.count; x++) {
 
                         round.push(arg.feed[x]);
 
@@ -25,14 +25,14 @@ var getFeeds = (feeds) => {
 
     });
 
-}
+};
 
-var getLengths = (feed) => {
+let getLengths = (feed) => {
 
     return new Promise( (resolve, reject) => {
 
-        var count = 0;
-        var existing = true;
+        let count = 0;
+        let existing = true;
 
         while (existing) {
                 
@@ -47,7 +47,7 @@ var getLengths = (feed) => {
         resolve({count: count, feed: feed});
 
     });
-}
+};
 
 module.exports = {
 
@@ -55,7 +55,7 @@ module.exports = {
 
         return new Promise( (resolve, reject) => {
             
-            var roundFeeds = getFeeds(feeds);
+            let roundFeeds = getFeeds(feeds);
             roundFeeds.then( (arg1) => {
                 
                 arg1.sort( (a, b) => {
@@ -72,4 +72,4 @@ module.exports = {
 
     }
 
-}
+};
