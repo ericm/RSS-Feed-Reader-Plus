@@ -14,7 +14,7 @@ document.getElementsByTagName('button')[0].onclick = () => {
         ipcRenderer.send('add-link', link);
     }
     
-}
+};
 
 ipcRenderer.on('link-reply', (event, arg) => {
     if (arg) {

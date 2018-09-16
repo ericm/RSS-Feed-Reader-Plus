@@ -339,7 +339,7 @@ ipcMain.on('add-link', (event, arg) => {
 
       console.log(reason);
 
-      if (reason == 'exists') {
+      if (reason === 'exists') {
         event.sender.send('exist-reply', true);
       }
 
@@ -403,7 +403,7 @@ ipcMain.on('editing', (event) => {
     heads.then( (resp) => {
       mainWindow.webContents.send('refreshed-new', resp);
     }).catch( (reason) => {
-      if (reason == 'restart') {
+      if (reason === 'restart') {
         console.log(reason);
       }
     });
@@ -411,10 +411,10 @@ ipcMain.on('editing', (event) => {
     event.sender.send('edit_this', theFeedObj);
 
   }).catch(  (reason) => {
-    if (reason == 'restart') {
+    if (reason === 'restart') {
       console.log(reason);
     }
-    if (reason == 'noExist') {
+    if (reason === 'noExist') {
       console.log(reason);
 
 
@@ -437,7 +437,7 @@ ipcMain.on('editing', (event) => {
 
         console.log(reason);
 
-        if (reason == 'exists') {
+        if (reason === 'exists') {
           event.sender.send('exist-reply', true);
         }
 
@@ -454,7 +454,7 @@ ipcMain.on('refresh', (event) => {
   heads.then( (response) => {
     event.sender.send('refreshed', response);
   }).catch( (reason) => {
-    if (reason == 'restart') {
+    if (reason === 'restart') {
       console.log(reason);
     }
   });
@@ -463,7 +463,7 @@ ipcMain.on('refresh', (event) => {
 
 ipcMain.on('reload', (event, arg) => {
 
-  if (arg.get == 'latest') {
+  if (arg.get === 'latest') {
 
     let getHeads = parser.readHeads();
 
@@ -486,7 +486,7 @@ ipcMain.on('reload', (event, arg) => {
           console.log(err);
         });
         
-      }
+      };
 
       let resolution = (feed) => {
         
@@ -508,12 +508,12 @@ ipcMain.on('reload', (event, arg) => {
 
         }
 
-        if (inc == response.length - 1) {
+        if (inc === response.length - 1) {
           sendIt();
         }
         inc += 1;
 
-      }
+      };
 
 
       for (let x = 0; x < response.length; x++) {
@@ -536,7 +536,7 @@ ipcMain.on('reload', (event, arg) => {
     
   }
 
-  if (arg.get == 'feed') {
+  if (arg.get === 'feed') {
 
     let getFeed = parser.readData(arg.name, arg.num);
     getFeed.then( (response) => {
@@ -572,14 +572,13 @@ ipcMain.on('getLatestTime', (event) => {
     if (err) {
       console.log('noExist');
     } else {
-      lastTime = data;
-      event.sender.send('latestTime', lastTime);
+        event.sender.send('latestTime', data);
     }
   });
 
 });
 
-ipcMain.on('reGet', (event) => {
+ipcMain.on('reGet', () => {
 
   let now = main_cron.now();
   now.then( () => {
@@ -641,20 +640,20 @@ let trayUpdate = () => {
 
   tray.setToolTip('(' + unseen + ') ' + global.sharedObj.title);
 
-  if (unseen == 0) {
+  if (unseen === 0) {
     tray.setImage(nativeImage.createFromPath('./img/64.ico'));
   } else {
     tray.setImage(nativeImage.createFromPath('./img/64n.ico'));
   }
 
-}
+};
 
 ipcMain.on('read', (event, arg) => {
 
   let title = arg.titleArt.replace(/U0027/g, "'").replace(/U0022/g, '"').replace(/U0060/g, '"').replace(/U0061/g, ',');
   let pubdate = arg.pubdate;
   let feed = arg.feed.replace(/U0027/g, "'").replace(/U0022/g, '"').replace(/U0060/g, '"').replace(/U0061/g, ',');
-  let newArt = arg.newArt
+  let newArt = arg.newArt;
 
   let makeRead = parser.makeRead(title, pubdate, feed, newArt);
   makeRead.then ( (response) => {
@@ -679,7 +678,7 @@ ipcMain.on('read', (event, arg) => {
           heads.then( (resp) => {
             mainWindow.webContents.send('newList', resp);
           }).catch( (reason) => {
-            if (reason == 'restart') {
+            if (reason === 'restart') {
               console.log(reason);
             }
           });
@@ -716,7 +715,7 @@ ipcMain.on('unread', (event, arg) => {
 
 ipcMain.on('allRead', (event, arg) => {
 
-  if (arg == 'latest') {
+  if (arg === 'latest') {
 
     let getHeads = parser.readHeads();
     getHeads.then( (heads) => {
@@ -724,16 +723,16 @@ ipcMain.on('allRead', (event, arg) => {
       let final = heads.length;
       let counting = 0;
 
-      for (x in heads) {
+      for (let x in heads) {
 
         let makeRead = parser.makeFeedRead(heads[x].name);
         makeRead.then( (response) => {
 
           let addToFeed = parser.addUnseenDataAll(response.name);
-          addToFeed.then( (resonse2) => {
+          addToFeed.then( () => {
 
             counting += 1;
-            if (counting == final) {
+            if (counting === final) {
 
               unseen = 0;
 
@@ -764,15 +763,15 @@ ipcMain.on('allRead', (event, arg) => {
     let getHeads = parser.readHeads();
     getHeads.then( (heads) => {
 
-      for (x in heads) {
+      for (let x in heads) {
 
-        if (arg == heads[x].title) {
+        if (arg === heads[x].title) {
 
           let makeRead = parser.makeFeedRead(heads[x].name);
           makeRead.then( (response) => {
 
             let addToFeed = parser.addUnseenDataAll(response.name);
-            addToFeed.then( (resonse2) => {
+            addToFeed.then( () => {
 
               unseen -= response.take;
 
@@ -831,7 +830,7 @@ global.output = {
         heads.then( (resp) => {
           mainWindow.webContents.send('newList', resp);
         }).catch( (reason) => {
-          if (reason == 'restart') {
+          if (reason === 'restart') {
             console.log(reason);
           }
         });
@@ -864,4 +863,4 @@ global.output = {
     
   }
 
-}
+};

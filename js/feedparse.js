@@ -12,7 +12,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
 
             var theFeed = {
-                head: new Object(),
+                head: {},
                 items: []
             };
 
@@ -45,15 +45,15 @@ module.exports = {
                 }
 
             });
-            
+
             feedparser.on('end', () => {
-                
+
                 resolve({feed: theFeed, x: x, link});
-                
+
             });
 
         });
-        
+
     },
 
     writeData: (link, data) => {
@@ -73,8 +73,8 @@ module.exports = {
 
             var theString = '{"items":[';
 
-            for (x in data) {
-                
+            for (var x in data) {
+
                 theString += utils.jsonStringify(data[x]);
 
                 if (x != data.length - 1) {
@@ -86,7 +86,7 @@ module.exports = {
 
             //if exists
 
-            var loc = app.getPath('userData') + "/rss-feeds/" + name + ".json";
+            const loc = app.getPath('userData') + "/rss-feeds/" + name + ".json";
 
             if (!fs.existsSync(loc)) {
 
@@ -126,18 +126,18 @@ module.exports = {
 
             var theString = '{"items":[';
 
-            for (x in data) {
-                
+            for (var x in data) {
+
                 theString += utils.jsonStringify(data[x]);
 
-                if (x != data.length - 1) {
+                if (x !== data.length - 1) {
                     theString += ',';
                 }
 
             }
             theString += ']}';
 
-            var loc = app.getPath('userData') + "/rss-feeds/" + name + ".json";
+            const loc = app.getPath('userData') + "/rss-feeds/" + name + ".json";
 
             fs.truncate(loc, 0, () => {
 
@@ -151,7 +151,7 @@ module.exports = {
                 });
 
             })
-            
+
         });
 
     },
@@ -162,7 +162,7 @@ module.exports = {
 
             var obj = {
                 feeds:[]
-            }
+            };
 
             var file = app.getPath('userData') + "/data.json";
 
@@ -184,7 +184,7 @@ module.exports = {
                     }
                 });
             });
-            
+
         });
 
     },
@@ -203,13 +203,13 @@ module.exports = {
                 if (err) {
                     reject('restart');
                 } else {
-                    
+
                     var obj = JSON.parse(data);
 
                     var objFeeds = obj.feeds;
 
                     objFeeds = arrayMove(objFeeds, old, position);
-                            
+
                     obj.feeds = objFeeds;
 
                     fs.writeFile(feeds, utils.jsonStringify(obj), (err) => {
@@ -247,9 +247,9 @@ module.exports = {
                 } else {
                     var obj = JSON.parse(data);
                     var feedHead = obj.feeds.filter( (item) => {
-                        return item.name == name;
+                        return item.name === name;
                     });
-                    
+
                     fs.readFile(feed, 'utf8', (err, dataFeed) => {
                         if (err) {
                             reject('noExist');
@@ -265,9 +265,9 @@ module.exports = {
                                 head: feedHead[0],
                                 obj: feedObj,
                                 x: x
-                            }
+                            };
                             resolve(theFeed);
-        
+
                         }
                     });
                 }
@@ -281,7 +281,7 @@ module.exports = {
 
         return new Promise((resolve, reject) => {
 
-            var feeds = app.getPath('userData') + "/data.json";
+            const feeds = app.getPath('userData') + "/data.json";
 
             if (!fs.existsSync(feeds)) {
                 reject('restart');
@@ -306,7 +306,7 @@ module.exports = {
 
             var link;
 
-            var feeds = app.getPath('userData') + "/data.json";
+            const feeds = app.getPath('userData') + "/data.json";
 
             if (!fs.existsSync(feeds)) {
                 reject('restart');
@@ -320,7 +320,7 @@ module.exports = {
                     var obj = JSON.parse(data);
                     for (var i = 0; i < obj.feeds.length; i++) {
 
-                        if (obj.feeds[i].title == feed) {
+                        if (obj.feeds[i].title === feed) {
 
                             link = obj.feeds[i].link;
 
@@ -337,34 +337,34 @@ module.exports = {
                     name = name.split('*').join('');
                     name = name.split('>').join('');
                     name = name.split('<').join('');
-        
-                    var loc = app.getPath('userData') + "/rss-feeds/" + name + ".json";
-        
+
+                    const loc = app.getPath('userData') + "/rss-feeds/" + name + ".json";
+
                     if (!fs.existsSync(loc)) {
                         reject('restart');
                     }
-        
+
                     fs.readFile(loc, 'utf8', (err, dataFeed) => {
                         if (err) {
                             reject('noExist');
                         } else {
                             var feedObj = JSON.parse(dataFeed);
-        
+
                             //Array of Objects
                             var items = feedObj.items;
-        
+
                             for (var i = 0; i < items.length; i++) {
-        
-                                if (items[i].title == title && items[i].pubdate == pubdate) {
-        
+
+                                if (items[i].title === title && items[i].pubdate === pubdate) {
+
                                     items[i].read = true;
-        
+
                                 }
-        
+
                             }
-        
+
                             feedObj.items = items;
-        
+
                             fs.writeFile(loc, utils.jsonStringify(feedObj), (err) => {
                                 if (err) {
                                     reject(err);
@@ -372,14 +372,14 @@ module.exports = {
                                     resolve(newArt);
                                 }
                             });
-        
+
                         }
-                    });        
+                    });
 
                 }
             });
 
-            
+
         });
 
     },
@@ -390,7 +390,7 @@ module.exports = {
 
             var obj = {
                 feeds:[]
-            }
+            };
 
             var file = app.getPath('userData') + "/data.json";
 
@@ -403,13 +403,13 @@ module.exports = {
 
                 for (var i = 0; i < obj.feeds.length; i++) {
 
-                    if (obj.feeds[i].title == title) {
+                    if (obj.feeds[i].title === title) {
 
                         if (settings.has('list.' + obj.feeds[i].id) ) {
 
                             settings.set('list.' + obj.feeds[i].id , settings.get('list.' + obj.feeds[i].id) + amount);
 
-                            if (settings.get('list.' + obj.feeds[i].id) < 0 && amount == -1) {
+                            if (settings.get('list.' + obj.feeds[i].id) < 0 && amount === -1) {
 
                                 settings.set('list.' + obj.feeds[i].id , 0);
 
@@ -428,9 +428,9 @@ module.exports = {
                     }
 
                 }
-                
+
             });
-            
+
         });
 
     },
@@ -453,7 +453,7 @@ module.exports = {
                     for (x in jData.items) {
 
                         if (typeof jData.items[x].read !== 'undefined' && typeof jData.items[x].new !== 'undefined') {
-                            if (jData.items[x].read == false && jData.items[x].new == true) {
+                            if (jData.items[x].read === false && jData.items[x].new === true) {
                                 take += 1;
                             }
                         }
@@ -471,7 +471,7 @@ module.exports = {
                     }
                 });
 
-                
+
 
             });
 
@@ -485,7 +485,7 @@ module.exports = {
 
             var obj = {
                 feeds:[]
-            }
+            };
 
             var file = app.getPath('userData') + "/data.json";
 
@@ -498,7 +498,7 @@ module.exports = {
 
                 for (var i = 0; i < obj.feeds.length; i++) {
 
-                    if (obj.feeds[i].name == name) {
+                    if (obj.feeds[i].name === name) {
 
                         settings.set('list.' + obj.feeds[i].id , 0);
                         resolve(name);
@@ -513,4 +513,4 @@ module.exports = {
 
     }
 
-}
+};

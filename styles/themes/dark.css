@@ -18,6 +18,10 @@ input[type="text"] {
     color: rgb(240, 240, 240);
 }
 
+input[name="link"] {
+    color: #1d1d1d;
+}
+
 button {
     background-color: rgb(240, 240, 240);
     color: #000;

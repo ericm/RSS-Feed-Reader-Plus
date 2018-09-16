@@ -33,7 +33,7 @@ module.exports = {
         
                     getHeads.then( (arg1) => {
 
-                        if (arg1.length == 0) {
+                        if (arg1.length === 0) {
                             global.running = false;
                         }
         
@@ -71,16 +71,16 @@ module.exports = {
                                         var newD = new Date(new_items[i].pubdate).getDate();
                                         var oldD = new Date(old_items[0].pubdate).getDate();
     
-                                        if (new_items[i].title == old_items[0].title && newD == oldD) {
+                                        if (new_items[i].title === old_items[0].title && newD === oldD) {
     
                                             matched = true;
     
-                                            if (i == 0) {
+                                            if (i === 0) {
                                                 break;
                                             }
-                                            
+
                                             var insert_index = i;
-    
+
                                             var add_items = new_items.slice(0, insert_index);
                     
                                             var insert = add_items.concat(old_items);
@@ -141,7 +141,7 @@ module.exports = {
     
                                     }
 
-                                    if (arg3.x == arg1.length - 1) {
+                                    if (arg3.x === arg1.length - 1) {
                                         global.running = false;
                                     }
         
@@ -198,7 +198,7 @@ module.exports = {
     
                 getHeads.then( (arg1) => {
 
-                    if (arg1.length == 0) {
+                    if (arg1.length === 0) {
                         global.running = false;
                     }
     
@@ -236,11 +236,11 @@ module.exports = {
                                     var newD = new Date(new_items[i].pubdate).getDate();
                                     var oldD = new Date(old_items[0].pubdate).getDate();
 
-                                    if (new_items[i].title == old_items[0].title && newD == oldD) {
+                                    if (new_items[i].title === old_items[0].title && newD === oldD) {
 
                                         matched = true;
 
-                                        if (i == 0) {
+                                        if (i === 0) {
                                             break;
                                         }
                                         
@@ -268,7 +268,7 @@ module.exports = {
                                             
                                     } else {
 
-                                        if (i == new_items.length - 1 && !matched) {
+                                        if (i === new_items.length - 1 && !matched) {
 
                                             matched = true;
 
@@ -308,7 +308,7 @@ module.exports = {
 
                                 }
 
-                                if (arg3.x == arg1.length - 1) {
+                                if (arg3.x === arg1.length - 1) {
                                     global.running = false;
                                 }
     
