@@ -121,6 +121,17 @@ ipcRenderer.on('mainSet', (event, settings) => {
 
     container.innerHTML += notifications;
 
+    //shadows
+
+    var shadows;
+
+    if (settings.shadows == true) {
+        shadows = `<br><label><p>Enable box shadows (disable for slower computers):</p><input onchange="update()" type="checkbox" checked/></label>`;
+    } else {
+        shadows = `<br><label><p>Enable box shadows (disable for slower computers):</p><input onchange="update()" type="checkbox" /></label>`;
+    }
+    container.innerHTML += shadows;
+
 });
 
 module.exports = {
@@ -159,13 +170,18 @@ module.exports = {
 
         var notifications = container[5].getElementsByTagName('input')[0].checked;
 
+        //shadows
+
+        var shadows = container[6].getElementsByTagName('input')[0].checked;
+
         var settings = {
             refresh: refresh,
             theme: theme,
             launch_start: launch_start,
             start_tray: start_tray,
             opacity: opacity,
-            notifications: notifications
+            notifications: notifications,
+            shadows: shadows
         }
 
         ipcRenderer.send('updateSet', settings);

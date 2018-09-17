@@ -38,6 +38,8 @@ if (process.platform == 'linux') {
 
 }
 
+
+
 function createWindow () {
   
   mainWindow = new BrowserWindow({width: 1200, height: 600, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: desktopImg});
@@ -106,7 +108,8 @@ app.on('ready', () => {
       launch_start: true,
       start_tray: true,
       opacity: 96,
-      notifications: true
+      notifications: true,
+      shadows: true
 
     });
 
@@ -137,6 +140,10 @@ app.on('ready', () => {
   unseen = settings.get('articles.unseen');
 
   //settings.delete('main');
+
+  //Set global settings
+
+  global.settings = settings.getAll();
 
   tray = new Tray(desktopImg);
   const contextMenu = Menu.buildFromTemplate([
@@ -632,7 +639,8 @@ ipcMain.on('updateSet', (event, arg) => {
     launch_start: arg.launch_start,
     start_tray: arg.start_tray,
     opacity: arg.opacity,
-    notifications: arg.notifications
+    notifications: arg.notifications,
+    shadows: arg.shadows
 
   });
 

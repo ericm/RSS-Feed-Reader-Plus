@@ -1,6 +1,50 @@
 var electron = require('electron').remote;
 var {ipcRenderer} = require('electron');
 var title = electron.getGlobal('sharedObj').title;
+var settings = electron.getGlobal('settings');
+
+//Removes box-shadows
+if (!settings.main.shadows) {
+
+    var head = document.getElementsByTagName('head')[0];
+
+    var elem = document.createElement('style');
+    elem.appendChild(document.createTextNode(`
+    
+    .article {
+        box-shadow: 0 0 0 0;
+    }
+
+    `));
+
+    head.appendChild(elem);
+
+}
+
+//Checks OS
+
+if (process.platform == 'linux') {
+
+    var head = document.getElementsByTagName('head')[0];
+
+    var elem = document.createElement('style');
+    elem.appendChild(document.createTextNode(`
+    
+    #ex {
+        padding-top: 1px;
+    }
+    #maximize {
+        padding-top: 3px;
+    }
+    #minimize {
+        padding-top: 2px;
+    }
+
+    `));
+
+    head.appendChild(elem);
+
+}
 
 document.getElementsByTagName('title')[0].innerHTML = window.TITLE + ' - ' + title;
 document.getElementsByTagName('h1')[0].innerHTML = window.TITLE + ' - ' + title;
