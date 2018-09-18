@@ -68,7 +68,7 @@ settings.watch('main', newVal => {
 
     if (newVal.theme == 'Default') {
 
-        var style = document.getElementsByTagName('style')[0];
+        var style = document.getElementsByTagName('style')[document.getElementsByTagName('style').length - 1];
 
         var css;
     
@@ -84,7 +84,7 @@ settings.watch('main', newVal => {
 
     else if (newVal.theme == 'Dark') {
 
-        var style = document.getElementsByTagName('style')[0];
+        var style = document.getElementsByTagName('style')[document.getElementsByTagName('style').length - 1];
 
         var css;
     
