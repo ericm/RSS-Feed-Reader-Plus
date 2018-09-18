@@ -522,6 +522,77 @@ module.exports = {
             
         });
 
+    },
+
+    titleChange: (link, newTitle) => {
+
+        return new Promise((resolve, reject) => {
+
+            var feeds = app.getPath('userData') + "/data.json";
+
+            fs.readFile(feeds, (err, data) => {
+                if (err) {
+                    reject('restart');
+                } else {
+
+                    var obj = JSON.parse(data);
+
+                    var feedsObj = obj.feeds;
+
+                    var name;
+
+                    for (x in feedsObj) {
+
+                        if (feedsObj[x].link == link) {
+                            feedsObj[x].title = newTitle;
+                            name = feedsObj[x].name;
+                        }
+
+                    }
+
+                    obj.feeds = feedsObj;
+
+                    fs.writeFile(feeds, utils.jsonStringify(obj), (err) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            
+                            var loc = app.getPath('userData') + "/rss-feeds/" + name + ".json";
+
+                            fs.readFile(loc, (error, newData) => {
+
+                                var feedObj = JSON.parse(newData);
+
+                                if (error) {
+                                    reject(error);
+                                } else {
+
+                                    for (x in feedObj.items) {
+                                        feedObj.items[x].meta.title = newTitle;
+                                    }
+
+                                    fs.writeFile(loc, utils.jsonStringify(feedObj), (errr) => {
+
+                                        if (errr) {
+                                            reject(errr);
+                                        } else{
+                                            resolve(true)
+                                        }
+
+                                    });
+
+                                }
+
+                            });
+
+                        }
+                    });
+
+                }
+            });
+
+        });
+
     }
 
 };

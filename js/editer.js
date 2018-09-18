@@ -6,10 +6,12 @@ const settings = require('electron-settings');
 ipcRenderer.send('editing', true);
 
 var idGlob;
+var linkGlob;
 
 ipcRenderer.on('edit_this', (event, theFeed) => {
 
     idGlob = theFeed.head.id;
+    linkGlob = theFeed.head.link;
 
     renderer.rename('Editing Feed: ' + theFeed.head.title);
 
@@ -20,7 +22,7 @@ ipcRenderer.on('edit_this', (event, theFeed) => {
     var container = document.getElementById('containerOb');
 
     //Feed name
-    container.innerHTML += `<label><p>Name of feed: </p><input onkeypress="update()" type="text" value="` + theFeed.head.title + `"></label><br>`;
+    container.innerHTML += `<label><p>Name of feed: </p><input onchange="update()" type="text" value="` + theFeed.head.title + `"></label><br>`;
 
     //Max articles
     container.innerHTML += `<label><p>Max number of articles: </p><input onchange="update()" type="number" value="` + settings.get("feeds." + theFeed.head.id + ".max")+ `"></label><br>`;
@@ -93,17 +95,17 @@ module.exports = {
 
         var name = obj[0].getElementsByTagName('input')[0].value;
 
-        var max = obj[1].getElementsByTagName('input')[0].value;
+        var max = parseInt(obj[1].getElementsByTagName('input')[0].value);
 
-        var notifications;
-        
-        //.getElementsByTagName('select')[0].options[container[1].getElementsByTagName('select')[0].selectedIndex].text;
+        var notifications = obj[2].getElementsByTagName('select')[0].options[obj[2].getElementsByTagName('select')[0].selectedIndex].text.toLowerCase();
 
         var send = {
 
             id: idGlob,
+            link: linkGlob,
             title: name,
-            max: max
+            max: max,
+            notifications : notifications
 
         };
 

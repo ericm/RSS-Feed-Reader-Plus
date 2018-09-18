@@ -3,6 +3,7 @@ const {app, BrowserWindow, ipcMain, Tray, Menu, shell, nativeImage, Notification
 const parser = require('./js/feedparse.js');
 const sorting = require('./js/sorting.js');
 const main_cron = require('./js/main_cron.js');
+const editUpdater = require('./js/editUpdater.js');
 const fs = require('fs');
 const notifier = require('node-notifier');
 const settings = require('electron-settings');
@@ -842,7 +843,9 @@ ipcMain.on('allRead', (event, arg) => {
 
 ipcMain.on('editSend', (event, arg) => {
 
-  console.log("changed");
+  editUpdater.send(arg).then((res) => {
+    console.log('saved');
+  });
 
 });
 
