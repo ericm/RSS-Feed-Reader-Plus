@@ -5,7 +5,11 @@ const settings = require('electron-settings');
 
 ipcRenderer.send('editing', true);
 
+var idGlob;
+
 ipcRenderer.on('edit_this', (event, theFeed) => {
+
+    idGlob = theFeed.head.id;
 
     renderer.rename('Editing Feed: ' + theFeed.head.title);
 
@@ -15,8 +19,10 @@ ipcRenderer.on('edit_this', (event, theFeed) => {
 
     var container = document.getElementById('containerOb');
 
+    //Feed name
     container.innerHTML += `<label><p>Name of feed: </p><input onkeypress="update()" type="text" value="` + theFeed.head.title + `"></label><br>`;
 
+    //Max articles
     container.innerHTML += `<label><p>Max number of articles: </p><input onchange="update()" type="number" value="` + settings.get("feeds." + theFeed.head.id + ".max")+ `"></label><br>`;
 
     var notify = "";
@@ -53,15 +59,23 @@ ipcRenderer.on('edit_this', (event, theFeed) => {
 
         }
 
-        rules += `</label><br><label class="adder"><p>Add Rules:</p><select>`;
+        if (settings.get("rules").length == 0) {
 
-        for (var x in settings.get("rules")) {
+            rules += `</label><br><label class="adder"><p>No rules available</p></label>`;
 
-            rules += `<option>` + settings.get("rules")[x] + `</option>`;
+        } else {
+
+            rules += `</label><br><label class="adder"><p>Add Rules:</p><select>`;
+
+            for (var x in settings.get("rules")) {
+
+                rules += `<option>` + settings.get("rules")[x] + `</option>`;
+
+            }
+
+            rules += `</select></label>`;
 
         }
-
-        rules += `</select></label>`;
 
     }
 
@@ -75,7 +89,23 @@ module.exports = {
 
     update: () => {
 
-        var send = {};
+        var obj = document.getElementsByTagName('label');
+
+        var name = obj[0].getElementsByTagName('input')[0].value;
+
+        var max = obj[1].getElementsByTagName('input')[0].value;
+
+        var notifications;
+        
+        //.getElementsByTagName('select')[0].options[container[1].getElementsByTagName('select')[0].selectedIndex].text;
+
+        var send = {
+
+            id: idGlob,
+            title: name,
+            max: max
+
+        };
 
         ipcRenderer.send('editSend', send);
 
