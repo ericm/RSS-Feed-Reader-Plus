@@ -844,7 +844,19 @@ ipcMain.on('allRead', (event, arg) => {
 ipcMain.on('editSend', (event, arg) => {
 
   editUpdater.send(arg).then((res) => {
-    console.log('saved');
+    if (res) {
+
+      parser.readHeads().then((heads) => {
+
+        mainWindow.webContents.send('newList', heads);
+
+      }).catch((reason) => {
+
+        console.log(reason);
+
+      })
+
+    }
   });
 
 });

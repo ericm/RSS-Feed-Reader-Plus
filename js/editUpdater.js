@@ -7,7 +7,7 @@ module.exports = {
 
         return new Promise((resolve, reject) => {
 
-            let feed = parser.feed(obj.link, 0);
+            let feed = parser.specificHead(obj.id);
 
             feed.then((theFeed) => {
 
@@ -15,7 +15,7 @@ module.exports = {
                 //check for title change
                 var titler = new Promise((_, reject) => {});
     
-                if (obj.title != theFeed.feed.head.title) {
+                if (obj.title != theFeed.title) {
         
                     titler = parser.titleChange(obj.link, obj.title);
         
@@ -38,6 +38,17 @@ module.exports = {
                 if (max != obj.max) {
 
                     settings.set('feeds.' + obj.id + '.max', obj.max);
+                    resolve(true);
+
+                }
+
+                //change notifications
+
+                var notifications = settings.get('feeds.' + obj.id + '.notifications');
+
+                if (notifications != obj.notifications) {
+
+                    settings.set('feeds.' + obj.id + '.notifications', obj.notifications);
                     resolve(true);
 
                 }

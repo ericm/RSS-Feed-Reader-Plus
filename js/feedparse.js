@@ -593,6 +593,38 @@ module.exports = {
 
         });
 
+    },
+
+    specificHead: (id) => {
+
+        return new Promise((resolve, reject) => {
+
+            const feeds = app.getPath('userData') + "/data.json";
+
+            if (!fs.existsSync(feeds)) {
+                reject('restart');
+            }
+
+            fs.readFile(feeds, (err, data) => {
+                if (err) {
+                    reject('restart');
+                } else {
+                    var obj = JSON.parse(data);
+                    var feedObj = obj.feeds;
+                    
+                    for (let x in feedObj) {
+                        if (feedObj[x].id == id) {
+
+                            resolve(feedObj[x]);
+
+                        }
+                    }
+                    
+                }
+            });
+
+        });
+
     }
 
 };

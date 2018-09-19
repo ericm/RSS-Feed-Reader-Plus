@@ -39,21 +39,21 @@ ipcRenderer.on('edit_this', (event, theFeed) => {
 
         if (settings.get("feeds." + theFeed.head.id + ".notifications") == 'default') {
 
-            notify += `<option selected>App default</option><option>Yes</option><option>No</option>`;
+            notify += `<option selected>Default</option><option>Yes</option><option>No</option>`;
 
         } else if (settings.get("feeds." + theFeed.head.id + ".notifications") == 'yes') {
 
-            notify += `<option>App default</option selected><option>Yes</option><option>No</option>`;
+            notify += `<option>Default</option selected><option>Yes</option><option>No</option>`;
 
         } else if (settings.get("feeds." + theFeed.head.id + ".notifications") == 'no') {
 
-            notify += `<option>App default</option><option>Yes</option><option selected>No</option>`;
+            notify += `<option>Default</option><option>Yes</option><option selected>No</option>`;
 
         }
 
         //Add rules ->
         
-        rules += `<br><label><p>Rules:</p>`;
+        rules += `</label><br><label><p>Rules:</p>`;
 
         for (var x in settings.get("feeds." + theFeed.head.id + ".rules")) {
 
