@@ -28,10 +28,14 @@ var xGlob;
 
 var removeMark = (str) => {
 
-    str = str.split(`'`).join('U0027');
-    str = str.split(`"`).join('U0022');
-    str = str.split("`").join('U0060');
-    str = str.split(",").join('U0061');
+    if (str != null) {
+
+        str = str.split(`'`).join('U0027');
+        str = str.split(`"`).join('U0022');
+        str = str.split("`").join('U0060');
+        str = str.split(",").join('U0061');
+
+    }
 
     return str;
 }

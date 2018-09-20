@@ -186,7 +186,15 @@ module.exports = {
 
                 });
 
-                obj.feeds.push({name: name, link: link, title: meta.title, id: length});
+                var title = meta.title;
+
+                if (title == null || typeof title === 'undefined') {
+
+                    title = meta.xmlurl;
+
+                }
+
+                obj.feeds.push({name: name, link: link, title: title, id: length});
                 fs.writeFile(file, utils.jsonStringify(obj), (err) => {
                     if (err) {
                         reject(err);

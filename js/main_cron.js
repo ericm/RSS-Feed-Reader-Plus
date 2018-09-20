@@ -82,8 +82,20 @@ module.exports = {
                                             var insert_index = i;
 
                                             var add_items = new_items.slice(0, insert_index);
+
+                                            for (let f in add_items) {
+                                                add_items[f].meta.title = arg1[arg3.x].title;
+                                            }
                     
                                             var insert = add_items.concat(old_items);
+
+                                            var max = settings.get("feeds." + arg3.id + ".max");
+
+                                            if (insert.length > max) {
+
+                                                insert = insert.slice(0, max - 1);
+
+                                            }
     
                                             var writer = parser.rewriteData(arg3.link, insert);
                                             writer.then ( (arg4) => {
@@ -247,8 +259,20 @@ module.exports = {
                                         var insert_index = i;
 
                                         var add_items = new_items.slice(0, insert_index);
+
+                                        for (let f in add_items) {
+                                            add_items[f].meta.title = arg1[arg3.x].title;
+                                        }
                 
                                         var insert = add_items.concat(old_items);
+
+                                        var max = settings.get("feeds." + arg3.id + ".max");
+                                        
+                                        if (insert.length > max) {
+
+                                            insert = insert.slice(0, max - 1);
+
+                                        }
 
                                         var writer = parser.rewriteData(arg3.link, insert);
                                         writer.then ( (arg4) => {
