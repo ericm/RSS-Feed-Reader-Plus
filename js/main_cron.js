@@ -70,6 +70,8 @@ module.exports = {
                                         
                                         var newD = new Date(new_items[i].pubdate).getDate();
                                         var oldD = new Date(old_items[0].pubdate).getDate();
+
+                                        new_items[i].meta.title = arg1[arg3.x].title;
     
                                         if (new_items[i].title === old_items[0].title && newD === oldD) {
     
@@ -82,14 +84,10 @@ module.exports = {
                                             var insert_index = i;
 
                                             var add_items = new_items.slice(0, insert_index);
-
-                                            for (let f in add_items) {
-                                                add_items[f].meta.title = arg1[arg3.x].title;
-                                            }
                     
                                             var insert = add_items.concat(old_items);
 
-                                            var max = settings.get("feeds." + arg3.id + ".max");
+                                            var max = settings.get("feeds." + arg1[arg3.x].id + ".max");
 
                                             if (insert.length > max) {
 
@@ -158,6 +156,7 @@ module.exports = {
                                     }
         
                                 }).catch ( (reason3) => {
+                                    global.running = false;
                                     reject(reason3);
                                 });
         
@@ -248,6 +247,8 @@ module.exports = {
                                     var newD = new Date(new_items[i].pubdate).getDate();
                                     var oldD = new Date(old_items[0].pubdate).getDate();
 
+                                    new_items[i].meta.title = arg1[arg3.x].title;
+
                                     if (new_items[i].title === old_items[0].title && newD === oldD) {
 
                                         matched = true;
@@ -259,14 +260,10 @@ module.exports = {
                                         var insert_index = i;
 
                                         var add_items = new_items.slice(0, insert_index);
-
-                                        for (let f in add_items) {
-                                            add_items[f].meta.title = arg1[arg3.x].title;
-                                        }
                 
                                         var insert = add_items.concat(old_items);
 
-                                        var max = settings.get("feeds." + arg3.id + ".max");
+                                        var max = settings.get("feeds." + arg1[arg3.x].id + ".max");
                                         
                                         if (insert.length > max) {
 
@@ -337,6 +334,7 @@ module.exports = {
                                 }
     
                             }).catch ( (reason3) => {
+                                global.running = false;
                                 reject(reason3);
                             });
     
