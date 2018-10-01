@@ -24,9 +24,10 @@ let unseen;
 global.sharedObj = {title: 'RSS FEED READER PLUS'};
 
 //Check OS Type
-let desktopImg;
-let desktopImgNew;
+let desktopImg = nativeImage.createFromPath('./img/64.ico');;
+let desktopImgNew = nativeImage.createFromPath('./img/64n.ico');
 
+/*
 if (process.platform == 'linux') {
 
   desktopImg = nativeImage.createFromPath('./img/64.png');
@@ -34,11 +35,11 @@ if (process.platform == 'linux') {
 
 } else if (process.platform == 'win32') {
 
-  desktopImg = nativeImage.createFromPath('./img/64.ico');
-  desktopImgNew = nativeImage.createFromPath('./img/64n.ico');
+  desktopImg = 
+  desktopImgNew = ;
 
 }
-
+*/
 
 
 function createWindow () {
@@ -742,11 +743,48 @@ ipcMain.on('read', (event, arg) => {
 
 ipcMain.on('unread', (event, arg) => {
 
-  unseen += 1;
-
-  let title = arg.titleArt;
+  let title = arg.titleArt.replace(/U0027/g, "'").replace(/U0022/g, '"').replace(/U0060/g, '"').replace(/U0061/g, ',');
   let pubdate = arg.pubdate;
-  let feed = arg.feed;
+  let feed = arg.feed.replace(/U0027/g, "'").replace(/U0022/g, '"').replace(/U0060/g, '"').replace(/U0061/g, ',');
+  
+  parser.makeUnread(title, pubdate, feed).then ( () => {
+
+    unseen += 1;
+
+    if (unseen < 0) {
+      unseen = 0;
+    }
+
+    trayUpdate();
+
+    let addToFeed = parser.addUnseenData(feed, 1);
+      addToFeed.then( () => {
+
+        if (mainWindow != null) {
+
+          let heads = parser.readHeads();
+    
+          heads.then( (resp) => {
+            mainWindow.webContents.send('newList', resp);
+          }).catch( (reason) => {
+            if (reason === 'restart') {
+              console.log(reason);
+            }
+          });
+    
+        }
+
+      }).catch( (reason) => {
+
+        console.log(reason);
+
+      });
+
+  }).catch ( (err) => {
+
+    throw err;
+
+  });
 
 });
 

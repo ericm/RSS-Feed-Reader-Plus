@@ -75,9 +75,11 @@ h1, h2, span, p, i, a, blockquote {
 }
 #minimize {
     right: 40px;
+    font-family: Calibri;
 }
 #maximize {
     right:20px;
+    font-family: Calibri;
 }
 #ex {
     right: 0;

@@ -196,7 +196,7 @@ var reloaded = (arts, number) => {
 ` + replace_href(article.description) + embed_yt + `
 </blockquote>
 <div class="artopt">
-<label><button onclick='unread("` + is_exist(article.title) + `", "` + is_exist(article.pubdate) + `", "` + is_exist(article.meta.title) + `, ` + newArt + `")' class="unread">Keep unread</button></label>
+<label><button onclick='unread("` + is_exist(removeMark(article.title)) + `", "` + is_exist(removeMark(article.pubdate)) + `", "` + is_exist(removeMark(article.meta.title)) + `")' class="unread">Keep unread</button></label>
 <label><button>Hide</button></label>
 <label>
 Save to:

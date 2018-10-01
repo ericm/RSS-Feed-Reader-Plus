@@ -400,9 +400,9 @@ module.exports = {
         ipcRenderer.send('reGet', []);
     },
 
-    unread: (title, pubdate, feed, newArt) => {
+    unread: (title, pubdate, feed) => {
 
-        ipcRenderer.send('unread', {title: title, pubdate: pubdate, feed: feed, new: newArt});
+        ipcRenderer.send('unread', {title: title, pubdate: pubdate, feed: feed});
 
     },
 

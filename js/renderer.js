@@ -22,7 +22,7 @@ if (!settings.main.shadows) {
 }
 
 //Checks OS
-
+/*
 if (process.platform == 'linux') {
 
     var head = document.getElementsByTagName('head')[0];
@@ -45,7 +45,7 @@ if (process.platform == 'linux') {
     head.appendChild(elem);
 
 }
-
+*/
 document.getElementsByTagName('title')[0].innerHTML = window.TITLE + ' - ' + title;
 document.getElementsByTagName('h1')[0].innerHTML = window.TITLE + ' - ' + title;
 
