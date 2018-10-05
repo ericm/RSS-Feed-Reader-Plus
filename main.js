@@ -27,19 +27,13 @@ global.sharedObj = {title: 'RSS FEED READER PLUS'};
 let desktopImg = nativeImage.createFromPath('./img/64.ico');;
 let desktopImgNew = nativeImage.createFromPath('./img/64n.ico');
 
-/*
 if (process.platform == 'linux') {
 
   desktopImg = nativeImage.createFromPath('./img/64.png');
   desktopImgNew = nativeImage.createFromPath('./img/64n.png');
 
-} else if (process.platform == 'win32') {
-
-  desktopImg = 
-  desktopImgNew = ;
-
 }
-*/
+
 
 
 function createWindow () {
