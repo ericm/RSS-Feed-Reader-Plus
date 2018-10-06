@@ -86,6 +86,17 @@ h1, h2, span, p, i, a, blockquote {
     top: -1px !important;   
     font-family: Calibri;
 }
+#ex img, #minimize img, #maximize img {
+    cursor: pointer;
+    width: .5em;
+}
+#minimize img {
+    padding-bottom: 4px;
+}
+#maximize img {
+    padding-bottom: .15em;
+}
+
 #ex:hover {
     background-color: rgb(230, 25, 66) !important;
 }

@@ -916,7 +916,7 @@ global.output = {
     unseen += 1;
 
     let addToFeed = parser.addUnseenData(body, 1);
-    addToFeed.then( (arg) => {
+    addToFeed.then( () => {
 
       if (mainWindow != null) {
 

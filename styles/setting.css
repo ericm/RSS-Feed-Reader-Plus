@@ -38,3 +38,12 @@ option {
     display: inline;
     margin-right: 20px;
 }
+#ex img {
+    padding-top: 7px;
+}
+#maximize img {
+    padding-top: 8px;
+}
+#minimize img {
+    padding-top: 10px;
+}

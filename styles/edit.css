@@ -65,3 +65,13 @@ input[type="number"] {
     font-size: 1em;
     display: inline-block;
 }
+
+#ex img {
+    padding-top: 7px;
+}
+#maximize img {
+    padding-top: 8px;
+}
+#minimize img {
+    padding-top: 10px;
+}
