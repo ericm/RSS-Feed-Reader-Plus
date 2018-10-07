@@ -1,6 +1,6 @@
 const {ipcRenderer} = require('electron');
 const renderer = require('./renderer.js');
-const parser = require('./feedparse.js');
+const parser = require('../main/feedparse.js');
 const settings = require('electron-settings');
 
 ipcRenderer.send('editing', true);

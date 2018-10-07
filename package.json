@@ -1,7 +1,7 @@
 {
   "name": "rss-feed-reader-plus",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Advanced Multi-Platform Desktop RSS Feed Reader with support for: Rules and Cloud Sync.",
   "main": "main.js",
   "scripts": {
     "start": "electron ."

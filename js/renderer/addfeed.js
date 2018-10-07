@@ -10,7 +10,7 @@ document.getElementsByTagName('button')[0].onclick = () => {
     if (!pattern.test(link)) {
         document.getElementsByTagName('p')[0].innerHTML = "Enter a VALID feed's URL:"
     } else {
-        document.getElementById('containerOb').innerHTML = `<img class='load' src='../img/load1.gif'><p>Loading</p>`
+        document.getElementById('containerOb').innerHTML = `<img class='load' src='../../img/load1.gif'><p>Loading</p>`
         ipcRenderer.send('add-link', link);
     }
     

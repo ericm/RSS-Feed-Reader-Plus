@@ -33,8 +33,7 @@
           <div id="drop-back">
               <span onclick="load()">View latest</span><hr>
               <span onclick="reload()">Refresh</span><hr>
-              <span>Global Rules</span><hr>
-              <span>Report a bug</span>
+              <span onclick="rulesEdit()">Manage Global Rules</span><hr>
               <span>About</span><hr>
               <span onclick="quit()">Quit</span>
           </div>
@@ -55,42 +54,45 @@
     <script>
       var TITLE = 'Latest';
       function rcl(index, event) {
-        require('../js/renderer.js').rclick(index, event);
+        require('../js/renderer/renderer.js').rclick(index, event);
       }
       function quit() {
-        require('../js/list.js').quit();
+        require('../js/renderer/list.js').quit();
       }
       function link(link) {
-        require('../js/list.js').link(link);
+        require('../js/renderer/list.js').link(link);
       }
       function opena(i, titleArt, pubdate, feed, newArt, read) {
-        require('../js/list.js').opena(i, titleArt, pubdate, feed, newArt, read);
+        require('../js/renderer/list.js').opena(i, titleArt, pubdate, feed, newArt, read);
       }
       function closea(i) {
-        require('../js/list.js').closea(i);
+        require('../js/renderer/list.js').closea(i);
       }
       function tab(name, i, title) {
-        require('../js/list.js').tab(name, i, title);
+        require('../js/renderer/list.js').tab(name, i, title);
       }
       function load() {
-        require('../js/list.js').load();
+        require('../js/renderer/list.js').load();
       }
       function reload() {
-        require('../js/list.js').reload();
+        require('../js/renderer/list.js').reload();
       }
       function unread(title, pubdate, feed) {
-        require('../js/list.js').unread(title, pubdate, feed);
+        require('../js/renderer/list.js').unread(title, pubdate, feed);
       }
       function allRead(feed) {
-        require('../js/list.js').allRead(feed);
+        require('../js/renderer/list.js').allRead(feed);
       }
-      require('../js/renderer.js');
-      require('../js/menu.js');
-      require('../js/list.js');
-      require('../js/renderitems.js');
-      require('../js/dropdown.js');
-      require('../js/themes.js');
-      require('../js/drag_list.js');
+      function rulesEdit(){
+        require('../js/renderer/list.js').rulesEdit();
+      }
+      require('../js/renderer/renderer.js');
+      require('../js/renderer/menu.js');
+      require('../js/renderer/list.js');
+      require('../js/renderer/renderitems.js');
+      require('../js/renderer/dropdown.js');
+      require('../js/renderer/themes.js');
+      require('../js/renderer/drag_list.js');
 
     </script>
   </body>

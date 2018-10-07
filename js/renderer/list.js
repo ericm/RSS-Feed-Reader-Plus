@@ -412,6 +412,12 @@ module.exports = {
 
         ipcRenderer.send('allRead', title);
 
+    },
+
+    rulesEdit: () => {
+
+        ipcRenderer.send('rulesEdit');
+
     }
 
 }

@@ -116,7 +116,7 @@ h1, h2, span, p, i, a, blockquote {
     display: block;
     cursor: pointer;
     color: rgb(230, 25, 66);
-    background-color: rgbargb(230, 25, 66, 0);
+    background-color: rgba(230, 25, 66, 0);
     transition: all 0.3s;
     padding: 8px;
     border-bottom: 1px solid rgb(230, 25, 66);

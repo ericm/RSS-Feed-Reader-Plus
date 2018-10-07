@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const parser = require('../js/feedparse.js');
+const parser = require('./feedparse.js');
 const {app} = require('electron');
 const fs = require('fs');
 const settings = require('electron-settings');
@@ -91,7 +91,7 @@ module.exports = {
 
                                             if (insert.length > max) {
 
-                                                insert = insert.slice(0, max - 1);
+                                                insert = insert.slice(0, max);
 
                                             }
     
@@ -267,7 +267,7 @@ module.exports = {
                                         
                                         if (insert.length > max) {
 
-                                            insert = insert.slice(0, max - 1);
+                                            insert = insert.slice(0, max);
 
                                         }
 

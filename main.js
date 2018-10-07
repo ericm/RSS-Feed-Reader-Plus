@@ -1,9 +1,9 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, ipcMain, Tray, Menu, shell, nativeImage, Notification} = require('electron');
-const parser = require('./js/feedparse.js');
-const sorting = require('./js/sorting.js');
-const main_cron = require('./js/main_cron.js');
-const editUpdater = require('./js/editUpdater.js');
+const parser = require('./js/main/feedparse.js');
+const sorting = require('./js/main/sorting.js');
+const main_cron = require('./js/main/main_cron.js');
+const editUpdater = require('./js/main/editUpdater.js');
 const fs = require('fs');
 const notifier = require('node-notifier');
 const settings = require('electron-settings');
@@ -18,6 +18,7 @@ let settingsOpen = false;
 let settingsWindow = null;
 let addOpen = false;
 let addWindow = null;
+let rulesWindow = null;
 let unseen;
 
 
@@ -36,7 +37,7 @@ if (process.platform == 'linux') {
 
 
 
-function createWindow () {
+let createWindow = () => {
   
   mainWindow = new BrowserWindow({width: 1200, height: 600, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: desktopImg});
 
@@ -49,6 +50,31 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   });
+
+}
+
+let createRules = () => {
+
+  if (rulesWindow == null) {
+
+    rulesWindow = new BrowserWindow({width: 1200, height: 600, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: desktopImg});
+
+    rulesWindow.setMenu(null);
+  
+    rulesWindow.loadFile('html/rules.html');
+  
+    rulesWindow.webContents.openDevTools();
+
+  } else {
+
+    rulesWindow.focus();   
+
+  }
+
+  rulesWindow.on('closed', () => {
+    rulesWindow = null
+  });
+
 }
 
 
@@ -898,6 +924,12 @@ ipcMain.on('editRule', (event, arg) => {
   console.log(arg);
 
 });
+
+ipcMain.on('rulesEdit', (event) => {
+
+  createRules();
+  
+})
 
 global.output = {
 

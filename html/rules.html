@@ -4,7 +4,7 @@
     <title></title>
     <link rel="stylesheet" href="../fonts/fonts.css"/>
     <link rel="stylesheet" href="../styles/main.css"/>
-    <link rel="stylesheet" href="../styles/addfeed.css"/>
+    <link rel="stylesheet" href="../styles/rules.css"/>
   </head>
   <body>
     <div id="menuC">
@@ -14,20 +14,17 @@
       <div id="maximize" class="menuOpt"><img src="../img/m.svg" /></div>
       <div id="minimize" class="menuOpt"><img src="../img/mi.svg" /></div>
     </div>
+    <aside id="sideR"></aside>
     <div id="containerOb">
-        <p>Enter a feed's URL:</p>
-	    <span class="input">
-            <input name="link" type="text" placeholder="http://example.com/feed">
-        </span>
-        <button>SUBMIT</button>
+      
     </div>
     <hr class="bottom">
     <script>
-        var TITLE = 'Add New Feed';
-        require('../js/renderer/addfeed.js');
+        var TITLE = 'Manage Global Rules';
         require('../js/renderer/menu.js');
         require('../js/renderer/renderer.js');
         require('../js/renderer/themes.js');
+        require('../js/renderer/rules.js');
     </script>
   </body>
 </html>
