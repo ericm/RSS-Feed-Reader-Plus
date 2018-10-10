@@ -41,3 +41,92 @@
     white-space: nowrap;
     cursor: pointer;
 }
+input[type="text"], input[type="number"] {
+    cursor: text;
+    background-color: transparent;
+    border-bottom: 3px rgb(0, 0, 0) solid;
+    font-size: 2em;
+}
+input[type="number"] {
+    width: 100px;
+}
+label {
+    font-family: 'Abel-Regular', sans-serif;
+    font-size: 2em;
+}
+
+#containerR {
+    position: fixed;
+    padding-left: 220px;
+    padding-right: 20px;
+    padding-top: 20px;
+    overflow-y: scroll;
+    height: 100vh;
+}
+#containerR label select::-webkit-scrollbar-track {
+    background-color: rgb(49, 49, 49);
+}
+
+#containerR label select::-webkit-scrollbar {
+	width: 5px;
+	background: transparent;
+}
+
+#containerR label select::-webkit-scrollbar-thumb {
+	background-color: rgb(78, 78, 78);
+}
+
+select, input[type="checkbox"] {
+    border: 3px solid rgb(49, 49, 49);
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+select {
+    margin-bottom: 10px;
+}
+button {
+    display: block;
+    outline-width: 0;
+    background-color: rgb(255, 255, 255);
+    top: 40px;
+    border: solid 2px rgb(49, 49, 49);
+    border-radius: 9999em;
+    transition: box-shadow 0.3s;
+    padding: 5px;
+    cursor: pointer;
+}
+
+label {
+    margin-top: 25px;
+    display: inline-block;
+}
+
+label, select {
+    font-size: 1.5em;
+    display: inline;
+}
+option {
+    font-size: 0.4em;
+}
+
+#containerR p {
+    display: inline;
+    margin-right: 20px;
+}
+span {
+    font-size: 2em;
+}
+h1 {
+    font-size: 3em;
+    font-weight: bolder;
+}
+i {
+    font-size: .7em;
+}
+.condition {
+    border: rgba(114, 114, 114, 0.192) 3px solid;
+    padding: 15px;
+    border-radius: 1em;
+    margin: 10px 0 0 10px;
+}

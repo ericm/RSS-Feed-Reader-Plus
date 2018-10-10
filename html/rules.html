@@ -15,12 +15,59 @@
       <div id="minimize" class="menuOpt"><img src="../img/mi.svg" /></div>
     </div>
     <aside id="sideR"></aside>
-    <div id="containerOb">
-      
+    <div id="containerR">
+      <h1>Test</h1>
+      <br />
+      <span>If an article's</span>
+      <div id="conditions">
+      <div class="condition">
+        <select>
+          <option>Title</option>
+          <option>Description</option>
+          <option>Link</option>
+          <option>Custom</option>
+        </select>
+        <select>
+          <option>contains</option>
+          <option>is equal to</option>
+          <option>starts with</option>
+          <option>end with</option>
+          <option>is greater than (nums)</option>
+          <option>is less than (nums)</option>
+        </select>
+        <input type="text" value="" />
+        <br />
+        <br />
+        <label><i>Case sensitive: </i><input type="checkbox" /></label>
+        <label><i>Invert condition: </i><input type="checkbox"/></label>
+        <br />
+        <br />
+        <button onclick="delCond(0)">Delete condition</button>
+      </div>
+    </div>
+      <br />
+      <button onclick="addCond();">Add condition</button>
+      <br />
+      <br />
+      <select>
+        <option>Mark as read</option>
+        <option>Delete</option>
+        <option>Hide</option>
+      </select>
     </div>
     <hr class="bottom">
     <script>
         var TITLE = 'Manage Global Rules';
+        var r = require('../js/renderer/rules.js');
+        function tab(i) {
+          r.tab(i);
+        }
+        function addCond() {
+          r.addCond();
+        }
+        function delCond() {
+          
+        }
         require('../js/renderer/menu.js');
         require('../js/renderer/renderer.js');
         require('../js/renderer/themes.js');

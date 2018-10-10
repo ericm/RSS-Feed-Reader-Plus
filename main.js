@@ -25,7 +25,7 @@ let unseen;
 global.sharedObj = {title: 'RSS FEED READER PLUS'};
 
 //Check OS Type
-let desktopImg = nativeImage.createFromPath('./img/64.ico');;
+let desktopImg = nativeImage.createFromPath('./img/64.ico');
 let desktopImgNew = nativeImage.createFromPath('./img/64n.ico');
 
 if (process.platform == 'linux') {
@@ -57,7 +57,7 @@ let createRules = () => {
 
   if (rulesWindow == null) {
 
-    rulesWindow = new BrowserWindow({width: 1200, height: 600, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: desktopImg});
+    rulesWindow = new BrowserWindow({width: 800, height: 600, frame: false, minWidth: 800, minHeight: 400, transparent: true, icon: desktopImg});
 
     rulesWindow.setMenu(null);
   
