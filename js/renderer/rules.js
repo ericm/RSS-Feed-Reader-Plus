@@ -43,13 +43,14 @@ class Current {
     
 }
 
+var current = new Current(null, null, null);
 var tab = (name) => {
     open = name;
         
         if (!settings.get("rRules")) {
             settings.set("rRules." + name, {
-                condition: [{}],
-                action: ""
+                condition: [],
+                action: -1
             });
         }
 
@@ -60,7 +61,7 @@ var tab = (name) => {
 
         var rule = settings.get("rRules." + name);
         
-        current = new Current({name: name, rules: rule, rl: rule.length});
+        current = new Current(name, rule, rule.condition.length);
 
         cont.innerHTML = "";
 
@@ -102,6 +103,41 @@ module.exports = {
         
     },
     delCond: () => {
+
+    },
+    save: () => {
+
+        // dom
+
+        var condtions = d.getElementsByClassName("condition");
+        var cObjs = [];
+
+        for (var x in condtions) {
+
+            //set cObjs
+            var push = {selector: 0, operator: 0, value: 0, cs: 0, invert: 0};
+            var select = condtions[x].getElementsByTagName("select");
+            var input =  condtions[x].getElementsByTagName("input");
+
+            push.selector = select[0].selectedIndex;
+            push.operator = select[1].selectedIndex;
+            push.value = input[0].value;
+            push.cs = input[1].checked;
+            push.invert = input[2].checked;
+
+            if(push.value === "") {
+                d.getElementById("conditions").innerHTML += "<span>All conditions must have values</span>";
+                break;
+            }
+
+            cObjs[x] = push;
+
+        }
+
+        settings.set(current.name, {
+            condition: cObjs,
+            action: d.getElementById("action").selectedIndex
+        })
 
     }
 }

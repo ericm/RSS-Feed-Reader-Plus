@@ -49,11 +49,12 @@
       <button onclick="addCond();">Add condition</button>
       <br />
       <br />
-      <select>
+      <select id="action">
         <option>Mark as read</option>
         <option>Delete</option>
         <option>Hide</option>
       </select>
+      <button onclick="save();">Save</button>
     </div>
     <hr class="bottom">
     <script>
@@ -67,6 +68,9 @@
         }
         function delCond() {
           
+        }
+        function save() {
+          r.save();
         }
         require('../js/renderer/menu.js');
         require('../js/renderer/renderer.js');
