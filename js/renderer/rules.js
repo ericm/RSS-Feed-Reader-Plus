@@ -102,7 +102,17 @@ module.exports = {
         d.getElementById("conditions").innerHTML += "<span>and</span>" + (new newCond({i: current.rLength})).out;
         
     },
-    delCond: () => {
+    delCond: (id) => {
+        
+        // dom
+
+        current.rLength--;
+        console.log("lost one bois");
+        d.getElementById("conditions").removeChild(d.getElementsByClassName("condition")[id]);
+
+        // remove from db
+
+        settings.delete("rRules." + current.name + "[" + id + "]");
 
     },
     save: () => {
