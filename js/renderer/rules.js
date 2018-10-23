@@ -99,7 +99,7 @@ module.exports = {
     addCond: () => {
         current.rLength++;
         console.log("added one");
-        d.getElementById("conditions").innerHTML += "<span>and</span>" + (new newCond({i: current.rLength})).out;
+        d.getElementById("conditions").innerHTML += "<span>and</span>" + (new newCond(current.rLength)).out;
         
     },
     delCond: (id) => {
@@ -112,7 +112,7 @@ module.exports = {
 
         // remove from db
 
-        settings.delete("rRules." + current.name + "[" + id + "]");
+        settings.delete("rRules." + current.name + ".condition[" + id + "]");
 
     },
     save: () => {
@@ -122,18 +122,17 @@ module.exports = {
         var condtions = d.getElementsByClassName("condition");
         var cObjs = [];
 
-        for (var x in condtions) {
+        for (var x = 0; x < condtions.length; x++) {
 
             //set cObjs
             var push = {selector: 0, operator: 0, value: 0, cs: 0, invert: 0};
-            var select = condtions[x].getElementsByTagName("select");
-            var input =  condtions[x].getElementsByTagName("input");
+            var condC = condtions[x];
 
-            push.selector = select[0].selectedIndex;
-            push.operator = select[1].selectedIndex;
-            push.value = input[0].value;
-            push.cs = input[1].checked;
-            push.invert = input[2].checked;
+            push.selector = condC.children[0].selectedIndex;
+            push.operator = condC.children[1].selectedIndex;
+            push.value = condC.children[2].value;
+            push.cs = condC.children[5].children[1].checked;
+            push.invert = condC.children[6].children[1].checked;
 
             if(push.value === "") {
                 d.getElementById("conditions").innerHTML += "<span>All conditions must have values</span>";
@@ -144,7 +143,7 @@ module.exports = {
 
         }
 
-        settings.set(current.name, {
+        settings.set("rRules." + current.name, {
             condition: cObjs,
             action: d.getElementById("action").selectedIndex
         })
