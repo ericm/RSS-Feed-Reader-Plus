@@ -69,10 +69,76 @@ var tab = (name) => {
 
         // render rules into containerR
 
+        container.innerHTML = "<h1>" + name + "</h1><br /><span>If an article's</span>";
+
+        condits = `<div id="conditions">`;
+
+        for (var x in rule.condition) {
+
+            var cRule = rule.condition[x];
+
+            if (x != 0) {
+                condits += "<span>and</span>";
+            }
+
+            condits += `<div class="condition">`;
+            
+            //selector
+            condits += `<select>`;
+            one = ["Title", "Description", "Link", "Custom"];
+            for (i in one) {
+                condits += i == cRule.selector ? "<option selected>" + one[i] + "</option>" : "<option>" + one[i] + "</option>";
+            }
+            condits += `</select>`;
+
+            //operator
+            condits += `<select>`;
+            one = ["contains", "is equal to", "starts with", "end with", "is greater than (nums)", "is less than (nums)"];
+            for (i in one) {
+                condits += i == cRule.operator ? "<option selected>" + one[i] + "</option>" : "<option>" + one[i] + "</option>";
+            }
+            condits += `</select>`;
+
+            //input
+            condits += `<input type="text" value="` + cRule.value + `" />
+            <br />
+            <br />`;
+
+            //cs
+            condits += cRule.cs ? `<label><i>Case sensitive: </i><input type="checkbox" checked /></label>` 
+            : `<label><i>Case sensitive: </i><input type="checkbox" /></label>`;
+
+            //invert
+            condits += cRule.invert ? `<label><i>Invert condition: </i><input type="checkbox" checked /></label>` 
+            : `<label><i>Invert condition: </i><input type="checkbox" /></label>`;
+
+            condits += `<br />
+            <br />
+            <button onclick="delCond(` + x + `)">Delete condition</button>`;
+
+            condits += "</div>"
+
+        }
+
+        condits += "</div>"
+
+        container.innerHTML += condits;
+
+        container.innerHTML += `<br />
+        <button onclick="addCond();">Add condition</button>
+        <br />
+        <br />
+        <select id="action">
+          <option>Mark as read</option>
+          <option>Delete</option>
+          <option>Hide</option>
+        </select>
+        <button onclick="save();">Save</button>`;
+
         container.style.display = "block";
 }
 
-window.onload = () => {
+window.onload = function() {
 
     cont = d.getElementById("sideR");
     
@@ -97,10 +163,9 @@ window.onload = () => {
 module.exports = {
     tab: (name) => tab(name),
     addCond: () => {
-        current.rLength++;
         console.log("added one");
         d.getElementById("conditions").innerHTML += "<span>and</span>" + (new newCond(current.rLength)).out;
-        
+        current.rLength++;
     },
     delCond: (id) => {
         
@@ -108,7 +173,16 @@ module.exports = {
 
         current.rLength--;
         console.log("lost one bois");
-        d.getElementById("conditions").removeChild(d.getElementsByClassName("condition")[id]);
+        var condC = d.getElementById("conditions");
+        condC.removeChild(d.getElementsByClassName("condition")[id]);
+        if (id !== 0) {
+            condC.removeChild(condC.getElementsByTagName("span")[id - 1]);
+        } else {
+            console.log("added one");
+            d.getElementById("conditions").innerHTML += (new newCond(current.rLength)).out;
+            current.rLength++;
+        }
+        
 
         // remove from db
 
