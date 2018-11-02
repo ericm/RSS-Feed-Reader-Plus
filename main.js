@@ -128,7 +128,7 @@ app.on('ready', () => {
       refresh: 30,
       theme: 'default',
       launch_start: true,
-      start_tray: true,
+      start_tray: false,
       opacity: 96,
       notifications: true,
       shadows: true

@@ -34,6 +34,16 @@ class newCond {
     }
 }
 
+class cRuleGen {
+    constructor(sel, op, val, cs, inv) {
+        this.selector = sel;
+        this.operator = op;
+        this.value = val;
+        this.cs = cs;
+        this.invert = inv;
+    }
+}
+
 class Current {
     constructor(name, rules, rl) {
         this.name = name
@@ -44,111 +54,122 @@ class Current {
 }
 
 var current = new Current(null, null, null);
+
+var gen = (x, cRule) => {
+    var condits = "";
+
+    condits += `<div class="condition">`;
+    
+    //selector
+    condits += `<select>`;
+    one = ["Title", "Description", "Link", "Custom"];
+    for (i in one) {
+        condits += i == cRule.selector ? "<option selected>" + one[i] + "</option>" : "<option>" + one[i] + "</option>";
+    }
+    condits += `</select>`;
+
+    //operator
+    condits += `<select>`;
+    one = ["contains", "is equal to", "starts with", "end with", "is greater than (nums)", "is less than (nums)"];
+    for (i in one) {
+        condits += i == cRule.operator ? "<option selected>" + one[i] + "</option>" : "<option>" + one[i] + "</option>";
+    }
+    condits += `</select>`;
+
+    //input
+    condits += `<input type="text" value="` + cRule.value + `" />
+    <br />
+    <br />`;
+
+    //cs
+    condits += cRule.cs ? `<label><i>Case sensitive: </i><input type="checkbox" checked /></label>` 
+    : `<label><i>Case sensitive: </i><input type="checkbox" /></label>`;
+
+    //invert
+    condits += cRule.invert ? `<label><i>Invert condition: </i><input type="checkbox" checked /></label>` 
+    : `<label><i>Invert condition: </i><input type="checkbox" /></label>`;
+
+    condits += `<br />
+    <br />
+    <button onclick="delCond(` + x + `)">Delete condition</button>`;
+
+    condits += "</div>";
+
+    return condits;
+}
+
 var tab = (name) => {
     open = name;
         
-        if (!settings.get("rRules")) {
-            settings.set("rRules." + name, {
-                condition: [],
-                action: -1
-            });
-        }
+    if (!settings.get("rRules")) {
+        settings.set("rRules." + name, {
+            condition: [],
+            action: -1
+        });
+    }
 
-        /*
-            layout
-                condition: [{"title", cond, enact}]
-        */
+    /*
+        layout
+            condition: [{"title", cond: {selector, value, operator, cs, invert}, enact}]
+            action
+    */
 
-        var rule = settings.get("rRules." + name);
-        
-        current = new Current(name, rule, rule.condition.length);
+    var rule = settings.get("rRules." + name);
+    
+    current = new Current(name, rule, rule.condition.length);
 
-        cont.innerHTML = "";
+    // cont.innerHTML = "";
 
-        var container = d.getElementById("containerR");
+    var container = d.getElementById("containerR");
 
-        // render rules into containerR
+    // render rules into containerR
 
-        container.innerHTML = "<h1>" + name + "</h1><br /><span>If an article's</span>";
+    container.innerHTML = "<h1>" + name + "</h1><br /><span>If an article's</span>";
 
-        condits = `<div id="conditions">`;
+    var conditsA = `<div id="conditions">`;
+
+    if (rule.condition.length == 0) {
+
+        conditsA += gen(0, new cRuleGen(0, 0, "", false, false));
+        current.rLength++;
+
+    } else {
 
         for (var x in rule.condition) {
-
-            var cRule = rule.condition[x];
 
             if (x != 0) {
                 condits += "<span>and</span>";
             }
 
-            condits += `<div class="condition">`;
-            
-            //selector
-            condits += `<select>`;
-            one = ["Title", "Description", "Link", "Custom"];
-            for (i in one) {
-                condits += i == cRule.selector ? "<option selected>" + one[i] + "</option>" : "<option>" + one[i] + "</option>";
-            }
-            condits += `</select>`;
-
-            //operator
-            condits += `<select>`;
-            one = ["contains", "is equal to", "starts with", "end with", "is greater than (nums)", "is less than (nums)"];
-            for (i in one) {
-                condits += i == cRule.operator ? "<option selected>" + one[i] + "</option>" : "<option>" + one[i] + "</option>";
-            }
-            condits += `</select>`;
-
-            //input
-            condits += `<input type="text" value="` + cRule.value + `" />
-            <br />
-            <br />`;
-
-            //cs
-            condits += cRule.cs ? `<label><i>Case sensitive: </i><input type="checkbox" checked /></label>` 
-            : `<label><i>Case sensitive: </i><input type="checkbox" /></label>`;
-
-            //invert
-            condits += cRule.invert ? `<label><i>Invert condition: </i><input type="checkbox" checked /></label>` 
-            : `<label><i>Invert condition: </i><input type="checkbox" /></label>`;
-
-            condits += `<br />
-            <br />
-            <button onclick="delCond(` + x + `)">Delete condition</button>`;
-
-            condits += "</div>"
+            conditsA += gen(x, rule.condition[x]);
 
         }
+    }
 
-        condits += "</div>"
 
-        container.innerHTML += condits;
+    conditsA += "</div>"
 
-        container.innerHTML += `<br />
-        <button onclick="addCond();">Add condition</button>
-        <br />
-        <br />
-        <select id="action">
-          <option>Mark as read</option>
-          <option>Delete</option>
-          <option>Hide</option>
-        </select>
-        <button onclick="save();">Save</button>`;
+    container.innerHTML += conditsA;
 
-        container.style.display = "block";
+    container.innerHTML += `<br />
+    <button onclick="addCond();">Add condition</button>
+    <br />
+    <br />
+    <select id="action">
+        <option>Mark as read</option>
+        <option>Delete</option>
+        <option>Hide</option>
+    </select>
+    <button onclick="save();">Save</button>`;
+
+    container.style.display = "block";
 }
 
 window.onload = function() {
-
-    cont = d.getElementById("sideR");
     
     var rules = settings.get("rules");
-
-    if (rules.length  == 0) {
-        d.getElementById("containerR").style.display = "none";
-    } else {
-        tab(rules[0]);
-    }
+    
+    cont = d.getElementById("sideR");
 
     for (var x in rules) {
 
@@ -158,13 +179,19 @@ window.onload = function() {
 
     }
 
+    tab(rules.length > 0 ? rules[0] : "");
+
 }
 
 module.exports = {
     tab: (name) => tab(name),
     addCond: () => {
         console.log("added one");
-        d.getElementById("conditions").innerHTML += "<span>and</span>" + (new newCond(current.rLength)).out;
+        // create dom fragment
+        var frag = document.createRange().createContextualFragment(
+            "<span>and</span>" + (new newCond(current.rLength)).out
+        );
+        d.getElementById("conditions").appendChild(frag);
         current.rLength++;
     },
     delCond: (id) => {
