@@ -138,7 +138,7 @@ var tab = (name) => {
         for (var x in rule.condition) {
 
             if (x != 0) {
-                condits += "<span>and</span>";
+                conditsA += "<span>and</span>";
             }
 
             conditsA += gen(x, rule.condition[x]);
@@ -154,13 +154,18 @@ var tab = (name) => {
     container.innerHTML += `<br />
     <button onclick="addCond();">Add condition</button>
     <br />
-    <br />
-    <select id="action">
-        <option>Mark as read</option>
-        <option>Delete</option>
-        <option>Hide</option>
-    </select>
+    <br />`;
+    var sele = `<select id="action">`;
+    var acts = ["Mark as read", "Delete", "Hide"];
+
+    for (var lx = 0; lx < acts.length; lx++) {
+        sele += (rule.action == lx ? `<option selected>` + acts[lx] : `<option>` + acts[lx]) + `</option>`;
+    }
+
+    sele += `</select>
     <button onclick="save();">Save</button>`;
+
+    container.innerHTML += sele;
 
     container.style.display = "block";
 }
