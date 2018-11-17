@@ -53,6 +53,13 @@ module.exports = {
 
                 }
 
+                //change rules
+                var rules = settings.get('feeds.' + obj.id + '.rules');
+
+                if (rules.toString() !== obj.rules.toString()) {
+                    settings.set('feeds.' + obj.id + '.rules', obj.rules);
+                }
+
             });
 
             

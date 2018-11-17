@@ -325,7 +325,7 @@ module.exports = {
 
                                     
                                     
-                                    i += 1;
+                                    i++;
 
                                 }
 

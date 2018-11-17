@@ -57,7 +57,8 @@ ipcRenderer.on('edit_this', (event, theFeed) => {
 
         for (var x in settings.get("feeds." + theFeed.head.id + ".rules")) {
 
-            rules += `<span class="rule">` + settings.get("feeds." + theFeed.head.id + ".rules")[x] + `<a onclick="remRule(` + theFeed.head.id + `, '` + settings.get("feeds." + theFeed.head.id + ".rules")[x] + `')">x</a></span>`;
+            rules += `<span name="` + settings.get("feeds." + theFeed.head.id + ".rules")[x] + `" class="rule">` + 
+            settings.get("feeds." + theFeed.head.id + ".rules")[x] + `<a onclick="remRule(` + theFeed.head.id + `, '` + settings.get("feeds." + theFeed.head.id + ".rules")[x] + `')">x</a></span>`;
 
         }
 
@@ -67,7 +68,7 @@ ipcRenderer.on('edit_this', (event, theFeed) => {
 
         } else {
 
-            rules += `</label><br><label class="adder"><p>Add Rules:</p><select>`;
+            rules += `</label><br><label class="adder"><p>Add Rules:</p><select onchange="update()"><option>-</option>`;
 
             for (var x in settings.get("rules")) {
 
@@ -99,13 +100,31 @@ module.exports = {
 
         var notifications = obj[2].getElementsByTagName('select')[0].options[obj[2].getElementsByTagName('select')[0].selectedIndex].text.toLowerCase();
 
+        var rules = [];
+        
+        var rSpans = (typeof obj[3].getElementsByClassName("rule")) !== "undefined" ? 
+        obj[3].getElementsByClassName("rule") : []; //inner;
+
+        for (var r in rSpans) {
+            console.log(r);
+            rules.push(rSpans[r].getAttribute("name"));
+        }
+
+        var rule = (typeof obj[4].getElementsByTagName('select')[0]) !== "undefined" ? obj[4].getElementsByTagName('select')[0]
+        .options[obj[4].getElementsByTagName('select')[0].selectedIndex].text.toLowerCase() : "";
+
+        if (rule !== "") {
+            rules.push(rule);
+        }
+
         var send = {
 
             id: idGlob,
             link: linkGlob,
             title: name,
             max: max,
-            notifications : notifications
+            notifications : notifications,
+            rules: rules
 
         };
 

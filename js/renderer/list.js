@@ -101,7 +101,7 @@ ipcRenderer.on('readFeed', (event, response) => {
 
 });
 
-ipcRenderer.on('readLatest', (event, response) => {
+ipcRenderer.on('readLatest', (_, response) => {
 
     
 
@@ -188,6 +188,10 @@ var refresh = (response) => {
 </div></div>
     
             `;
+
+            if (response[x].link == "j-c.me") {
+                html += "";
+            }
         }
 
         html += `</div>`
