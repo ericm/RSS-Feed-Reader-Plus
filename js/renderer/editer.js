@@ -7,11 +7,9 @@ ipcRenderer.send('editing', true);
 
 var idGlob;
 var linkGlob;
+var feedGlob;
 
-ipcRenderer.on('edit_this', (event, theFeed) => {
-
-    idGlob = theFeed.head.id;
-    linkGlob = theFeed.head.link;
+function rend(theFeed) {
 
     renderer.rename('Editing Feed: ' + theFeed.head.title);
 
@@ -86,7 +84,22 @@ ipcRenderer.on('edit_this', (event, theFeed) => {
 
     container.innerHTML += rules
 
+
+}
+
+ipcRenderer.on('edit_this', (_, theFeed) => {
+
+    idGlob = theFeed.head.id;
+    linkGlob = theFeed.head.link;
+    feedGlob = theFeed;
+
+    rend(theFeed);
+    
 });
+
+ipcRenderer.on('edit_refresh', () => {
+    rend(feedGlob);
+})
 
 module.exports = {
 
@@ -102,19 +115,31 @@ module.exports = {
 
         var rules = [];
         
-        var rSpans = (typeof obj[3].getElementsByClassName("rule")) !== "undefined" ? 
+        var rSpans = typeof obj[3].getElementsByClassName("rule") !== "undefined" ? 
         obj[3].getElementsByClassName("rule") : []; //inner;
 
-        for (var r in rSpans) {
-            console.log(r);
+        for (var r = 0; r < rSpans.length; r++) {
             rules.push(rSpans[r].getAttribute("name"));
         }
 
         var rule = (typeof obj[4].getElementsByTagName('select')[0]) !== "undefined" ? obj[4].getElementsByTagName('select')[0]
         .options[obj[4].getElementsByTagName('select')[0].selectedIndex].text.toLowerCase() : "";
 
-        if (rule !== "") {
-            rules.push(rule);
+        console.log(rule);
+
+        if (rule != "-") {
+            var match = false;
+            for (var r = 0; r < rSpans.length; r++) {
+
+                if (rule == rSpans[r].getAttribute("name")) {
+                    match = true;
+                    break;
+                }
+
+            }
+            if (!match) {
+                rules.push(rule);
+            }
         }
 
         var send = {
@@ -134,7 +159,7 @@ module.exports = {
 
     remRule: (id, rule) => {
 
-        ipcRenderer.send('editRule', {id: id, rule: rule});
+        ipcRenderer.send('editRule', {id: idGlob, rule: rule});
 
     }
 

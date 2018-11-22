@@ -19,6 +19,8 @@ let settingsWindow = null;
 let addOpen = false;
 let addWindow = null;
 let rulesWindow = null;
+let editWindow = null;
+let editOpen = false;
 let unseen;
 
 
@@ -371,17 +373,36 @@ ipcMain.on('add-link', (event, arg) => {
           setTimeout(() => addWindow.close(), 1500);
 
           setTimeout(() => {
-            let editWindow = new BrowserWindow({width: 600, height: 600, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: desktopImg});
 
-            editWindow.setMenu(null);
-  
-            editWindow.loadFile('html/edit.html');
-  
-            // Open the DevTools.
-            editWindow.webContents.openDevTools();
-            editWindow.on('closed', () => {
-              editWindow  = null
-            });
+            var openW = () => {
+
+              editWindow = new BrowserWindow({width: 600, height: 600, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: desktopImg});
+
+              editWindow.setMenu(null);
+    
+              editWindow.loadFile('html/edit.html');
+    
+              // Open the DevTools.
+              editWindow.webContents.openDevTools();
+              editWindow.on('closed', () => {
+                editWindow  = null;
+                editOpen = false;
+              });
+
+            }
+
+            if (!editOpen) {
+
+              
+              openW();
+
+            } else {
+              editWindow.close();
+              openW();
+
+            }
+            
+            editOpen = true;
 
           }, 1500);
           
@@ -418,11 +439,12 @@ ipcMain.on('add-link', (event, arg) => {
 ipcMain.on('edit', (event, arg) => {
 
   let readHead = parser.readHeads();
-  readHead.then( (res) => {
+
+  let openW = (res) => {
 
     editing = res[arg].name;
 
-    let editWindow = new BrowserWindow({width: 600, height: 600, frame: false, minWidth: 700, minHeight: 400, transparent: true, icon: desktopImg});
+    editWindow = new BrowserWindow({width: 600, height: 600, frame: false, minWidth: 600, minHeight: 400, transparent: true, icon: desktopImg});
 
     editWindow.setMenu(null);
   
@@ -431,8 +453,23 @@ ipcMain.on('edit', (event, arg) => {
     // Open the DevTools.
     editWindow.webContents.openDevTools();
     editWindow.on('closed', () => {
-      editWindow  = null
+      editWindow  = null;
+      editOpen = false;
     });
+
+  }
+
+  readHead.then( (res) => {
+    if (!editOpen) {
+      
+      openW(res);
+    } else {
+
+      editWindow.close();
+      openW(res);
+
+    }
+    editOpen = true;
 
   }).catch( (reas) => {
 
@@ -907,6 +944,7 @@ ipcMain.on('editSend', (event, arg) => {
       parser.readHeads().then((heads) => {
 
         mainWindow.webContents.send('newList', heads);
+        editWindow.webContents.send('edit_refresh');
 
       }).catch((reason) => {
 
