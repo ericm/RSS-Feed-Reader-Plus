@@ -954,12 +954,15 @@ ipcMain.on('editSend', (event, arg) => {
 
     }
   });
-
-});
+;});
 
 ipcMain.on('editRule', (event, arg) => {
 
-  console.log(arg);
+  editUpdater.rem(arg.id, arg.rule).then((res) => {
+    console.log("yeyesyysyey");
+  });
+    
+  
 
 });
 

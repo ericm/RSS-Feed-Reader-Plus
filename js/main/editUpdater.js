@@ -3,6 +3,17 @@ const settings = require('electron-settings');
 
 module.exports = {
 
+    rem: (id, rule) => {
+
+        return new Promise((resolve) => {
+
+            settings.delete("feeds." + id + ".rules[" + rule + "]");
+            resolve(true);
+
+        });
+
+    },
+
     send: (obj) => {
 
         return new Promise((resolve, reject) => {
