@@ -56,7 +56,7 @@ function rend(theFeed) {
         for (var x in settings.get("feeds." + theFeed.head.id + ".rules")) {
 
             rules += `<span name="` + settings.get("feeds." + theFeed.head.id + ".rules")[x] + `" class="rule">` + 
-            settings.get("feeds." + theFeed.head.id + ".rules")[x] + `<a onclick="remRule(` + theFeed.head.id + `, '` + settings.get("feeds." + theFeed.head.id + ".rules")[x] + `')">x</a></span>`;
+            settings.get("feeds." + theFeed.head.id + ".rules")[x] + `<a onclick="remRule(` + theFeed.head.id + `, ` + x + `)">x</a></span>`;
 
         }
 
@@ -98,6 +98,7 @@ ipcRenderer.on('edit_this', (_, theFeed) => {
 });
 
 ipcRenderer.on('edit_refresh', () => {
+    document.getElementById('containerOb').innerHTML = "";
     rend(feedGlob);
 })
 

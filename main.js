@@ -959,10 +959,13 @@ ipcMain.on('editSend', (event, arg) => {
 ipcMain.on('editRule', (event, arg) => {
 
   editUpdater.rem(arg.id, arg.rule).then((res) => {
-    console.log("yeyesyysyey");
+    if (res) {
+      editWindow.webContents.send('edit_refresh');
+    }
+  }).catch ( (reason) => {
+    console.log(reason);
   });
     
-  
 
 });
 

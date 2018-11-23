@@ -5,11 +5,24 @@ module.exports = {
 
     rem: (id, rule) => {
 
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
 
-            settings.delete("feeds." + id + ".rules[" + rule + "]");
-            resolve(true);
+            try {
+                let q = "feeds." + id + ".rules";
+                let rls = settings.get(q);
+                let adder = [];
+                for (var x = 0; x < rls.length; x++) {
+                    if (x != rule) {
+                        adder.push(rls[x]);
+                    }
+                }
+                settings.set(q, adder);
+                resolve(true);
+            } catch(e) {
+                reject(e);
+            }
 
+            
         });
 
     },
