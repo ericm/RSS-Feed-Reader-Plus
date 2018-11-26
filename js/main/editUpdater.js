@@ -82,6 +82,7 @@ module.exports = {
 
                 if (rules.toString() !== obj.rules.toString()) {
                     settings.set('feeds.' + obj.id + '.rules', obj.rules);
+                    resolve(true);
                 }
 
             });
