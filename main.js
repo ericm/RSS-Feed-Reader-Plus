@@ -944,23 +944,35 @@ ipcMain.on('editSend', (event, arg) => {
       parser.readHeads().then((heads) => {
 
         mainWindow.webContents.send('newList', heads);
-        editWindow.webContents.send('edit_refresh');
 
-      }).catch((reason) => {
+        let getData = parser.readData(editing, 0);
 
-        console.log(reason);
+        let theFeedObj;
+
+        getData.then( (response) => {
+          
+          theFeedObj = response;
+
+          editWindow.webContents.send('edit_refresh', theFeedObj);
+
+        }).catch((reason) => {
+
+          console.log(reason);
+
+        })
 
       })
-
     }
+
   });
-;});
+
+});
 
 ipcMain.on('editRule', (event, arg) => {
 
   editUpdater.rem(arg.id, arg.rule).then((res) => {
     if (res) {
-      editWindow.webContents.send('edit_refresh');
+      editWindow.webContents.send('edit_refresh_rule');
     }
   }).catch ( (reason) => {
     console.log(reason);

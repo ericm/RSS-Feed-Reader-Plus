@@ -97,10 +97,24 @@ ipcRenderer.on('edit_this', (_, theFeed) => {
     
 });
 
-ipcRenderer.on('edit_refresh', () => {
+ipcRenderer.on('edit_refresh', (_, theFeed) => {
+
     document.getElementById('containerOb').innerHTML = "";
+    idGlob = theFeed.head.id;
+    linkGlob = theFeed.head.link;
+    feedGlob = theFeed;
+    
     rend(feedGlob);
-})
+
+});
+
+ipcRenderer.on('edit_refresh_rule', () => {
+
+    document.getElementById('containerOb').innerHTML = "";
+    
+    rend(feedGlob);
+
+});
 
 module.exports = {
 
