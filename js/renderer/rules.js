@@ -55,6 +55,16 @@ class Current {
 
 var current = new Current(null, null, null);
 
+var newRule = () => {
+
+    var container = d.getElementById("containerR");
+
+    container.innerHTML = `<h1>New Rule</h1><br />`;
+
+    container.innerHTML += gen(1, new cRuleGen(0,0,"",false,false));
+
+}
+
 var gen = (x, cRule) => {
     var condits = "";
 
@@ -169,7 +179,6 @@ var tab = (name) => {
 
     container.style.display = "block";
 }
-
 window.onload = function() {
     
     var rules = settings.get("rules");
@@ -189,7 +198,11 @@ window.onload = function() {
 }
 
 module.exports = {
-    tab: (name) => tab(name),
+    tab: (name) => {
+        var rules = settings.get("rules");
+        tab(rules[name]);
+    },
+    newRule: () => newRule(),
     addCond: () => {
         console.log("added one");
         // create dom fragment
@@ -252,7 +265,7 @@ module.exports = {
         settings.set("rRules." + current.name, {
             condition: cObjs,
             action: d.getElementById("action").selectedIndex
-        })
+        });
 
     }
 }

@@ -968,7 +968,7 @@ ipcMain.on('editSend', (event, arg) => {
 
 });
 
-ipcMain.on('editRule', (event, arg) => {
+ipcMain.on('editRule', (_, arg) => {
 
   editUpdater.rem(arg.id, arg.rule).then((res) => {
     if (res) {

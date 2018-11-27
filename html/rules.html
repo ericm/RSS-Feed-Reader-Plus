@@ -14,47 +14,10 @@
       <div id="maximize" class="menuOpt"><img src="../img/m.svg" /></div>
       <div id="minimize" class="menuOpt"><img src="../img/mi.svg" /></div>
     </div>
-    <aside id="sideR"></aside>
+    <aside id="sideR">
+      <button id="addr" onclick="newRule(); clckd(this);">Add new rule</button>
+    </aside>
     <div id="containerR">
-      <h1>Test</h1>
-      <br />
-      <span>If an article's</span>
-      <div id="conditions">
-      <div class="condition">
-        <select>
-          <option>Title</option>
-          <option>Description</option>
-          <option>Link</option>
-          <option>Custom</option>
-        </select>
-        <select>
-          <option>contains</option>
-          <option>is equal to</option>
-          <option>starts with</option>
-          <option>end with</option>
-          <option>is greater than (nums)</option>
-          <option>is less than (nums)</option>
-        </select>
-        <input type="text" value="" />
-        <br />
-        <br />
-        <label><i>Case sensitive: </i><input type="checkbox" /></label>
-        <label><i>Invert condition: </i><input type="checkbox"/></label>
-        <br />
-        <br />
-        <button onclick="delCond(0)">Delete condition</button>
-      </div>
-    </div>
-      <br />
-      <button onclick="addCond();">Add condition</button>
-      <br />
-      <br />
-      <select id="action">
-        <option>Mark as read</option>
-        <option>Delete</option>
-        <option>Hide</option>
-      </select>
-      <button onclick="save();">Save</button>
     </div>
     <hr class="bottom">
     <script>
@@ -71,6 +34,9 @@
         }
         function save() {
           r.save();
+        }
+        function newRule() {
+          r.newRule();
         }
         require('../js/renderer/menu.js');
         require('../js/renderer/renderer.js');

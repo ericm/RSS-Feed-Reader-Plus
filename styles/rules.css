@@ -14,7 +14,7 @@
     background: rgb(49, 49, 49);
     padding: 5px 0 0 5px;
     position: fixed;
-    
+    z-index: 10000;
 }
 .ruleEdit {
     border: solid 3px rgb(34, 34, 34);
@@ -53,6 +53,15 @@ input[type="number"] {
 label {
     font-family: 'Abel-Regular', sans-serif;
     font-size: 2em;
+}
+
+#addr {
+    padding: .5em;
+    margin: 1em -.8em;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    background: rgba(255, 255, 255, 0.774);
+    cursor: pointer;
 }
 
 #containerR {
