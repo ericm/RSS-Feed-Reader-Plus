@@ -63,6 +63,17 @@ var newRule = () => {
 
     container.innerHTML += gen(1, new cRuleGen(0,0,"",false,false));
 
+    container.innerHTML += `
+    <br />
+    <br />
+    <select id="action">
+      <option>Mark as read</option>
+      <option>Delete</option>
+      <option>Hide</option>
+    </select>
+    <button onclick="save();">Save</button>
+    `;
+
 }
 
 var gen = (x, cRule) => {
@@ -134,7 +145,7 @@ var tab = (name) => {
 
     // render rules into containerR
 
-    container.innerHTML = "<h1>" + name + "</h1><br /><span>If an article's</span>";
+    container.innerHTML = "<input id='h' type='text' value='" + name + "' /><button onclick='saveH();'>Save</button><br /><span>If an article's</span>";
 
     var conditsA = `<div id="conditions">`;
 
@@ -179,11 +190,14 @@ var tab = (name) => {
 
     container.style.display = "block";
 }
-window.onload = function() {
-    
+
+var launch = () => {
+
     var rules = settings.get("rules");
     
     cont = d.getElementById("sideR");
+
+    cont.innerHTML = `<button id="addr" onclick="newRule(); clckd(this);">Add new rule</button>`;
 
     for (var x in rules) {
 
@@ -194,6 +208,21 @@ window.onload = function() {
     }
 
     tab(rules.length > 0 ? rules[0] : "");
+
+}
+window.onload = function() { launch(); }
+
+var saveH = () => {
+
+    //TODO: handle editer rules
+    var hd = settings.get("rRules." + current.name);
+
+    var nH = document.getElementById("h");
+    if (!settings.has("rRules." + nH.value) && nH.value !== "") {
+        settings.set("rRules" + nH.value, hd);
+    }
+    
+    launch();
 
 }
 
@@ -234,6 +263,7 @@ module.exports = {
         settings.delete("rRules." + current.name + ".condition[" + id + "]");
 
     },
+    saveH: () => saveH(),
     save: () => {
 
         // dom

@@ -41,6 +41,16 @@
     white-space: nowrap;
     cursor: pointer;
 }
+#h {
+    font-size: 3em;
+    width: 50%;
+    margin-bottom: .5em; 
+}
+#h+button {
+    display: inline-block;
+    margin-top: .3em;
+    vertical-align: sub;
+}
 input[type="text"], input[type="number"] {
     cursor: text;
     background-color: transparent;
