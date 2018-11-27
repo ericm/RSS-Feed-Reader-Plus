@@ -130,6 +130,16 @@ option {
     font-size: 0.4em;
 }
 
+.errored {
+    border-color: rgba(245, 44, 44, 0.932) !important;
+}
+#erd {
+    vertical-align: sub;
+    color: rgba(245, 44, 44, 0.932);
+    font-style: italic;
+    font-size: .9em;
+    margin-left: 1em;
+}
 #containerR p {
     display: inline;
     margin-right: 20px;

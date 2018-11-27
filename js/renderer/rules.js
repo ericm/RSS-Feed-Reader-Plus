@@ -59,7 +59,7 @@ var newRule = () => {
 
     var container = d.getElementById("containerR");
 
-    container.innerHTML = `<h1>New Rule</h1><br />`;
+    container.innerHTML = "<input id='h' type='text' value='New Rule' /><button onclick='saveH();'>Save</button><span id='erd'></span><br /><span>If an article's</span>";;
 
     container.innerHTML += gen(1, new cRuleGen(0,0,"",false,false));
 
@@ -145,7 +145,7 @@ var tab = (name) => {
 
     // render rules into containerR
 
-    container.innerHTML = "<input id='h' type='text' value='" + name + "' /><button onclick='saveH();'>Save</button><br /><span>If an article's</span>";
+    container.innerHTML = "<input id='h' type='text' value='" + name + "' /><button onclick='saveH();'>Save</button><span id='erd'></span><br /><span>If an article's</span>";
 
     var conditsA = `<div id="conditions">`;
 
@@ -218,6 +218,7 @@ var saveH = () => {
     var hd = settings.get("rRules." + current.name);
 
     var nH = document.getElementById("h");
+
     if (!settings.has("rRules." + nH.value) && nH.value !== "") {
         settings.set("rRules." + nH.value, hd);
         settings.delete("rRules." + current.name);
@@ -225,9 +226,14 @@ var saveH = () => {
         var r = settings.get("rules");
         r[r.indexOf(current.name)] = nH.value;
         settings.set("rules", r);
+
+        launch();
+
+    } else {
+        document.getElementById("erd").innerText = "Entries must be unique";
+        nH.classList.add("errored");
     }
     
-    launch();
 
 }
 
@@ -272,6 +278,12 @@ module.exports = {
     save: () => {
 
         // dom
+
+        if (!(current.name in settings.get("rules"))) {
+
+            // TODO: this lol
+
+        }
 
         var condtions = d.getElementsByClassName("condition");
         var cObjs = [];
