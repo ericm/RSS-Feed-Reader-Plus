@@ -219,7 +219,12 @@ var saveH = () => {
 
     var nH = document.getElementById("h");
     if (!settings.has("rRules." + nH.value) && nH.value !== "") {
-        settings.set("rRules" + nH.value, hd);
+        settings.set("rRules." + nH.value, hd);
+        settings.delete("rRules." + current.name);
+
+        var r = settings.get("rules");
+        r[r.indexOf(current.name)] = nH.value;
+        settings.set("rules", r);
     }
     
     launch();
