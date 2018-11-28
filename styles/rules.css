@@ -27,6 +27,8 @@
     padding-bottom: 7px; 
     cursor: pointer;
     transition: all 0.3s;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 .ruleEdit:hover {
     background-color:  rgb(34, 34, 34);
