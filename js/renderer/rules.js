@@ -298,7 +298,7 @@ module.exports = {
 
         // dom
 
-        if (!settings.get("rules").includes(current.name)) {
+        if (current.newR || current.name !== document.getElementById("h").value) {
 
             saveH();
 
