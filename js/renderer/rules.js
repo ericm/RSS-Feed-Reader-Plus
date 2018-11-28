@@ -45,23 +45,32 @@ class cRuleGen {
 }
 
 class Current {
-    constructor(name, rules, rl) {
+    constructor(name, rules, rl, newR) {
         this.name = name
         this.rules = rules
         this.rLength = rl
+        this.newR = newR
     }
     
 }
 
-var current = new Current(null, null, null);
+var current = new Current(null, null, null, null);
 
 var newRule = () => {
+
+    current = new Current("New Rule", [], 1, true)
 
     var container = d.getElementById("containerR");
 
     container.innerHTML = "<input id='h' type='text' value='New Rule' /><button onclick='saveH();'>Save</button><span id='erd'></span><br /><span>If an article's</span>";;
 
-    container.innerHTML += gen(1, new cRuleGen(0,0,"",false,false));
+    var conditsA = `<div id="conditions">`;
+
+    conditsA += gen(1, new cRuleGen(0,0,"",false,false));
+
+    conditsA += "</div>";
+
+    container.innerHTML += conditsA;
 
     container.innerHTML += `
     <br />
@@ -137,7 +146,7 @@ var tab = (name) => {
 
     var rule = settings.get("rRules." + name);
     
-    current = new Current(name, rule, rule.condition.length);
+    current = new Current(name, rule, rule.condition.length, false);
 
     // cont.innerHTML = "";
 
@@ -197,7 +206,7 @@ var launch = () => {
     
     cont = d.getElementById("sideR");
 
-    cont.innerHTML = `<button id="addr" onclick="newRule(); clckd(this);">Add new rule</button>`;
+    cont.innerHTML = `<button id="addr" onclick="newRule();">Add new rule</button>`;
 
     for (var x in rules) {
 
@@ -224,7 +233,17 @@ var saveH = () => {
         settings.delete("rRules." + current.name);
 
         var r = settings.get("rules");
-        r[r.indexOf(current.name)] = nH.value;
+        if (current.newR) {
+
+            r.push(nH.value);
+            current.name = nH.value;
+
+        } else {
+
+            r[r.indexOf(current.name)] = nH.value;
+
+        }
+        
         settings.set("rules", r);
 
         launch();
@@ -268,7 +287,7 @@ module.exports = {
             current.rLength++;
         }
         
-
+        
         // remove from db
 
         settings.delete("rRules." + current.name + ".condition[" + id + "]");
@@ -279,9 +298,9 @@ module.exports = {
 
         // dom
 
-        if (!(current.name in settings.get("rules"))) {
+        if (!settings.get("rules").includes(current.name)) {
 
-            // TODO: this lol
+            saveH();
 
         }
 
